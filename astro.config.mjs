@@ -21,7 +21,30 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
-  integrations: [vue(), sitemap()],
+  integrations: [
+    vue(),
+    // @astrojs/sitemap never reads Astro's own `i18n`; without this option the
+    // sitemap ships no xhtml:link rel="alternate" hreflang entries at all.
+    // Keys are URL path segments, values are hreflang codes — identical here.
+    sitemap({
+      i18n: {
+        defaultLocale: 'en-US',
+        locales: {
+          'de-DE': 'de-DE',
+          'en-US': 'en-US',
+          'es-ES': 'es-ES',
+          'fr-FR': 'fr-FR',
+          'it-IT': 'it-IT',
+          'ja-JP': 'ja-JP',
+          'ko-KR': 'ko-KR',
+          'nl-NL': 'nl-NL',
+          'pt-PT': 'pt-PT',
+          'zh-CN': 'zh-CN',
+          'zh-TW': 'zh-TW',
+        },
+      },
+    }),
+  ],
   build: {
     // One directory-free .html per route keeps canonical URLs stable.
     format: 'file',

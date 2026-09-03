@@ -8,7 +8,9 @@ export const onRequest = defineMiddleware((context, next) => {
   // Root path: detect language and redirect
   if (pathname === '/') {
     const locale = detectLocale(context.request.headers.get('accept-language'));
-    return context.redirect(`/${locale}/`, 302);
+    // No trailing slash: `trailingSlash: 'never'` + `build.format: 'file'`
+    // serve the locale home at `/en-US`, so `/en-US/` costs a hop or 404s.
+    return context.redirect(`/${locale}`, 302);
   }
 
   // Check if path starts with a valid locale
