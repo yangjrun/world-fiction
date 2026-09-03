@@ -1,0 +1,39 @@
+{
+  "nav.home": "All photo specs",
+  "nav.about": "About",
+  "footer.privacy": "Privacy",
+  "footer.terms": "Terms",
+  "footer.about": "About",
+  "footer.disclaimer": "Requirements are summarised from official sources and can change; always check the authority's own page before applying.",
+  "footer.privacy-note": "Photos are processed entirely in your browser. Nothing you upload is sent to a server, stored, or seen by anyone else.",
+  "skip.content": "Skip to content",
+
+  "home.title": "Passport and visa photos that actually meet the requirements",
+  "home.subtitle": "Most rejected photos fail on head size, not on the crop. Pick a document below and this tool measures your face, positions it inside the permitted range, replaces the background and gives you a printable sheet.",
+  "home.privacy": "Every step runs inside your browser. Your photo is never uploaded, never stored and never seen by anyone but you.",
+  "home.choose": "Choose your document",
+  "home.how-heading": "How the measurements work",
+
+  "editor.heading": "Make your {documentName}",
+  "editor.privacy": "Everything runs on your device. Your photo is never uploaded.",
+  "editor.drag": "Drag a photo here, or",
+  "editor.choose": "Choose a photo",
+  "editor.formats": "JPEG, PNG or WebP, up to 25MB",
+  "editor.loading": "Loading the on-device models, this happens once…",
+  "editor.processing": "Processing your photo…",
+
+  "requirements.heading": "Requirements at a glance",
+  "requirements.source": "Source:",
+  "requirements.checked": "last checked",
+
+  "rejections.heading": "Why photos get rejected",
+  "faq.heading": "Common questions",
+
+  "spec.size": "Photo size",
+  "spec.head-height": "Head height, chin to crown",
+  "spec.eye-height": "Eye height above bottom edge",
+  "spec.background": "Background",
+  "spec.file": "File",
+
+  "test.greeting": "Hello {name}, welcome to {place}"
+}
