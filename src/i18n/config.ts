@@ -17,3 +17,7 @@ export type Locale = keyof typeof languages;
 export const defaultLocale: Locale = 'en-US';
 
 export const locales = Object.keys(languages) as Locale[];
+
+export function isLocale(value: string): value is Locale {
+  return (locales as readonly string[]).includes(value);
+}
