@@ -27,11 +27,11 @@ export function useTranslations(locale: Locale) {
       dict = await getTranslations(locale);
     },
     t(key: string, params?: Record<string, string>): string {
-      let text = dict[key] || key;
+      const text = dict[key] || key;
       if (params) {
-        Object.entries(params).forEach(([k, v]) => {
-          text = text.replace(`{${k}}`, v);
-        });
+        return Object.entries(params).reduce((result, [k, v]) => {
+          return result.replaceAll(`{${k}}`, v);
+        }, text);
       }
       return text;
     }

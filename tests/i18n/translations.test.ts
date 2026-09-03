@@ -29,4 +29,11 @@ describe('Translation system', () => {
     expect(result).toContain('Alice');
     expect(result).toContain('Tokyo');
   });
+
+  it('should handle repeated parameters', async () => {
+    const t = useTranslations('en-US');
+    await t.load();
+    const result = t.t('test.repeated', { name: 'Bob' });
+    expect(result).toBe('Hello Bob, goodbye Bob');
+  });
 });

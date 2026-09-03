@@ -35,5 +35,6 @@
   "spec.background": "Background",
   "spec.file": "File",
 
-  "test.greeting": "Hello {name}, welcome to {place}"
+  "test.greeting": "Hello {name}, welcome to {place}",
+  "test.repeated": "Hello {name}, goodbye {name}"
 }
