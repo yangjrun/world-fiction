@@ -1,0 +1,82 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getVerifiedSpecPages } from '@/lib/specs';
+
+const pages = await getVerifiedSpecPages();
+---
+
+<BaseLayout
+  title="About This Passport Photo Tool"
+  description="Why this tool exists, how it measures head height from the hair rather than the hairline, and why every photograph is processed on your own device."
+>
+  <h1 class="text-3xl font-semibold tracking-tight text-ink-900">About</h1>
+
+  <div class="markdown mt-8 max-w-2xl">
+    <h2>Why this exists</h2>
+    <p>
+      Passport photo rejections are mostly one problem wearing different hats: the head is
+      the wrong size. Authorities publish a narrow permitted range — often a five millimetre
+      window on a forty-five millimetre photo — and there is no way to hit it reliably by
+      cropping to the right outer dimensions and hoping. Meanwhile most free tools want you
+      to upload a photograph of your face to a server you know nothing about, and most paid
+      ones charge for a crop.
+    </p>
+    <p>
+      This tool does the measurement properly and does it on your own machine.
+    </p>
+
+    <h2>How it measures</h2>
+    <p>
+      Every specification measures head height from the bottom of the chin to the top of the
+      head <em>including hair</em>. That last part is the hard part. Face-landmark models —
+      the standard tool for finding features in a photograph — have no landmark for the top
+      of the skull; their highest point sits around the hairline, so any estimate built from
+      them is systematically short, and short in exactly the dimension that gets photos
+      rejected.
+    </p>
+    <p>
+      So the pipeline runs in an order that might look backwards: it separates you from the
+      background first, then reads the top of your head off the outline of your hair, and
+      only uses the landmark model for the chin and the eye line. The background separation
+      was needed anyway to replace the background with the required colour, so the accurate
+      measurement comes free.
+    </p>
+    <p>
+      With the crown, chin and eye line known, the crop is computed to land in the middle of
+      every permitted range rather than near an edge, which leaves the widest margin for the
+      small errors any automatic measurement makes. If your original photograph is framed too
+      tightly for a compliant crop to exist, the tool tells you which edge is short instead
+      of cropping further and producing something that will fail.
+    </p>
+
+    <h2>Why nothing is uploaded</h2>
+    <p>
+      A passport photograph is a picture of your face attached to an identity document
+      application. There is no good reason for it to travel to someone else's server to be
+      cropped, and several bad ones. Face detection, background separation, cropping and JPEG
+      encoding all run in your browser through WebAssembly. You can confirm it in the Network
+      tab of your browser's developer tools.
+    </p>
+
+    <h2>How the specifications are kept honest</h2>
+    <p>
+      Each page links the official source its numbers came from and shows the date a person
+      last read that source. A specification that has not been checked against its source does
+      not get published at all — the build skips it — because a confidently wrong page here
+      costs someone a rejected application. There are currently {pages.length} verified
+      specifications on the site.
+    </p>
+    <p>
+      If you spot a number that no longer matches the official page, that is the most useful
+      thing you can tell us.
+    </p>
+
+    <h2>How it is paid for</h2>
+    <p>
+      Advertising covers hosting. The tool itself is free, has no account, no usage limit and
+      no paid tier, and advertisers receive nothing about you from us beyond what Google's own
+      advertising systems collect. They never receive your photograph, because we never have a
+      copy of it.
+    </p>
+  </div>
+</BaseLayout>

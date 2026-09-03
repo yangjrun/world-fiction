@@ -1,0 +1,8 @@
+# pnpm 11 reads settings from here rather than from package.json.
+#
+# Both packages need their install script to run: esbuild links the platform
+# binary that vite/vitest shell out to, and protobufjs generates the descriptors
+# onnxruntime-web loads. Without these two the test run and the build both fail.
+allowBuilds:
+  esbuild: true
+  protobufjs: true

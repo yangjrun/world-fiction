@@ -1,0 +1,66 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+const updated = '3 September 2026';
+---
+
+<BaseLayout
+  title="Terms of Use"
+  description="The terms covering use of this passport photo tool, including what it does, what it cannot guarantee, and the limits of our liability."
+>
+  <h1 class="text-3xl font-semibold tracking-tight text-ink-900">Terms of Use</h1>
+  <p class="mt-2 text-sm text-ink-400">Last updated {updated}</p>
+
+  <div class="markdown mt-8 max-w-2xl">
+    <h2>What this site provides</h2>
+    <p>
+      This site provides a free tool that crops and formats a photograph to the published
+      specification for a passport, visa or similar document, and summarises those published
+      specifications. It is not affiliated with, endorsed by or acting on behalf of any
+      government, passport authority, embassy or consulate.
+    </p>
+
+    <h2>Accuracy, and what we cannot promise</h2>
+    <p>
+      The measurements on each page are transcribed from the official source linked at the
+      bottom of that page, and each carries the date a person last checked it. Requirements
+      do change, and specifications are sometimes interpreted differently by different
+      offices handling the same application.
+    </p>
+    <p>
+      We therefore cannot guarantee that a photograph produced here will be accepted. The
+      tool reports whether the output meets the measurements we hold on file; acceptance is
+      the decision of the authority receiving your application, and factors it judges by eye
+      — expression, lighting, shadows on your face, whether your hair covers your eyes — are
+      outside what any automated check can confirm. Always read the authority's own page
+      before you submit, and treat the linked source as authoritative over this site.
+    </p>
+
+    <h2>Acceptable use</h2>
+    <p>
+      Use the tool for your own photographs, or for photographs you have permission to
+      process. Do not use it to produce images intended to misrepresent someone's identity,
+      and do not attempt to interfere with the site's operation or with other visitors' use
+      of it.
+    </p>
+
+    <h2>Liability</h2>
+    <p>
+      The tool is provided as is, without warranty of any kind. To the fullest extent the
+      law allows, we are not liable for any loss arising from use of this site, including a
+      rejected application, a missed appointment, a delayed trip, or fees you paid to an
+      authority. Nothing in these terms limits liability that cannot lawfully be limited.
+    </p>
+
+    <h2>Intellectual property</h2>
+    <p>
+      The text, design and code of this site belong to its operator. Your photographs remain
+      entirely yours; we neither receive nor claim any rights in them.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      These terms may be updated, and the date above will change when they are. Continuing
+      to use the site after a change means you accept the revised terms.
+    </p>
+  </div>
+</BaseLayout>

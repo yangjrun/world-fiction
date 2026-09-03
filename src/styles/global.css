@@ -1,0 +1,83 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink-50: #f6f7f9;
+  --color-ink-100: #eceef2;
+  --color-ink-200: #d5d9e2;
+  --color-ink-400: #8b93a5;
+  --color-ink-600: #4d556a;
+  --color-ink-800: #262c3d;
+  --color-ink-900: #151926;
+
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #d9e6ff;
+  --color-brand-500: #3565f6;
+  --color-brand-600: #2450dc;
+  --color-brand-700: #1c3fae;
+
+  --color-ok-500: #12945f;
+  --color-warn-500: #c07b12;
+  --color-bad-500: #d0342c;
+
+  --font-sans: 'Inter var', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-white text-ink-800 font-sans antialiased;
+}
+
+/* Visible focus ring for keyboard users on every interactive element. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  @apply outline-2 outline-offset-2 outline-brand-600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Rendered Markdown from the spec content collection. */
+.markdown h2 {
+  @apply mt-8 mb-3 text-xl font-semibold text-ink-900;
+}
+
+.markdown h3 {
+  @apply mt-6 mb-2 text-lg font-semibold text-ink-900;
+}
+
+.markdown p {
+  @apply mb-4 leading-relaxed text-ink-600;
+}
+
+.markdown ul,
+.markdown ol {
+  @apply mb-4 ml-5 space-y-1 text-ink-600;
+}
+
+.markdown ul {
+  @apply list-disc;
+}
+
+.markdown ol {
+  @apply list-decimal;
+}
+
+.markdown a {
+  @apply text-brand-700 underline;
+}
+
+.markdown strong {
+  @apply font-semibold text-ink-800;
+}

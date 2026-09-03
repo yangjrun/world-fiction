@@ -1,0 +1,62 @@
+---
+import { resolvePhysicalSize, resolvePixelSize } from '@/lib/photo/units';
+import type { PhotoSpec } from '@/lib/photo/types';
+
+export interface Props {
+  spec: PhotoSpec;
+}
+
+const { spec } = Astro.props;
+const pixels = resolvePixelSize(spec.output);
+const physical = resolvePhysicalSize(spec.output);
+
+const mm = (ratio: number) => (physical ? `${(ratio * physical.heightMm).toFixed(1)} mm` : null);
+const pct = (ratio: number) => `${(ratio * 100).toFixed(0)}%`;
+
+/** Show the authority's own units first, with the derived one in brackets. */
+function band(min: number, max: number): string {
+  const asMm = physical ? `${mm(min)} – ${mm(max)}` : null;
+  const asPct = `${pct(min)} – ${pct(max)} of height`;
+  return asMm ? `${asMm} (${asPct})` : asPct;
+}
+
+const rows: Array<{ label: string; value: string }> = [
+  {
+    label: 'Photo size',
+    value: physical
+      ? `${physical.widthMm} × ${physical.heightMm} mm (${pixels.widthPx} × ${pixels.heightPx} px at ${physical.dpi} DPI)`
+      : `${pixels.widthPx} × ${pixels.heightPx} px`,
+  },
+  { label: 'Head height, chin to crown', value: band(spec.headHeight.minRatio, spec.headHeight.maxRatio) },
+  ...(spec.eyeLine
+    ? [{ label: 'Eye height above bottom edge', value: band(spec.eyeLine.minRatio, spec.eyeLine.maxRatio) }]
+    : []),
+  { label: 'Background', value: spec.background.description },
+  {
+    label: 'File',
+    value: [
+      spec.file.format.toUpperCase(),
+      spec.file.maxBytes ? `max ${Math.round(spec.file.maxBytes / 1024)} KB` : null,
+      spec.file.minBytes ? `min ${Math.round(spec.file.minBytes / 1024)} KB` : null,
+    ]
+      .filter(Boolean)
+      .join(', '),
+  },
+];
+---
+
+<table class="w-full border-collapse text-sm">
+  <caption class="sr-only">{spec.documentName} requirements</caption>
+  <tbody>
+    {
+      rows.map((row) => (
+        <tr class="border-b border-ink-200 last:border-0">
+          <th scope="row" class="w-1/2 py-3 pr-4 text-left align-top font-medium text-ink-800">
+            {row.label}
+          </th>
+          <td class="py-3 align-top text-ink-600">{row.value}</td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

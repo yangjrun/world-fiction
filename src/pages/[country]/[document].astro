@@ -1,0 +1,112 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SpecTable from '@/components/SpecTable.astro';
+import PhotoEditor from '@/components/editor/PhotoEditor.vue';
+import { getVerifiedSpecPages } from '@/lib/specs';
+
+export async function getStaticPaths() {
+  const pages = await getVerifiedSpecPages();
+  return pages.map((page) => ({
+    params: { country: page.entry.data.country, document: page.entry.data.document },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const { entry, spec } = page;
+const { Content } = await render(entry);
+
+const checked = entry.data.sourceCheckedOn.toISOString().slice(0, 10);
+
+const faqSchema =
+  entry.data.faq.length > 0
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: entry.data.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: { '@type': 'Answer', text: item.a },
+        })),
+      }
+    : null;
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: `${entry.data.documentName} maker`,
+  applicationCategory: 'MultimediaApplication',
+  operatingSystem: 'Any',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+};
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  structuredData={[appSchema, ...(faqSchema ? [faqSchema] : [])]}
+>
+  <nav aria-label="Breadcrumb" class="mb-4 text-sm text-ink-400">
+    <a class="hover:text-brand-700" href="/">All photo specs</a>
+    <span aria-hidden="true"> / </span>
+    <span>{entry.data.countryName}</span>
+  </nav>
+
+  <h1 class="text-3xl font-semibold tracking-tight text-ink-900">{entry.data.title}</h1>
+  <p class="mt-3 max-w-2xl text-ink-600">{entry.data.description}</p>
+
+  <div class="mt-8">
+    <PhotoEditor spec={spec} client:visible />
+  </div>
+
+  <section class="mt-12" aria-labelledby="requirements">
+    <h2 id="requirements" class="text-xl font-semibold text-ink-900">Requirements at a glance</h2>
+    <div class="mt-4 rounded-xl border border-ink-200 p-5">
+      <SpecTable spec={spec} />
+      <p class="mt-4 text-xs text-ink-400">
+        Source:
+        <a class="underline hover:text-brand-700" href={entry.data.sourceUrl} rel="nofollow noopener" target="_blank">
+          {new URL(entry.data.sourceUrl).hostname}
+        </a>
+        · last checked {checked}
+      </p>
+    </div>
+  </section>
+
+  {
+    entry.data.rejectionReasons.length > 0 && (
+      <section class="mt-12" aria-labelledby="rejections">
+        <h2 id="rejections" class="text-xl font-semibold text-ink-900">Why photos get rejected</h2>
+        <ul class="mt-4 space-y-2 text-ink-600">
+          {entry.data.rejectionReasons.map((reason) => (
+            <li class="flex gap-3">
+              <span aria-hidden="true" class="mt-2 size-1.5 shrink-0 rounded-full bg-bad-500" />
+              <span>{reason}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <div class="markdown mt-12 max-w-2xl">
+    <Content />
+  </div>
+
+  {
+    entry.data.faq.length > 0 && (
+      <section class="mt-12" aria-labelledby="faq">
+        <h2 id="faq" class="text-xl font-semibold text-ink-900">Common questions</h2>
+        <dl class="mt-4 space-y-5">
+          {entry.data.faq.map((item) => (
+            <div>
+              <dt class="font-medium text-ink-800">{item.q}</dt>
+              <dd class="mt-1 text-ink-600">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )
+  }
+</BaseLayout>

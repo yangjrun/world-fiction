@@ -1,0 +1,74 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getVerifiedSpecPages } from '@/lib/specs';
+import { resolvePhysicalSize, resolvePixelSize } from '@/lib/photo/units';
+
+const pages = await getVerifiedSpecPages();
+
+function sizeLabel(spec: (typeof pages)[number]['spec']): string {
+  const physical = resolvePhysicalSize(spec.output);
+  if (physical) return `${physical.widthMm} × ${physical.heightMm} mm`;
+  const { widthPx, heightPx } = resolvePixelSize(spec.output);
+  return `${widthPx} × ${heightPx} px`;
+}
+---
+
+<BaseLayout
+  title="Passport and Visa Photo Maker — Free, Private, In Your Browser"
+  description="Make a compliant passport or visa photo for free. Correct head height, eye line and background for each country, plus a printable 4x6 sheet. Nothing is uploaded."
+>
+  <h1 class="max-w-3xl text-4xl font-semibold tracking-tight text-ink-900">
+    Passport and visa photos that actually meet the requirements
+  </h1>
+  <p class="mt-4 max-w-2xl text-lg text-ink-600">
+    Most rejected photos fail on head size, not on the crop. Pick a document below and
+    this tool measures your face, positions it inside the permitted range, replaces the
+    background and gives you a printable sheet.
+  </p>
+  <p class="mt-3 max-w-2xl text-ink-600">
+    Every step runs inside your browser. Your photo is never uploaded, never stored and
+    never seen by anyone but you.
+  </p>
+
+  <h2 class="mt-12 text-xl font-semibold text-ink-900">Choose your document</h2>
+  <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+    {
+      pages.map(({ entry, spec, href }) => (
+        <li>
+          <a
+            href={href}
+            class="block h-full rounded-xl border border-ink-200 p-5 transition-colors hover:border-brand-500 hover:bg-brand-50"
+          >
+            <span class="block font-medium text-ink-900">{entry.data.documentName}</span>
+            <span class="mt-1 block text-sm text-ink-600">{entry.data.countryName}</span>
+            <span class="mt-3 block text-sm text-ink-400">{sizeLabel(spec)}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <section class="mt-16 max-w-2xl" aria-labelledby="how">
+    <h2 id="how" class="text-xl font-semibold text-ink-900">How the measurements work</h2>
+    <p class="mt-3 text-ink-600">
+      Every authority publishes two numbers that matter more than the outer size: how tall
+      your head must be from the bottom of the chin to the top of the head, and sometimes
+      how far your eyes must sit above the bottom edge. These are narrow ranges, often only
+      five millimetres wide, and a crop that looks right by eye lands outside them more
+      often than not.
+    </p>
+    <p class="mt-3 text-ink-600">
+      Head height is measured to the top of the head <em>including hair</em>, which is why
+      this tool separates you from the background first: the outline of your hair is what
+      reveals where the top of your head really is. Face-detection models stop at the
+      hairline and consistently underestimate it. Once the crown, chin and eye line are
+      known, the crop is computed to land in the middle of each permitted range rather
+      than at its edge, which leaves the most room for error.
+    </p>
+    <p class="mt-3 text-ink-600">
+      If your original photo is framed too tightly to produce a compliant result, the tool
+      says which edge falls short instead of cropping in further and handing you something
+      that will be turned down at the counter.
+    </p>
+  </section>
+</BaseLayout>

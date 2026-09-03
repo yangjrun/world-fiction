@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+.astro/
+.output/
+
+# ML model weights and WASM runtimes (fetched locally, never committed)
+public/models/*
+!public/models/README.md
+public/wasm/
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# test & coverage
+coverage/
+*.log
+
+# editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

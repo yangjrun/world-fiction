@@ -1,0 +1,36 @@
+{
+  "name": "passport-photo-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Privacy-first passport & visa photo tool. All image processing happens in the browser.",
+  "scripts": {
+    "dev": "astro dev",
+    "setup:wasm": "node scripts/copy-wasm.mjs",
+    "prebuild": "node scripts/copy-wasm.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@astrojs/vue": "7.0.2",
+    "@mediapipe/tasks-vision": "1.0.1",
+    "astro": "7.2.10",
+    "onnxruntime-web": "1.29.0",
+    "vue": "3.5.42",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@tailwindcss/vite": "4.3.3",
+    "@vitest/coverage-v8": "4.1.11",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
+  },
+  "packageManager": "pnpm@11.4.0"
+}
