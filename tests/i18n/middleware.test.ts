@@ -67,18 +67,22 @@ describe('i18n middleware', () => {
 
   it('redirects an unprefixed path to the default locale, preserving the path', async () => {
     const { context, redirects } = createStub('/about');
+    const next = createNext();
 
-    await onRequest(context, createNext());
+    await onRequest(context, next);
 
     expect(redirects).toEqual([{ path: '/en-US/about', status: 301 }]);
+    expect(next).not.toHaveBeenCalled();
   });
 
   it('treats an unrecognised locale prefix as an unprefixed path', async () => {
     const { context, redirects } = createStub('/xx-YY/about');
+    const next = createNext();
 
-    await onRequest(context, createNext());
+    await onRequest(context, next);
 
     expect(redirects).toEqual([{ path: '/en-US/xx-YY/about', status: 301 }]);
+    expect(next).not.toHaveBeenCalled();
   });
 
   it('passes a validly prefixed path through and records the locale', async () => {

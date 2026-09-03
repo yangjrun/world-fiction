@@ -4,16 +4,11 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 
+import { DEFAULT_LOCALE, LOCALES } from './astro.locales.mjs';
+
 // TODO(deploy): replace with the real apex domain before the first production build.
 // `site` must be correct or sitemap.xml and canonical URLs ship wrong absolute URLs.
 const SITE = process.env.SITE_URL ?? 'https://example.com';
-
-// Single source of truth for every locale list in this file. Deliberately plain
-// JS and NOT imported from src/i18n/config.ts: if that specifier ever failed to
-// resolve inside the config loader, nothing would build at all. Parity with
-// src/i18n/config.ts is enforced by tests/i18n/astro-config.test.ts instead.
-const LOCALES = ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'it-IT', 'ja-JP', 'ko-KR', 'nl-NL', 'pt-PT', 'zh-CN', 'zh-TW'];
-const DEFAULT_LOCALE = 'en-US';
 
 export default defineConfig({
   site: SITE,
