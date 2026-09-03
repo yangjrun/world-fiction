@@ -5,6 +5,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // Astro resolves this virtual specifier itself at build time; plain vitest
+      // cannot, so point it at the real module the virtual one re-exports.
+      'astro:middleware': 'astro/middleware',
     },
   },
   test: {

@@ -8,12 +8,19 @@ import { fileURLToPath } from 'node:url';
 // `site` must be correct or sitemap.xml and canonical URLs ship wrong absolute URLs.
 const SITE = process.env.SITE_URL ?? 'https://example.com';
 
+// Single source of truth for every locale list in this file. Deliberately plain
+// JS and NOT imported from src/i18n/config.ts: if that specifier ever failed to
+// resolve inside the config loader, nothing would build at all. Parity with
+// src/i18n/config.ts is enforced by tests/i18n/astro-config.test.ts instead.
+const LOCALES = ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'it-IT', 'ja-JP', 'ko-KR', 'nl-NL', 'pt-PT', 'zh-CN', 'zh-TW'];
+const DEFAULT_LOCALE = 'en-US';
+
 export default defineConfig({
   site: SITE,
   trailingSlash: 'never',
   i18n: {
-    defaultLocale: 'en-US',
-    locales: ['de-DE', 'en-US', 'es-ES', 'fr-FR', 'it-IT', 'ja-JP', 'ko-KR', 'nl-NL', 'pt-PT', 'zh-CN', 'zh-TW'],
+    defaultLocale: DEFAULT_LOCALE,
+    locales: LOCALES,
     routing: {
       // Every URL carries a locale prefix, including the default locale.
       prefixDefaultLocale: true,
@@ -25,23 +32,12 @@ export default defineConfig({
     vue(),
     // @astrojs/sitemap never reads Astro's own `i18n`; without this option the
     // sitemap ships no xhtml:link rel="alternate" hreflang entries at all.
-    // Keys are URL path segments, values are hreflang codes — identical here.
+    // Keys are URL path segments, values are hreflang codes — identical here,
+    // so the map is derived from LOCALES rather than restated.
     sitemap({
       i18n: {
-        defaultLocale: 'en-US',
-        locales: {
-          'de-DE': 'de-DE',
-          'en-US': 'en-US',
-          'es-ES': 'es-ES',
-          'fr-FR': 'fr-FR',
-          'it-IT': 'it-IT',
-          'ja-JP': 'ja-JP',
-          'ko-KR': 'ko-KR',
-          'nl-NL': 'nl-NL',
-          'pt-PT': 'pt-PT',
-          'zh-CN': 'zh-CN',
-          'zh-TW': 'zh-TW',
-        },
+        defaultLocale: DEFAULT_LOCALE,
+        locales: Object.fromEntries(LOCALES.map(locale => [locale, locale])),
       },
     }),
   ],

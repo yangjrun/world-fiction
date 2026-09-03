@@ -5,85 +5,146 @@ import { describe, expect, it } from 'vitest';
 
 import { defaultLocale, locales } from '@/i18n/config';
 
-// The locale list lives in three places: Astro's own `i18n` config, the
-// @astrojs/sitemap integration's `i18n` option (the integration never derives
-// its own from Astro's), and the runtime module. Nothing links them, so this
-// guard compares all three as text. Importing astro.config.mjs would drag in
-// every integration and Vite plugin, which plain vitest (no Astro plugin)
-// cannot be relied on to load.
+// astro.config.mjs keeps its own plain-JS copy of the locale list, because
+// importing src/i18n/config.ts from inside the config loader would mean a
+// resolution failure there stops every build. This guard keeps the two honest.
+//
+// The config funnels every locale list through two consts, so there is exactly
+// one array literal and one default-locale string to compare here, and the
+// sitemap map is derived from the array rather than restated.
+//
+// NOTE: if these lists are ever genuinely derived from src/i18n/config.ts —
+// imported rather than duplicated — this whole file becomes dead weight and
+// should be deleted. Until then the guard deliberately trips that refactor.
 const ASTRO_CONFIG_PATH = fileURLToPath(new URL('../../astro.config.mjs', import.meta.url));
 
-const CONFIG_SOURCE = readFileSync(ASTRO_CONFIG_PATH, 'utf8');
+const LOCALES_CONST = 'LOCALES';
+const DEFAULT_LOCALE_CONST = 'DEFAULT_LOCALE';
 
 const EXPECTED_LOCALE_COUNT = 11;
+
+// Astro's own `i18n` and the one handed to sitemap(). Exactly two, never more.
+const EXPECTED_I18N_BLOCK_COUNT = 2;
+
+// `locales`/`defaultLocale` must reference the consts, never restate a literal —
+// otherwise the consts could go stale while the guard reads dead code.
+const ASTRO_LOCALES_REFERENCE = /\blocales\s*:\s*LOCALES\b/;
+const SITEMAP_DERIVED_LOCALES = /\blocales\s*:\s*Object\.fromEntries\(\s*LOCALES\s*\.map\(/;
+const DEFAULT_LOCALE_REFERENCE = /\bdefaultLocale\s*:\s*DEFAULT_LOCALE\b/;
+const ARRAY_LITERAL_LOCALES = /\blocales\s*:\s*\[/;
+const OBJECT_LITERAL_LOCALES = /\blocales\s*:\s*\{/;
 
 const NO_I18N_FIXTURE = 'export default defineConfig({ site: "https://example.test" });';
 
 /**
- * Returns the object literal starting at `openBraceIndex`, honouring nested
- * braces, string literals and comments. Null when the braces never balance.
+ * Drops `//` and block comments while keeping string literals intact, so no
+ * extractor below can be fooled by a commented-out entry or by a locale that is
+ * only named in a note. Every extractor runs on the stripped text.
+ *
+ * A regex literal containing `/` would confuse this; the config has none, and
+ * the block-count assertions would fail loudly rather than quietly if one
+ * appeared.
  */
-function readBalancedBlock(source: string, openBraceIndex: number): string | null {
-  let depth = 0;
+function stripComments(source: string): string {
+  let stripped = '';
   let quote: string | null = null;
-  let index = openBraceIndex;
+  let index = 0;
 
   while (index < source.length) {
-    const char = source[index];
+    const char = source[index] ?? '';
     const next = source[index + 1];
 
     if (quote !== null) {
       if (char === '\\') {
+        stripped += char + (next ?? '');
         index += 2;
         continue;
       }
       if (char === quote) {
         quote = null;
       }
+      stripped += char;
       index += 1;
       continue;
     }
 
     if (char === '/' && next === '/') {
       const lineEnd = source.indexOf('\n', index);
-      index = lineEnd === -1 ? source.length : lineEnd + 1;
+      // Stop before the newline so line structure survives.
+      index = lineEnd === -1 ? source.length : lineEnd;
       continue;
     }
 
     if (char === '/' && next === '*') {
       const commentEnd = source.indexOf('*/', index + 2);
       index = commentEnd === -1 ? source.length : commentEnd + 2;
+      stripped += ' ';
       continue;
     }
 
     if (char === "'" || char === '"' || char === '`') {
       quote = char;
-    } else if (char === '{') {
-      depth += 1;
-    } else if (char === '}') {
-      depth -= 1;
-      if (depth === 0) {
-        return source.slice(openBraceIndex, index + 1);
-      }
     }
 
+    stripped += char;
     index += 1;
+  }
+
+  return stripped;
+}
+
+/**
+ * The balanced `open`..`close` region starting at `openIndex`, honouring string
+ * literals. Null when the delimiters never balance. Input must be comment-free.
+ */
+function readBalancedRegion(source: string, openIndex: number, open: string, close: string): string | null {
+  let depth = 0;
+  let quote: string | null = null;
+
+  for (let index = openIndex; index < source.length; index += 1) {
+    const char = source[index];
+
+    if (quote !== null) {
+      if (char === '\\') {
+        index += 1;
+      } else if (char === quote) {
+        quote = null;
+      }
+      continue;
+    }
+
+    if (char === "'" || char === '"' || char === '`') {
+      quote = char;
+    } else if (char === open) {
+      depth += 1;
+    } else if (char === close) {
+      depth -= 1;
+      if (depth === 0) {
+        return source.slice(openIndex, index + 1);
+      }
+    }
   }
 
   return null;
 }
 
-/** Every `i18n: { ... }` object literal in the source, in file order. */
-function collectI18nBlocks(source: string): string[] {
-  const blocks: string[] = [];
+interface FoundBlock {
+  readonly start: number;
+  readonly text: string;
+}
+
+/** Every `i18n: { ... }` object literal in the (comment-free) source. */
+function collectI18nBlocks(source: string): FoundBlock[] {
+  const blocks: FoundBlock[] = [];
   const keyPattern = /\bi18n\s*:\s*\{/g;
 
   let match = keyPattern.exec(source);
   while (match !== null) {
     // `lastIndex - 1` is the `{` the pattern just consumed.
-    const block = readBalancedBlock(source, keyPattern.lastIndex - 1);
-    if (block !== null) {
-      blocks.push(block);
+    const start = keyPattern.lastIndex - 1;
+    const text = readBalancedRegion(source, start, '{', '}');
+    if (text !== null) {
+      blocks.push({ start, text });
     }
     match = keyPattern.exec(source);
   }
@@ -91,157 +152,210 @@ function collectI18nBlocks(source: string): string[] {
   return blocks;
 }
 
-interface I18nBlockShape {
-  readonly owner: string;
-  readonly shape: string;
-  readonly localesPattern: RegExp;
-}
+/** Character range of the single `sitemap(...)` call's argument list. */
+function readSitemapCall(source: string, label: string): { readonly start: number; readonly end: number } {
+  const callPattern = /\bsitemap\s*\(/g;
+  const opens: number[] = [];
 
-// The two `i18n` blocks are told apart by their `locales` value: an array
-// literal for Astro, an object map for @astrojs/sitemap.
-const ASTRO_BLOCK: I18nBlockShape = {
-  owner: 'Astro',
-  shape: 'locales: [...] array',
-  localesPattern: /\blocales\s*:\s*\[/,
-};
+  let match = callPattern.exec(source);
+  while (match !== null) {
+    opens.push(callPattern.lastIndex - 1);
+    match = callPattern.exec(source);
+  }
 
-const SITEMAP_BLOCK: I18nBlockShape = {
-  owner: '@astrojs/sitemap',
-  shape: 'locales: { ... } object map',
-  localesPattern: /\blocales\s*:\s*\{/,
-};
-
-function extractI18nBlock(source: string, label: string, wanted: I18nBlockShape): string {
-  const blocks = collectI18nBlocks(source);
-  const found = blocks.find(block => wanted.localesPattern.test(block));
-
-  if (found === undefined) {
+  const start = opens.length === 1 ? opens[0] : undefined;
+  if (start === undefined) {
     throw new Error(
-      `[locale parity guard] No ${wanted.owner} i18n block with a "${wanted.shape}" in ${label} ` +
-        `(${blocks.length} i18n block(s) parsed). There is nothing to compare, so this guard ` +
-        `must fail rather than pass on an empty match — fix the config or this parser.`,
+      `[locale parity guard] Expected exactly 1 "sitemap(" call in ${label}, found ${opens.length}. ` +
+        `The sitemap i18n block is anchored on that call, so the guard cannot tell which block is whose.`,
     );
   }
 
-  return found;
-}
-
-function extractLocales(block: string, label: string): string[] {
-  const arrayBody = /\blocales\s*:\s*\[([^\]]*)\]/.exec(block)?.[1];
-  if (arrayBody === undefined) {
-    throw new Error(`[locale parity guard] Could not read the "locales: [...]" array from ${label}.`);
+  const args = readBalancedRegion(source, start, '(', ')');
+  if (args === null) {
+    throw new Error(`[locale parity guard] The parentheses of the "sitemap(" call in ${label} never balance.`);
   }
 
-  const parsed = [...arrayBody.matchAll(/['"]([^'"]+)['"]/g)]
+  return { start, end: start + args.length };
+}
+
+/**
+ * The two i18n blocks, told apart by which call encloses them rather than by
+ * shape: shape alone let a stray or documentation-shaped block win the match.
+ */
+function extractI18nBlocks(source: string, label: string): { readonly astro: string; readonly sitemap: string } {
+  const blocks = collectI18nBlocks(source);
+
+  if (blocks.length !== EXPECTED_I18N_BLOCK_COUNT) {
+    throw new Error(
+      `[locale parity guard] Expected exactly ${EXPECTED_I18N_BLOCK_COUNT} i18n blocks in ${label} ` +
+        `(Astro's own plus the one passed to sitemap()), found ${blocks.length}. A missing, stray or ` +
+        `duplicated block means the guard could be reading the wrong one — fix the config or this parser.`,
+    );
+  }
+
+  const call = readSitemapCall(source, label);
+  const inside = blocks.filter(block => block.start > call.start && block.start < call.end);
+  const outside = blocks.filter(block => block.start < call.start || block.start > call.end);
+
+  const sitemapBlock = inside.length === 1 ? inside[0]?.text : undefined;
+  const astroBlock = outside.length === 1 ? outside[0]?.text : undefined;
+  if (sitemapBlock === undefined || astroBlock === undefined) {
+    throw new Error(
+      `[locale parity guard] Expected exactly 1 i18n block inside the "sitemap(" call and 1 outside it ` +
+        `in ${label}, found ${inside.length} inside and ${outside.length} outside.`,
+    );
+  }
+
+  return { astro: astroBlock, sitemap: sitemapBlock };
+}
+
+function extractConstArray(source: string, label: string, name: string): string[] {
+  const body = new RegExp(`\\bconst\\s+${name}\\s*=\\s*\\[([^\\]]*)\\]`).exec(source)?.[1];
+  if (body === undefined) {
+    throw new Error(
+      `[locale parity guard] Could not read "const ${name} = [...]" from ${label}. There is nothing ` +
+        `to compare, so this guard must fail rather than pass on an empty match.`,
+    );
+  }
+
+  const parsed = [...body.matchAll(/['"]([^'"]+)['"]/g)]
     .map(match => match[1])
     .filter((value): value is string => value !== undefined);
 
   if (parsed.length === 0) {
-    throw new Error(`[locale parity guard] The "locales" array in ${label} parsed to zero entries.`);
+    throw new Error(`[locale parity guard] "const ${name} = [...]" in ${label} parsed to zero entries.`);
   }
 
   return parsed;
 }
 
-/**
- * The `locales: { 'de-DE': 'de-DE', ... }` map from @astrojs/sitemap's `i18n`
- * option: URL path segment -> hreflang code.
- */
-function extractLocaleMap(block: string, label: string): ReadonlyMap<string, string> {
-  const keyPattern = /\blocales\s*:\s*\{/g;
-  if (keyPattern.exec(block) === null) {
-    throw new Error(
-      `[locale parity guard] Could not find a "locales: { ... }" object map inside the ` +
-        `@astrojs/sitemap i18n block in ${label}.`,
-    );
-  }
-
-  const mapBlock = readBalancedBlock(block, keyPattern.lastIndex - 1);
-  if (mapBlock === null) {
-    throw new Error(
-      `[locale parity guard] The braces of the @astrojs/sitemap "locales" object map in ${label} never balance.`,
-    );
-  }
-
-  const pairs = [...mapBlock.matchAll(/['"]([^'"]+)['"]\s*:\s*['"]([^'"]+)['"]/g)].flatMap(match => {
-    const segment = match[1];
-    const hreflang = match[2];
-    return segment === undefined || hreflang === undefined ? [] : [[segment, hreflang] as const];
-  });
-
-  if (pairs.length === 0) {
-    throw new Error(
-      `[locale parity guard] The @astrojs/sitemap "locales" object map in ${label} parsed to zero entries.`,
-    );
-  }
-
-  return new Map(pairs);
-}
-
-function extractDefaultLocale(block: string, label: string): string {
-  const parsed = /\bdefaultLocale\s*:\s*['"]([^'"]+)['"]/.exec(block)?.[1];
+function extractConstString(source: string, label: string, name: string): string {
+  const parsed = new RegExp(`\\bconst\\s+${name}\\s*=\\s*['"]([^'"]+)['"]`).exec(source)?.[1];
   if (parsed === undefined) {
-    throw new Error(`[locale parity guard] Could not read "defaultLocale" from the i18n block in ${label}.`);
+    throw new Error(
+      `[locale parity guard] Could not read "const ${name} = '...'" from ${label}. There is nothing ` +
+        `to compare, so this guard must fail rather than pass on an empty match.`,
+    );
   }
 
   return parsed;
 }
 
-describe('astro.config.mjs and src/i18n/config.ts agree on locales', () => {
-  const i18nBlock = extractI18nBlock(CONFIG_SOURCE, ASTRO_CONFIG_PATH, ASTRO_BLOCK);
-  const configLocales = extractLocales(i18nBlock, ASTRO_CONFIG_PATH);
+const CONFIG_SOURCE = stripComments(readFileSync(ASTRO_CONFIG_PATH, 'utf8'));
 
-  it('lists exactly the locales exported by @/i18n/config', () => {
+describe('astro.config.mjs locale consts match src/i18n/config.ts', () => {
+  const configLocales = extractConstArray(CONFIG_SOURCE, ASTRO_CONFIG_PATH, LOCALES_CONST);
+  const { astro: astroBlock } = extractI18nBlocks(CONFIG_SOURCE, ASTRO_CONFIG_PATH);
+
+  it(`declares in ${LOCALES_CONST} exactly the locales exported by @/i18n/config`, () => {
     expect([...configLocales].sort()).toEqual([...locales].sort());
   });
 
-  it('lists exactly 11 locales on both sides', () => {
+  it('declares exactly 11 locales on both sides', () => {
     expect(configLocales).toHaveLength(EXPECTED_LOCALE_COUNT);
     expect(locales).toHaveLength(EXPECTED_LOCALE_COUNT);
   });
 
-  it('declares the same defaultLocale as @/i18n/config', () => {
-    expect(extractDefaultLocale(i18nBlock, ASTRO_CONFIG_PATH)).toBe(defaultLocale);
+  it(`declares in ${DEFAULT_LOCALE_CONST} the same defaultLocale as @/i18n/config`, () => {
+    expect(extractConstString(CONFIG_SOURCE, ASTRO_CONFIG_PATH, DEFAULT_LOCALE_CONST)).toBe(defaultLocale);
   });
 
-  it('throws instead of matching nothing when the i18n block is missing', () => {
-    expect(() => extractI18nBlock(NO_I18N_FIXTURE, 'fixture.mjs', ASTRO_BLOCK)).toThrow(/No Astro i18n block/);
+  it('wires Astro i18n to those consts instead of restating literals', () => {
+    expect(astroBlock).toMatch(ASTRO_LOCALES_REFERENCE);
+    expect(astroBlock).toMatch(DEFAULT_LOCALE_REFERENCE);
+    expect(astroBlock).not.toMatch(ARRAY_LITERAL_LOCALES);
+  });
+});
+
+// @astrojs/sitemap reads only its own `i18n` option and never Astro's, so its
+// map used to be a third hand-written copy. It is now derived from LOCALES; this
+// suite exists to stop anyone re-expanding it into an unguarded literal.
+describe('astro.config.mjs derives the @astrojs/sitemap i18n map from the same consts', () => {
+  const { sitemap: sitemapBlock } = extractI18nBlocks(CONFIG_SOURCE, ASTRO_CONFIG_PATH);
+
+  it(`derives locales from ${LOCALES_CONST} rather than restating them`, () => {
+    expect(sitemapBlock).toMatch(SITEMAP_DERIVED_LOCALES);
+  });
+
+  it('does not restate the map as an object or array literal', () => {
+    expect(sitemapBlock).not.toMatch(OBJECT_LITERAL_LOCALES);
+    expect(sitemapBlock).not.toMatch(ARRAY_LITERAL_LOCALES);
+  });
+
+  it(`resolves its defaultLocale to ${DEFAULT_LOCALE_CONST}`, () => {
+    expect(sitemapBlock).toMatch(DEFAULT_LOCALE_REFERENCE);
+    expect(extractConstString(CONFIG_SOURCE, ASTRO_CONFIG_PATH, DEFAULT_LOCALE_CONST)).toBe(defaultLocale);
   });
 });
 
-// @astrojs/sitemap reads only its own `i18n` option, so a locale added to
-// src/i18n/config.ts and to Astro's `i18n` but forgotten here would build fine
-// and silently ship without hreflang alternates.
-describe("astro.config.mjs's @astrojs/sitemap i18n map agrees with src/i18n/config.ts", () => {
-  const sitemapBlock = extractI18nBlock(CONFIG_SOURCE, ASTRO_CONFIG_PATH, SITEMAP_BLOCK);
-  const localeMap = extractLocaleMap(sitemapBlock, ASTRO_CONFIG_PATH);
-
-  it('maps exactly the locales exported by @/i18n/config', () => {
-    expect([...localeMap.keys()].sort()).toEqual([...locales].sort());
-  });
-
-  it('maps exactly 11 locales', () => {
-    expect(localeMap.size).toBe(EXPECTED_LOCALE_COUNT);
-  });
-
-  it('maps every URL path segment to an identical hreflang code', () => {
-    const mismatched = [...localeMap.entries()].filter(([segment, hreflang]) => segment !== hreflang);
-    expect(mismatched).toEqual([]);
-  });
-
-  it('declares the same defaultLocale as @/i18n/config', () => {
-    expect(extractDefaultLocale(sitemapBlock, ASTRO_CONFIG_PATH)).toBe(defaultLocale);
-  });
-
-  it('throws instead of matching nothing when the sitemap i18n block is missing', () => {
-    expect(() => extractI18nBlock(NO_I18N_FIXTURE, 'fixture.mjs', SITEMAP_BLOCK)).toThrow(
-      /No @astrojs\/sitemap i18n block/,
+// The guard is only worth anything if it cannot pass on zero matches, and it
+// must read code rather than comments.
+describe('astro.config.mjs guard fails loudly instead of matching nothing', () => {
+  it('throws when there is no i18n block at all', () => {
+    expect(() => extractI18nBlocks(stripComments(NO_I18N_FIXTURE), 'fixture.mjs')).toThrow(
+      /Expected exactly 2 i18n blocks/,
     );
   });
 
-  it('throws instead of matching nothing when the locales map is missing', () => {
-    expect(() => extractLocaleMap("{ defaultLocale: 'en-US' }", 'fixture.mjs')).toThrow(
-      /Could not find a "locales: \{ \.\.\. \}" object map/,
+  it('throws when a duplicate i18n block appears', () => {
+    const fixture = `
+      const LOCALES = ['en-US'];
+      export default defineConfig({
+        i18n: { defaultLocale: DEFAULT_LOCALE, locales: LOCALES },
+        integrations: [sitemap({ i18n: { defaultLocale: DEFAULT_LOCALE, locales: LOCALES } })],
+        stray: { i18n: { defaultLocale: 'en-US', locales: ['XX-XX'] } },
+      });`;
+    expect(() => extractI18nBlocks(stripComments(fixture), 'fixture.mjs')).toThrow(/found 3/);
+  });
+
+  it('throws when the sitemap i18n block moves to another call', () => {
+    const fixture = `
+      export default defineConfig({
+        i18n: { defaultLocale: DEFAULT_LOCALE, locales: LOCALES },
+        integrations: [vue({ i18n: { defaultLocale: DEFAULT_LOCALE, locales: LOCALES } }), sitemap()],
+      });`;
+    expect(() => extractI18nBlocks(stripComments(fixture), 'fixture.mjs')).toThrow(
+      /found 0 inside and 2 outside/,
     );
+  });
+
+  it(`throws when const ${LOCALES_CONST} is gone`, () => {
+    expect(() => extractConstArray('const OTHER = [1];', 'fixture.mjs', LOCALES_CONST)).toThrow(
+      /Could not read "const LOCALES = \[\.\.\.\]"/,
+    );
+  });
+
+  it(`throws when const ${DEFAULT_LOCALE_CONST} is gone`, () => {
+    expect(() => extractConstString('const OTHER = 1;', 'fixture.mjs', DEFAULT_LOCALE_CONST)).toThrow(
+      /Could not read "const DEFAULT_LOCALE = '\.\.\.'"/,
+    );
+  });
+
+  it('does not count a commented-out locale as present', () => {
+    const fixture = "const LOCALES = [\n  'de-DE',\n  // 'nl-NL',\n  'en-US',\n];";
+    expect(extractConstArray(stripComments(fixture), 'fixture.mjs', LOCALES_CONST)).toEqual(['de-DE', 'en-US']);
+  });
+
+  it('does not count a locale that only appears in a note comment', () => {
+    const fixture = "// dropped 'nl-NL' pending translations\nconst LOCALES = ['de-DE', 'en-US'];";
+    expect(extractConstArray(stripComments(fixture), 'fixture.mjs', LOCALES_CONST)).toEqual(['de-DE', 'en-US']);
+  });
+
+  it('does not count a commented-out i18n block or sitemap call', () => {
+    const fixture = `
+      /* reference shape: sitemap({ i18n: { locales: { 'de-DE': 'de-DE' } } }) */
+      export default defineConfig({
+        i18n: { defaultLocale: DEFAULT_LOCALE, locales: LOCALES },
+        integrations: [sitemap({ i18n: { defaultLocale: DEFAULT_LOCALE, locales: LOCALES } })],
+      });`;
+    expect(() => extractI18nBlocks(stripComments(fixture), 'fixture.mjs')).not.toThrow();
+  });
+
+  it('keeps string literals that contain slashes', () => {
+    const stripped = stripComments("const SITE = 'https://example.com'; // TODO(deploy)");
+    expect(stripped).toContain("'https://example.com'");
+    expect(stripped).not.toContain('TODO');
   });
 });
+
