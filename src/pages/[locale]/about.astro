@@ -1,0 +1,69 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { isLocale, locales } from '@/i18n/config';
+import { parseEmphasis } from '@/i18n/rich-text';
+import { useTranslations } from '@/i18n/ui';
+import { getVerifiedSpecPages } from '@/lib/specs';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+// Astro types a route param as `string | undefined`. getStaticPaths emits only
+// the 11 real locales, so this guard never fires in a normal build; it is here
+// to narrow that type without an `as Locale` cast, and to fail the build loudly
+// rather than render a page whose `lang`, hreflang set and translation bundle
+// would all disagree with its URL if the route were ever reached another way.
+const { locale: param } = Astro.params;
+if (param === undefined || !isLocale(param)) {
+  throw new Error(`[locale]/about.astro: "${param}" is not a supported locale`);
+}
+const locale = param;
+
+const t = useTranslations(locale);
+await t.load();
+
+// The count below is what *this locale* publishes, which is exactly the list its
+// own home page renders. Quoting the English catalogue on a German page would
+// contradict the documents a German reader can actually see, and this section is
+// the one that promises the numbers on this site are kept honest.
+const pages = await getVerifiedSpecPages(locale);
+// Formatted rather than interpolated raw, for the same reason
+// src/lib/spec-labels.ts formats every number it prints: 1,024 is 1.024 in German.
+const verifiedCount = new Intl.NumberFormat(locale).format(pages.length);
+
+// Body copy carries its emphasis as {em}…{/em} placeholders, parsed here and
+// mapped onto real <em> elements below. Every chunk interpolates as text, so no
+// translated string reaches a raw-HTML sink: markup inside a translation renders
+// escaped and inert rather than as elements. See src/i18n/rich-text.ts.
+const measures = parseEmphasis(t.t('about.measures-p1'));
+---
+
+<BaseLayout
+  locale={locale}
+  title={t.t('about.meta-title')}
+  description={t.t('about.meta-description')}
+>
+  <h1 class="text-3xl font-semibold tracking-tight text-ink-900">{t.t('about.title')}</h1>
+
+  <div class="markdown mt-8 max-w-2xl">
+    <h2>{t.t('about.why-heading')}</h2>
+    <p>{t.t('about.why-p1')}</p>
+    <p>{t.t('about.why-p2')}</p>
+
+    <h2>{t.t('about.measures-heading')}</h2>
+    <p>{measures.map((chunk) => (chunk.emphasis ? <em>{chunk.text}</em> : chunk.text))}</p>
+    <p>{t.t('about.measures-p2')}</p>
+    <p>{t.t('about.measures-p3')}</p>
+
+    <h2>{t.t('about.upload-heading')}</h2>
+    <p>{t.t('about.upload-p1')}</p>
+
+    <h2>{t.t('about.honest-heading')}</h2>
+    <p>{t.t('about.honest-p1', { count: verifiedCount })}</p>
+    <p>{t.t('about.honest-p2')}</p>
+
+    <h2>{t.t('about.paid-heading')}</h2>
+    <p>{t.t('about.paid-p1')}</p>
+  </div>
+</BaseLayout>

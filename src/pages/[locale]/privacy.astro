@@ -1,0 +1,68 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { isLocale, locales } from '@/i18n/config';
+import { parseLinks, type RichTextLink } from '@/i18n/rich-text';
+import { useTranslations } from '@/i18n/ui';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+// See [locale]/about.astro: narrows the route param without a cast, and fails the
+// build rather than serving a page whose `lang` disagrees with its URL.
+const { locale: param } = Astro.params;
+if (param === undefined || !isLocale(param)) {
+  throw new Error(`[locale]/privacy.astro: "${param}" is not a supported locale`);
+}
+const locale = param;
+
+const t = useTranslations(locale);
+await t.load();
+
+// Deliberately a literal, not a localised date. This is the date a published
+// policy last changed — the marker a reader compares against the copy they were
+// shown before — so it says the same thing in every language, and reformatting it
+// per locale would rewrite it in English too.
+const updated = '3 September 2026';
+
+// The two destinations the advertising paragraph links to, in `{a1}`, `{a2}`
+// order. They live in the page and never in a translation bundle: the copy says
+// which words link where, the page says where that is. See src/i18n/rich-text.ts
+// for why a translator-supplied href is a category of risk of its own.
+const adLinks: readonly RichTextLink[] = [
+  { href: 'https://myadcenter.google.com/', rel: 'noopener', target: '_blank' },
+  { href: 'https://optout.aboutads.info/', rel: 'noopener', target: '_blank' },
+];
+const consent = parseLinks(t.t('privacy.ads-p2'), adLinks);
+---
+
+<BaseLayout
+  locale={locale}
+  title={t.t('privacy.meta-title')}
+  description={t.t('privacy.meta-description')}
+>
+  <h1 class="text-3xl font-semibold tracking-tight text-ink-900">{t.t('privacy.title')}</h1>
+  <p class="mt-2 text-sm text-ink-400">{t.t('legal.updated', { date: updated })}</p>
+
+  <div class="markdown mt-8 max-w-2xl">
+    <h2>{t.t('privacy.photos-heading')}</h2>
+    <p>{t.t('privacy.photos-p1')}</p>
+    <p>{t.t('privacy.photos-p2')}</p>
+
+    <h2>{t.t('privacy.collected-heading')}</h2>
+    <p>{t.t('privacy.collected-p1')}</p>
+
+    <h2>{t.t('privacy.ads-heading')}</h2>
+    <p>{t.t('privacy.ads-p1')}</p>
+    <p>{consent.map((chunk) => (chunk.link === null ? chunk.text : <a href={chunk.link.href} rel={chunk.link.rel} target={chunk.link.target}>{chunk.text}</a>))}</p>
+
+    <h2>{t.t('privacy.rights-heading')}</h2>
+    <p>{t.t('privacy.rights-p1')}</p>
+
+    <h2>{t.t('privacy.children-heading')}</h2>
+    <p>{t.t('privacy.children-p1')}</p>
+
+    <h2>{t.t('privacy.changes-heading')}</h2>
+    <p>{t.t('privacy.changes-p1')}</p>
+  </div>
+</BaseLayout>

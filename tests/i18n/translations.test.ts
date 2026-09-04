@@ -174,6 +174,159 @@ describe('Document page translations', () => {
 });
 
 /**
+ * The about, privacy and terms pages moved under `src/pages/[locale]/` and now
+ * render every heading and every paragraph from the bundle. Two failure modes
+ * matter enough to guard: a key missing from a locale ships its own name as body
+ * copy — `privacy.children-p1` where a compliance statement should be — and the
+ * privacy page's two outbound links live as markers whose URLs stay in the page,
+ * which only holds while no bundle starts carrying a URL of its own.
+ */
+describe('Static page translations', () => {
+  function required(dict: Record<string, string>, key: string): string {
+    const value = dict[key];
+    if (value === undefined) throw new Error(`missing translation key: ${key}`);
+    return value;
+  }
+
+  const aboutKeys = [
+    'about.meta-title',
+    'about.meta-description',
+    'about.title',
+    'about.why-heading',
+    'about.why-p1',
+    'about.why-p2',
+    'about.measures-heading',
+    'about.measures-p1',
+    'about.measures-p2',
+    'about.measures-p3',
+    'about.upload-heading',
+    'about.upload-p1',
+    'about.honest-heading',
+    'about.honest-p1',
+    'about.honest-p2',
+    'about.paid-heading',
+    'about.paid-p1',
+  ];
+
+  const privacyKeys = [
+    'privacy.meta-title',
+    'privacy.meta-description',
+    'privacy.title',
+    'privacy.photos-heading',
+    'privacy.photos-p1',
+    'privacy.photos-p2',
+    'privacy.collected-heading',
+    'privacy.collected-p1',
+    'privacy.ads-heading',
+    'privacy.ads-p1',
+    'privacy.ads-p2',
+    'privacy.rights-heading',
+    'privacy.rights-p1',
+    'privacy.children-heading',
+    'privacy.children-p1',
+    'privacy.changes-heading',
+    'privacy.changes-p1',
+  ];
+
+  const termsKeys = [
+    'terms.meta-title',
+    'terms.meta-description',
+    'terms.title',
+    'terms.provides-heading',
+    'terms.provides-p1',
+    'terms.accuracy-heading',
+    'terms.accuracy-p1',
+    'terms.accuracy-p2',
+    'terms.use-heading',
+    'terms.use-p1',
+    'terms.liability-heading',
+    'terms.liability-p1',
+    'terms.ip-heading',
+    'terms.ip-p1',
+    'terms.changes-heading',
+    'terms.changes-p1',
+  ];
+
+  const pageKeys = [...aboutKeys, ...privacyKeys, ...termsKeys, 'legal.updated'];
+
+  it('carries every key the three pages render, in every locale', async () => {
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      for (const key of pageKeys) {
+        expect(dict[key], `${locale} is missing ${key}`).toBeTruthy();
+      }
+    }
+  });
+
+  it('keeps each document-head string tuned, and apart from the page copy', async () => {
+    // These three pages each carry a `title` and `description` written for search
+    // results, not the on-page heading and not the opening paragraph. The about
+    // page is the one whose heading is plainly not its title ("About"); privacy
+    // and terms legitimately share theirs with the heading, so the guard there is
+    // the length window every other page in the site is held to.
+    const dict = await getTranslations('en-US');
+
+    expect(required(dict, 'about.meta-title')).not.toBe(required(dict, 'about.title'));
+
+    for (const page of ['about', 'privacy', 'terms']) {
+      const title = required(dict, `${page}.meta-title`);
+      const description = required(dict, `${page}.meta-description`);
+
+      expect(title.length, `${page} title`).toBeLessThanOrEqual(70);
+      expect(description.length, `${page} description`).toBeGreaterThanOrEqual(50);
+      expect(description.length, `${page} description`).toBeLessThanOrEqual(170);
+    }
+
+    expect(required(dict, 'about.meta-description')).not.toBe(required(dict, 'about.why-p1'));
+    expect(required(dict, 'privacy.meta-description')).not.toBe(
+      required(dict, 'privacy.photos-p1'),
+    );
+    expect(required(dict, 'terms.meta-description')).not.toBe(required(dict, 'terms.provides-p1'));
+  });
+
+  it('keeps the emphasis on the head measurement, balanced, in every locale', async () => {
+    // The about page maps `{em}…{/em}` onto a real <em>; one marker without the
+    // other loses the emphasis silently, and a raw `<` could only ever render as
+    // visible junk because every chunk interpolates as text.
+    for (const locale of locales) {
+      const value = required(await getTranslations(locale), 'about.measures-p1');
+      expect(value.split('{em}'), `${locale} opens {em} more than once`).toHaveLength(2);
+      expect(value.split('{/em}'), `${locale} closes {/em} more than once`).toHaveLength(2);
+      expect(value.includes('<'), `${locale} carries a raw <`).toBe(false);
+    }
+  });
+
+  it('keeps the advertising links as markers, with their addresses out of the bundle', async () => {
+    // `{a1}` and `{a2}` say which words link where; src/pages/[locale]/privacy.astro
+    // says where that is. A bundle that grew a URL of its own would mean a
+    // translator had been handed a destination to get wrong — or to redirect.
+    for (const locale of locales) {
+      const value = required(await getTranslations(locale), 'privacy.ads-p2');
+
+      for (const marker of ['{a1}', '{/a1}', '{a2}', '{/a2}']) {
+        expect(value.split(marker), `${locale} does not use ${marker} exactly once`).toHaveLength(
+          2,
+        );
+      }
+
+      expect(value, `${locale} carries a URL in its copy`).not.toMatch(/https?:\/\//);
+      expect(value.includes('<'), `${locale} carries a raw <`).toBe(false);
+    }
+  });
+
+  it('keeps the verified-spec count and the updated date as parameters', async () => {
+    // Both are supplied by the page: the count is a live query, and the date is
+    // when a published document last changed. A bundle that drops the placeholder
+    // ships a sentence with the fact missing from it.
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      expect(required(dict, 'about.honest-p1'), locale).toContain('{count}');
+      expect(required(dict, 'legal.updated'), locale).toContain('{date}');
+    }
+  });
+});
+
+/**
  * Translator documentation.
  *
  * The bundle is a flat `Record<string, string>` because the loader, `t()` and

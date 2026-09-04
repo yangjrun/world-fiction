@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { isLocale, locales } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+// See [locale]/about.astro: narrows the route param without a cast, and fails the
+// build rather than serving a page whose `lang` disagrees with its URL.
+const { locale: param } = Astro.params;
+if (param === undefined || !isLocale(param)) {
+  throw new Error(`[locale]/terms.astro: "${param}" is not a supported locale`);
+}
+const locale = param;
+
+const t = useTranslations(locale);
+await t.load();
+
+// A literal for the same reason as on the privacy page: the date a published
+// document last changed is not a number to reformat per locale.
+const updated = '3 September 2026';
+---
+
+<BaseLayout
+  locale={locale}
+  title={t.t('terms.meta-title')}
+  description={t.t('terms.meta-description')}
+>
+  <h1 class="text-3xl font-semibold tracking-tight text-ink-900">{t.t('terms.title')}</h1>
+  <p class="mt-2 text-sm text-ink-400">{t.t('legal.updated', { date: updated })}</p>
+
+  <div class="markdown mt-8 max-w-2xl">
+    <h2>{t.t('terms.provides-heading')}</h2>
+    <p>{t.t('terms.provides-p1')}</p>
+
+    <h2>{t.t('terms.accuracy-heading')}</h2>
+    <p>{t.t('terms.accuracy-p1')}</p>
+    <p>{t.t('terms.accuracy-p2')}</p>
+
+    <h2>{t.t('terms.use-heading')}</h2>
+    <p>{t.t('terms.use-p1')}</p>
+
+    <h2>{t.t('terms.liability-heading')}</h2>
+    <p>{t.t('terms.liability-p1')}</p>
+
+    <h2>{t.t('terms.ip-heading')}</h2>
+    <p>{t.t('terms.ip-p1')}</p>
+
+    <h2>{t.t('terms.changes-heading')}</h2>
+    <p>{t.t('terms.changes-p1')}</p>
+  </div>
+</BaseLayout>
