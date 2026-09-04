@@ -124,7 +124,7 @@
   "spec.file-min": "min {size} {unit}",
   "spec.file-min__note": "Shown when an authority sets a floor on the file size. {size} is a number, {unit} is the value of unit.kb.",
   "spec.file-separator": ", ",
-  "spec.file-separator__note": "Joins the file constraints into one table cell: JPEG, max 240 KB. Include whatever spaces the language needs, and never leave it empty or the values run together.",
+  "spec.file-separator__note": "Joins the file constraints into one table cell: JPEG, max 240 KB. It needs a visible mark such as a comma, plus whatever spaces the language wants around it: left empty, or left as a space on its own, the values run together into one phrase instead of reading as two separate limits.",
 
   "unit.mm": "mm",
   "unit.px": "px",

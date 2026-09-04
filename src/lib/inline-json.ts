@@ -31,9 +31,17 @@
 export function inlineJson(value: unknown): string {
   // JSON.stringify returns undefined — not a string — for undefined, and for a
   // bare function or symbol, and `.replace` on that would end a build with a
-  // TypeError raised from inside a `set:html` attribute. Anything it declines to
-  // serialise becomes `null`, which every JSON-LD consumer skips. Its return is
-  // typed `string`, so the check has to be a runtime one.
+  // TypeError raised from inside a `set:html` attribute, where the stack says
+  // nothing useful about which block was at fault. Its return is typed `string`,
+  // so the check has to be a runtime one, and `null` is the substitute because
+  // every JSON-LD consumer skips a null block.
+  //
+  // Not everything unserialisable arrives here as undefined: JSON.stringify
+  // *throws* on a BigInt and on a circular structure, and both are left to throw.
+  // Neither is a shape content can take — the frontmatter and translation values
+  // feeding these blocks are Zod-validated strings, numbers and dates — so both
+  // would mean a bug in a caller, and a build that dies naming this file is a
+  // better outcome than a page quietly shipping without its structured data.
   const json: string | undefined = JSON.stringify(value);
   if (typeof json !== 'string') return 'null';
 

@@ -69,7 +69,7 @@ describe('inlineJson', () => {
     expect(JSON.parse(escaped)).toEqual(value);
   });
 
-  it('serialises anything JSON cannot represent as null, rather than throwing', () => {
+  it('serialises the values JSON.stringify drops as null, rather than throwing', () => {
     // JSON.stringify answers `undefined` for all three of these, and `.replace`
     // on `undefined` is the mid-build TypeError the guard exists to prevent —
     // raised from inside a `set:html` attribute, where the stack says nothing

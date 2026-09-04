@@ -200,8 +200,12 @@ describe('Spec label file separator', () => {
       const labels = await labelsFor(locale);
       const value = labels.file(DV_LOTTERY);
 
-      // An empty separator is the fused token written by hand.
-      expect(separator.length, `${locale} has an empty separator`).toBeGreaterThan(0);
+      // An empty separator is the fused token written by hand — and a
+      // whitespace-only one is `JPEG max 240 KB`, where the constraints read as
+      // one phrase describing the format rather than as two independent limits.
+      // The key's own __note asks for a visible mark, so the check is on the
+      // trimmed length: " " has to fail here, not ship unflagged.
+      expect(separator.trim().length, `${locale} has a blank separator`).toBeGreaterThan(0);
       // The format name is not translated, so this holds once the bundles are.
       expect(value.startsWith(`JPEG${separator}`), `${locale}: ${value}`).toBe(true);
     }
