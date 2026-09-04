@@ -129,3 +129,46 @@ describe('Home page translations', () => {
     expect(metaDescription.length).toBeLessThanOrEqual(170);
   });
 });
+
+/**
+ * The document page is the other page rendering its chrome from the bundle, and
+ * nothing type-checks a translation key: `t()` answers a missing one with the key
+ * itself, so a typo here or a bundle that never gains the key ships `faq.heading`
+ * as a heading. The ten bundles below en-US are still to be written.
+ */
+describe('Document page translations', () => {
+  const pageKeys = [
+    'aria.breadcrumb',
+    'nav.home',
+    'requirements.heading',
+    'requirements.source',
+    'requirements.checked',
+    'rejections.heading',
+    'faq.heading',
+    'schema.app-name',
+    'spec.size',
+    'spec.head-height',
+    'spec.eye-height',
+    'spec.background',
+    'spec.file',
+  ];
+
+  it('carries every key the page and its spec table render, in every locale', async () => {
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      for (const key of pageKeys) {
+        expect(dict[key], `${locale} is missing ${key}`).toBeTruthy();
+      }
+    }
+  });
+
+  it('keeps the document name a parameter of the JSON-LD application name', async () => {
+    // That block now claims `inLanguage`, so its one human-readable string is
+    // translated; a bundle that drops the placeholder would give all five
+    // documents the same name in search results.
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      expect(dict['schema.app-name'], locale).toContain('{documentName}');
+    }
+  });
+});

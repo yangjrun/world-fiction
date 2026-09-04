@@ -1,52 +1,42 @@
 ---
-import { resolvePhysicalSize, resolvePixelSize } from '@/lib/photo/units';
+import type { Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
 import type { PhotoSpec } from '@/lib/photo/types';
+import { createSpecLabels } from '@/lib/spec-labels';
 
 export interface Props {
   spec: PhotoSpec;
+  /** Locale of the page rendering the table. Decides units and number format. */
+  locale: Locale;
 }
 
-const { spec } = Astro.props;
-const pixels = resolvePixelSize(spec.output);
-const physical = resolvePhysicalSize(spec.output);
+const { spec, locale } = Astro.props;
 
-const mm = (ratio: number) => (physical ? `${(ratio * physical.heightMm).toFixed(1)} mm` : null);
-const pct = (ratio: number) => `${(ratio * 100).toFixed(0)}%`;
+const t = useTranslations(locale);
+await t.load();
 
-/** Show the authority's own units first, with the derived one in brackets. */
-function band(min: number, max: number): string {
-  const asMm = physical ? `${mm(min)} – ${mm(max)}` : null;
-  const asPct = `${pct(min)} – ${pct(max)} of height`;
-  return asMm ? `${asMm} (${asPct})` : asPct;
-}
+// Every number, unit and pattern in the rows below comes from here, and so does
+// the size printed on each home-page card, so the two cannot disagree about how
+// a size is written. See src/lib/spec-labels.ts.
+const labels = createSpecLabels(locale, t.t);
+
+// Only some authorities publish an eye-line band. Where none exists the row is
+// dropped rather than shown empty.
+const eyeLine = labels.eyeLine(spec);
 
 const rows: Array<{ label: string; value: string }> = [
-  {
-    label: 'Photo size',
-    value: physical
-      ? `${physical.widthMm} × ${physical.heightMm} mm (${pixels.widthPx} × ${pixels.heightPx} px at ${physical.dpi} DPI)`
-      : `${pixels.widthPx} × ${pixels.heightPx} px`,
-  },
-  { label: 'Head height, chin to crown', value: band(spec.headHeight.minRatio, spec.headHeight.maxRatio) },
-  ...(spec.eyeLine
-    ? [{ label: 'Eye height above bottom edge', value: band(spec.eyeLine.minRatio, spec.eyeLine.maxRatio) }]
-    : []),
-  { label: 'Background', value: spec.background.description },
-  {
-    label: 'File',
-    value: [
-      spec.file.format.toUpperCase(),
-      spec.file.maxBytes ? `max ${Math.round(spec.file.maxBytes / 1024)} KB` : null,
-      spec.file.minBytes ? `min ${Math.round(spec.file.minBytes / 1024)} KB` : null,
-    ]
-      .filter(Boolean)
-      .join(', '),
-  },
+  { label: t.t('spec.size'), value: labels.sizeWithPixels(spec) },
+  { label: t.t('spec.head-height'), value: labels.headHeight(spec) },
+  ...(eyeLine === null ? [] : [{ label: t.t('spec.eye-height'), value: eyeLine }]),
+  // Background and file wording is spec data, translated with the content bundle
+  // rather than the UI bundle.
+  { label: t.t('spec.background'), value: spec.background.description },
+  { label: t.t('spec.file'), value: labels.file(spec) },
 ];
 ---
 
 <table class="w-full border-collapse text-sm">
-  <caption class="sr-only">{spec.documentName} requirements</caption>
+  <caption class="sr-only">{labels.caption(spec)}</caption>
   <tbody>
     {
       rows.map((row) => (

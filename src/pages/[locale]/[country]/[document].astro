@@ -3,23 +3,48 @@ import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import SpecTable from '@/components/SpecTable.astro';
 import PhotoEditor from '@/components/editor/PhotoEditor.vue';
-import { getVerifiedSpecPages } from '@/lib/specs';
-import { defaultLocale } from '@/i18n/config';
+import { getVerifiedSpecPages, type SpecPage } from '@/lib/specs';
+import { locales, type Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
 
 export async function getStaticPaths() {
-  // Interim: this route is still the non-localized one. Task 6 moves it under
-  // src/pages/[locale]/ and takes the locale from the route instead.
-  const pages = await getVerifiedSpecPages(defaultLocale);
-  return pages.map((page) => ({
-    params: { country: page.entry.data.country, document: page.entry.data.document },
-    props: { page },
-  }));
+  // Each locale is asked for its own verified specs, in parallel. A locale with
+  // no content bundle yet contributes no paths rather than borrowing English
+  // ones: a page whose `lang` claims de-DE over an English body is worse for a
+  // reader, and for search, than no page at all. Today that means en-US alone —
+  // the other ten start emitting pages as their spec bundles land.
+  const perLocale = await Promise.all(
+    locales.map(async (locale) => {
+      const pages = await getVerifiedSpecPages(locale);
+      return pages.map((page) => ({
+        params: {
+          locale,
+          country: page.entry.data.country,
+          document: page.entry.data.document,
+        },
+        props: { page, locale },
+      }));
+    }),
+  );
+  return perLocale.flat();
 }
 
-const { page } = Astro.props;
+export interface Props {
+  page: SpecPage;
+  /** Locale of this page, from the route. Every string below is loaded for it. */
+  locale: Locale;
+}
+
+const { page, locale } = Astro.props;
 const { entry, spec } = page;
 const { Content } = await render(entry);
 
+const t = useTranslations(locale);
+await t.load();
+
+// ISO 8601 and deliberately not localised: this date is the freshness marker on
+// the numbers above it, and 2026-09-03 reads the same everywhere, where
+// 09/03/2026 does not.
 const checked = entry.data.sourceCheckedOn.toISOString().slice(0, 10);
 
 const faqSchema =
@@ -35,10 +60,14 @@ const faqSchema =
       }
     : null;
 
+// `inLanguage` is what tells a crawler which of the eleven hreflang alternates
+// this block belongs to, so the one human-readable string in it is translated
+// rather than left in English beside a claim that the page is German.
 const appSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: `${entry.data.documentName} maker`,
+  name: t.t('schema.app-name', { documentName: entry.data.documentName }),
+  inLanguage: locale,
   applicationCategory: 'MultimediaApplication',
   operatingSystem: 'Any',
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
@@ -46,12 +75,13 @@ const appSchema = {
 ---
 
 <BaseLayout
+  locale={locale}
   title={entry.data.title}
   description={entry.data.description}
   structuredData={[appSchema, ...(faqSchema ? [faqSchema] : [])]}
 >
-  <nav aria-label="Breadcrumb" class="mb-4 text-sm text-ink-400">
-    <a class="hover:text-brand-700" href="/">All photo specs</a>
+  <nav aria-label={t.t('aria.breadcrumb')} class="mb-4 text-sm text-ink-400">
+    <a class="hover:text-brand-700" href={`/${locale}`}>{t.t('nav.home')}</a>
     <span aria-hidden="true"> / </span>
     <span>{entry.data.countryName}</span>
   </nav>
@@ -64,15 +94,17 @@ const appSchema = {
   </div>
 
   <section class="mt-12" aria-labelledby="requirements">
-    <h2 id="requirements" class="text-xl font-semibold text-ink-900">Requirements at a glance</h2>
+    <h2 id="requirements" class="text-xl font-semibold text-ink-900">
+      {t.t('requirements.heading')}
+    </h2>
     <div class="mt-4 rounded-xl border border-ink-200 p-5">
-      <SpecTable spec={spec} />
+      <SpecTable spec={spec} locale={locale} />
       <p class="mt-4 text-xs text-ink-400">
-        Source:
+        {t.t('requirements.source')}
         <a class="underline hover:text-brand-700" href={entry.data.sourceUrl} rel="nofollow noopener" target="_blank">
           {new URL(entry.data.sourceUrl).hostname}
         </a>
-        · last checked {checked}
+        · {t.t('requirements.checked')} {checked}
       </p>
     </div>
   </section>
@@ -80,7 +112,9 @@ const appSchema = {
   {
     entry.data.rejectionReasons.length > 0 && (
       <section class="mt-12" aria-labelledby="rejections">
-        <h2 id="rejections" class="text-xl font-semibold text-ink-900">Why photos get rejected</h2>
+        <h2 id="rejections" class="text-xl font-semibold text-ink-900">
+          {t.t('rejections.heading')}
+        </h2>
         <ul class="mt-4 space-y-2 text-ink-600">
           {entry.data.rejectionReasons.map((reason) => (
             <li class="flex gap-3">
@@ -100,7 +134,9 @@ const appSchema = {
   {
     entry.data.faq.length > 0 && (
       <section class="mt-12" aria-labelledby="faq">
-        <h2 id="faq" class="text-xl font-semibold text-ink-900">Common questions</h2>
+        <h2 id="faq" class="text-xl font-semibold text-ink-900">
+          {t.t('faq.heading')}
+        </h2>
         <dl class="mt-4 space-y-5">
           {entry.data.faq.map((item) => (
             <div>

@@ -43,6 +43,20 @@
   "spec.eye-height": "Eye height above bottom edge",
   "spec.background": "Background",
   "spec.file": "File",
+  "spec.caption": "{documentName} requirements",
+  "spec.dimensions": "{width} × {height} {unit}",
+  "spec.size-print": "{physical} ({pixels} at {dpi} {dpiUnit})",
+  "spec.band-length": "{minLength} {unit} – {maxLength} {unit} ({minPercent} – {maxPercent} of height)",
+  "spec.band-percent": "{minPercent} – {maxPercent} of height",
+  "spec.file-max": "max {size} {unit}",
+  "spec.file-min": "min {size} {unit}",
+
+  "unit.mm": "mm",
+  "unit.px": "px",
+  "unit.dpi": "DPI",
+  "unit.kb": "KB",
+
+  "schema.app-name": "{documentName} maker",
 
   "test.greeting": "Hello {name}, welcome to {place}",
   "test.repeated": "Hello {name}, goodbye {name}"
