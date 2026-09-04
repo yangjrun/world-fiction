@@ -31,6 +31,17 @@ const BOUNDED_FILE: PhotoSpec = {
   ...DV_LOTTERY,
   file: { format: 'jpeg', maxBytes: 240 * 1024, minBytes: 10 * 1024 },
 };
+/** Schengen at 600 DPI, where a pixel dimension first reaches four digits. */
+const HIGH_DPI: PhotoSpec = {
+  ...SCHENGEN_VISA,
+  output: { kind: 'physical', widthMm: 35, heightMm: 45, dpi: 600 },
+};
+
+/** A 25MB ceiling, where a kilobyte count first reaches five digits. */
+const LARGE_CEILING: PhotoSpec = {
+  ...DV_LOTTERY,
+  file: { format: 'jpeg', maxBytes: 25 * 1024 * 1024 },
+};
 
 describe('Spec labels in the source locale', () => {
   it('prints a print size, with the derived pixel size in brackets', async () => {
@@ -143,5 +154,61 @@ describe('Spec label translation keys', () => {
       expect(value).not.toContain('unit.');
       expect(value).not.toContain('{');
     }
+  });
+});
+
+describe('Spec label number grouping', () => {
+  // One formatter cannot serve both: a pixel count and a kilobyte count want
+  // opposite answers on the thousands separator, and both reach four digits with
+  // ordinary spec data.
+  it('writes pixel dimensions and DPI without a thousands separator', async () => {
+    // Imaging writes `1920 × 1080`, never `1,920 × 1,080` — and grouped, this
+    // locale set would spell that separator three ways (`1,063`, `1.063`,
+    // `1 063`) for a number no reader takes as a quantity. The largest spec in
+    // the repository today is 827 px; a 600-DPI spec reaches four digits at once.
+    const enUS = await labelsFor('en-US');
+    expect(enUS.sizeWithPixels(HIGH_DPI)).toBe('35 × 45 mm (827 × 1063 px at 600 DPI)');
+
+    const deDE = await labelsFor('de-DE');
+    expect(deDE.sizeWithPixels(HIGH_DPI)).toBe('35 × 45 mm (827 × 1063 px at 600 DPI)');
+  });
+
+  it('keeps grouping on a kilobyte ceiling, which is a quantity', async () => {
+    // `max 25600 KB` is a worse read than `max 25,600 KB`, and this is the value
+    // an authority states as a limit rather than a dimension.
+    const enUS = await labelsFor('en-US');
+    expect(enUS.file(LARGE_CEILING)).toBe('JPEG, max 25,600 KB');
+
+    const deDE = await labelsFor('de-DE');
+    expect(deDE.file(LARGE_CEILING)).toBe('JPEG, max 25.600 KB');
+  });
+});
+
+describe('Spec label file separator', () => {
+  // Intl.ListFormat was the first implementation here and was wrong twice over.
+  // `{style: 'short', type: 'unit'}` inserts a conjunction for two items in
+  // es-ES, fr-FR, it-IT and pt-PT (`JPEG et max 240 KB`) and for three in de-DE,
+  // so the rationale for choosing `unit` over `conjunction` was simply false. And
+  // zh-CN's unit-list pattern has no separator at all: `JPEG` and `max 240 KB`
+  // come out as `JPEGmax 240 KB`, one fused token, with nothing a translator can
+  // do about it. A table cell of independent constraints is not a linguistic
+  // list, so the separator is a bundle key.
+  it('separates the constraints in every locale, and fuses nothing', async () => {
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      const separator = dict['spec.file-separator'] ?? '';
+      const labels = await labelsFor(locale);
+      const value = labels.file(DV_LOTTERY);
+
+      // An empty separator is the fused token written by hand.
+      expect(separator.length, `${locale} has an empty separator`).toBeGreaterThan(0);
+      // The format name is not translated, so this holds once the bundles are.
+      expect(value.startsWith(`JPEG${separator}`), `${locale}: ${value}`).toBe(true);
+    }
+  });
+
+  it('is exactly what the table always rendered, in the source locale', async () => {
+    const dict = await getTranslations('en-US');
+    expect(dict['spec.file-separator']).toBe(', ');
   });
 });

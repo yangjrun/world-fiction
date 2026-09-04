@@ -19,7 +19,9 @@
  * everywhere. The patterns are translated whole instead of assembled from
  * fragments, so `56% – 69% of height` can become a sentence that puts the
  * percentages inside the phrase — Japanese does — rather than three pieces that
- * only fit together in one order.
+ * only fit together in one order. The separator between file constraints is a
+ * bundle key for the same reason, and because CLDR list formatting turned out not
+ * to be a separator at all: see `file` below.
  */
 
 import type { Locale } from '@/i18n/config';
@@ -48,7 +50,14 @@ export interface SpecLabels {
 }
 
 export function createSpecLabels(locale: Locale, translate: Translate): SpecLabels {
-  const number = new Intl.NumberFormat(locale);
+  // Grouping belongs on a file size — a 25MB ceiling reads `25,600 KB` — and is
+  // harmless on a print size, which never reaches four digits.
+  const quantity = new Intl.NumberFormat(locale);
+  // Pixel dimensions and DPI are written without grouping wherever images are
+  // discussed: `1920 × 1080`, never `1,920 × 1,080`. Grouped, this locale set
+  // would also spell that separator three ways — `1,063`, `1.063`, `1 063` — for
+  // a number no reader takes as a quantity.
+  const resolution = new Intl.NumberFormat(locale, { useGrouping: false });
   // Exactly one decimal for a derived millimetre band: the ratios come from the
   // published millimetres, so 0.6875 of a 50.8mm photo has to print as the
   // 34.9mm an authority would recognise rather than as 34.925.
@@ -57,24 +66,30 @@ export function createSpecLabels(locale: Locale, translate: Translate): SpecLabe
     maximumFractionDigits: 1,
   });
   const percent = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 0 });
-  // `short` + `unit` is a plain comma-separated list in English — what the file
-  // row has always been — and CLDR's own separator elsewhere, which for Chinese
-  // is no separator at all. `conjunction` would add an "and" that does not belong
-  // in a list of constraints.
-  const list = new Intl.ListFormat(locale, { style: 'short', type: 'unit' });
 
-  const dimensions = (width: number, height: number, unit: string): string =>
+  const dimensions = (
+    format: Intl.NumberFormat,
+    width: number,
+    height: number,
+    unit: string,
+  ): string =>
     translate('spec.dimensions', {
-      width: number.format(width),
-      height: number.format(height),
+      width: format.format(width),
+      height: format.format(height),
       unit,
     });
 
+  const printSize = (widthMm: number, heightMm: number): string =>
+    dimensions(quantity, widthMm, heightMm, translate('unit.mm'));
+
+  const pixelSize = (widthPx: number, heightPx: number): string =>
+    dimensions(resolution, widthPx, heightPx, translate('unit.px'));
+
   function size(spec: PhotoSpec): string {
     const physical = resolvePhysicalSize(spec.output);
-    if (physical) return dimensions(physical.widthMm, physical.heightMm, translate('unit.mm'));
+    if (physical) return printSize(physical.widthMm, physical.heightMm);
     const { widthPx, heightPx } = resolvePixelSize(spec.output);
-    return dimensions(widthPx, heightPx, translate('unit.px'));
+    return pixelSize(widthPx, heightPx);
   }
 
   function sizeWithPixels(spec: PhotoSpec): string {
@@ -84,9 +99,9 @@ export function createSpecLabels(locale: Locale, translate: Translate): SpecLabe
     if (!physical) return size(spec);
     const { widthPx, heightPx } = resolvePixelSize(spec.output);
     return translate('spec.size-print', {
-      physical: dimensions(physical.widthMm, physical.heightMm, translate('unit.mm')),
-      pixels: dimensions(widthPx, heightPx, translate('unit.px')),
-      dpi: number.format(physical.dpi),
+      physical: printSize(physical.widthMm, physical.heightMm),
+      pixels: pixelSize(widthPx, heightPx),
+      dpi: resolution.format(physical.dpi),
       dpiUnit: translate('unit.dpi'),
     });
   }
@@ -109,7 +124,7 @@ export function createSpecLabels(locale: Locale, translate: Translate): SpecLabe
   function file(rule: FileRule): string {
     const unit = translate('unit.kb');
     const kilobytes = (bytes: number): string =>
-      number.format(Math.round(bytes / BYTES_PER_KB));
+      quantity.format(Math.round(bytes / BYTES_PER_KB));
     const parts = [
       rule.format.toUpperCase(),
       rule.maxBytes === undefined
@@ -119,7 +134,14 @@ export function createSpecLabels(locale: Locale, translate: Translate): SpecLabe
         ? null
         : translate('spec.file-min', { size: kilobytes(rule.minBytes), unit }),
     ].filter((part): part is string => part !== null);
-    return list.format(parts);
+    // A table cell of independent constraints is not a linguistic list, so the
+    // separator comes from the bundle rather than from Intl.ListFormat. CLDR's
+    // unit-list patterns are not separator-only: on full-ICU Node they insert a
+    // conjunction for two items in es-ES, fr-FR, it-IT and pt-PT (`JPEG et max
+    // 240 KB`) and for three in de-DE, and zh-CN's pattern has no separator at
+    // all, fusing `JPEG` and `max 240 KB` into `JPEGmax 240 KB` — one token, and
+    // nothing a translator can do about it.
+    return parts.join(translate('spec.file-separator'));
   }
 
   return {

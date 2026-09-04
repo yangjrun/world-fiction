@@ -172,3 +172,84 @@ describe('Document page translations', () => {
     }
   });
 });
+
+/**
+ * Translator documentation.
+ *
+ * The bundle is a flat `Record<string, string>` because the loader, `t()` and
+ * every consumer treat it as one, so the documentation a translator needs has to
+ * live in that same flat shape: a `__readme` at the top, and a `<key>__note`
+ * beside anything carrying a placeholder. A separate notes file would not travel
+ * with the ten copies of this bundle that a later task hands out, and JSON has no
+ * comment syntax, so a header block has to be a key regardless.
+ *
+ * The specific hazards these notes exist for: `{minPercent}` and `{maxPercent}`
+ * arrive from Intl with their `%` sign already attached, so `{minPercent}%` ships
+ * `50%%`; and `{physical}` and `{pixels}` are whole phrases built from
+ * `spec.dimensions`, not bare numbers. Neither is guessable from the pattern.
+ */
+describe('Translator documentation', () => {
+  const NOTE = '__note';
+
+  /** Keys that are strings the app renders, as opposed to notes or fixtures. */
+  const isRenderedKey = (key: string): boolean =>
+    !key.startsWith('__') && !key.endsWith(NOTE) && !key.startsWith('test.');
+
+  const placeholdersIn = (value: string): string[] => value.match(/\{[^}]+}/g) ?? [];
+
+  it('keeps the bundle a flat map of strings', async () => {
+    // Nesting notes under an object per key is the tidier-looking shape, and it
+    // would break `getTranslations`, `t()` and every test in this file at once.
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      for (const [key, value] of Object.entries(dict)) {
+        expect(typeof value, `${locale} ${key}`).toBe('string');
+      }
+    }
+  });
+
+  it('opens with a readme that states the placeholder rule', async () => {
+    const dict = await getTranslations('en-US');
+    const readme = dict['__readme'];
+    expect(readme).toBeTruthy();
+    expect(readme).toContain('{braces}');
+    expect(readme).toContain(NOTE);
+  });
+
+  it('documents every string that carries a placeholder', async () => {
+    const dict = await getTranslations('en-US');
+    const documented = Object.keys(dict).filter(
+      (key) => isRenderedKey(key) && placeholdersIn(dict[key] ?? '').length > 0,
+    );
+
+    // Guards the guard: a detector that matches nothing would pass silently.
+    expect(documented.length).toBeGreaterThan(5);
+    for (const key of documented) {
+      expect(dict[`${key}${NOTE}`], `${key} has a placeholder and no ${NOTE}`).toBeTruthy();
+    }
+  });
+
+  it('has no note documenting a string that is not there', async () => {
+    // A note left behind by a renamed key is documentation for a string nobody
+    // renders, and the next translator wastes time on it.
+    const dict = await getTranslations('en-US');
+    for (const key of Object.keys(dict).filter((k) => k.endsWith(NOTE))) {
+      const subject = key.slice(0, -NOTE.length);
+      expect(dict[subject], `${key} documents nothing`).toBeTruthy();
+    }
+  });
+
+  it('mentions in every note each placeholder its string carries', async () => {
+    // A note that has drifted from its pattern is worse than no note: it is
+    // wrong with authority.
+    const dict = await getTranslations('en-US');
+    for (const [key, value] of Object.entries(dict)) {
+      if (!isRenderedKey(key)) continue;
+      const note = dict[`${key}${NOTE}`];
+      if (note === undefined) continue;
+      for (const placeholder of placeholdersIn(value)) {
+        expect(note, `${key}${NOTE} never mentions ${placeholder}`).toContain(placeholder);
+      }
+    }
+  });
+});

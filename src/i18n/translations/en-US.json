@@ -1,4 +1,6 @@
 {
+  "__readme": "Every string the site renders lives in this file. Text in {braces} is a placeholder the app substitutes: keep each one spelled exactly as it appears, reorder them freely to suit the language, and never translate the word inside the braces. Keys ending in __note are notes to you rather than strings — nothing renders them and they need no translation.",
+
   "nav.home": "All photo specs",
   "nav.about": "About",
   "footer.privacy": "Privacy",
@@ -21,9 +23,11 @@
   "home.how-heading": "How the measurements work",
   "home.how-p1": "Every authority publishes two numbers that matter more than the outer size: how tall your head must be from the bottom of the chin to the top of the head, and sometimes how far your eyes must sit above the bottom edge. These are narrow ranges, often only five millimetres wide, and a crop that looks right by eye lands outside them more often than not.",
   "home.how-p2": "Head height is measured to the top of the head {em}including hair{/em}, which is why this tool separates you from the background first: the outline of your hair is what reveals where the top of your head really is. Face-detection models stop at the hairline and consistently underestimate it. Once the crown, chin and eye line are known, the crop is computed to land in the middle of each permitted range rather than at its edge, which leaves the most room for error.",
+  "home.how-p2__note": "{em} and {/em} mark where an emphasised phrase starts and ends; it renders in italics. Keep the pair, keep them in that order, and put them around whichever words carry the emphasis in your language.",
   "home.how-p3": "If your original photo is framed too tightly to produce a compliant result, the tool says which edge falls short instead of cropping in further and handing you something that will be turned down at the counter.",
 
   "editor.heading": "Make your {documentName}",
+  "editor.heading__note": "{documentName} is the document name from the spec data, e.g. US passport photo.",
   "editor.privacy": "Everything runs on your device. Your photo is never uploaded.",
   "editor.drag": "Drag a photo here, or",
   "editor.choose": "Choose a photo",
@@ -44,12 +48,21 @@
   "spec.background": "Background",
   "spec.file": "File",
   "spec.caption": "{documentName} requirements",
+  "spec.caption__note": "Screen-reader caption of the requirements table. {documentName} is the spec's own document name, e.g. US passport photo.",
   "spec.dimensions": "{width} × {height} {unit}",
+  "spec.dimensions__note": "A photo size, used on its own on the home page and inside spec.size-print. {width} and {height} are numbers already formatted for this locale; {unit} is the value of unit.mm or unit.px.",
   "spec.size-print": "{physical} ({pixels} at {dpi} {dpiUnit})",
+  "spec.size-print__note": "{physical} and {pixels} are complete phrases already built from spec.dimensions — 50.8 × 50.8 mm and 600 × 600 px — not bare numbers. {dpi} is a number and {dpiUnit} is the value of unit.dpi.",
   "spec.band-length": "{minLength} {unit} – {maxLength} {unit} ({minPercent} – {maxPercent} of height)",
+  "spec.band-length__note": "A permitted range in the units an authority publishes. {minLength} and {maxLength} are numbers with one decimal and {unit} is the value of unit.mm. {minPercent} and {maxPercent} already include the % sign, so adding another gives 50%%.",
   "spec.band-percent": "{minPercent} – {maxPercent} of height",
+  "spec.band-percent__note": "The same range for a spec that states pixels only and has no print size. {minPercent} and {maxPercent} already include the % sign.",
   "spec.file-max": "max {size} {unit}",
+  "spec.file-max__note": "Shown when an authority caps the file size. {size} is a number, {unit} is the value of unit.kb.",
   "spec.file-min": "min {size} {unit}",
+  "spec.file-min__note": "Shown when an authority sets a floor on the file size. {size} is a number, {unit} is the value of unit.kb.",
+  "spec.file-separator": ", ",
+  "spec.file-separator__note": "Joins the file constraints into one table cell: JPEG, max 240 KB. Include whatever spaces the language needs, and never leave it empty or the values run together.",
 
   "unit.mm": "mm",
   "unit.px": "px",
@@ -57,6 +70,7 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName} maker",
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
 
   "test.greeting": "Hello {name}, welcome to {place}",
   "test.repeated": "Hello {name}, goodbye {name}"
