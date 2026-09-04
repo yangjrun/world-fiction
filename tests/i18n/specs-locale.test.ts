@@ -1,9 +1,9 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
 
-import { isLocale, locales, type Locale } from '@/i18n/config';
+import { defaultLocale, isLocale, locales, type Locale } from '@/i18n/config';
 // Imported from the pure module rather than `@/lib/specs`, which re-exports it:
 // `specs.ts` imports `astro:content`, and plain vitest cannot resolve that.
 import {
@@ -299,5 +299,92 @@ describe('localesWithDocument', () => {
       status: 'verified',
     };
     expect(localesWithDocument(published, entryData)).toEqual(['en-US']);
+  });
+});
+
+/**
+ * `sourceCheckedOn` is the one claim on a spec page that is about a person rather
+ * than about a number: it says a human read the official source on that date. All
+ * sixty non-English specs were copied from en-US with that date attached, so every
+ * one of them currently asserts a reading that never happened in that language.
+ *
+ * `status: needs-review` is what keeps them unpublished, and it holds. This is the
+ * guard for the moment somebody flips one to `verified` — the date is exactly the
+ * field a translator has no reason to look at, and publishing an unearned freshness
+ * claim on a page whose whole argument is that its numbers are checked is the
+ * failure this repo is least able to afford.
+ *
+ * Frontmatter is read with two anchored patterns rather than a YAML parser, because
+ * adding a dependency to assert two scalars is a poor trade. The scan below fails
+ * if either pattern stops matching, so it cannot go quietly vacuous.
+ */
+describe('a verified translation has had its own source re-read', () => {
+  const SPECS_DIR = fileURLToPath(new URL('../../src/content/specs', import.meta.url));
+
+  interface SpecClaim {
+    readonly status: string;
+    readonly checkedOn: string;
+  }
+
+  /** The `status` and `sourceCheckedOn` of one spec, or `null` if either is absent. */
+  function readClaim(locale: string, name: string): SpecClaim | null {
+    const text = readFileSync(`${SPECS_DIR}/${locale}/${name}`, 'utf8');
+    const frontmatter = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text)?.[1];
+    if (frontmatter === undefined) return null;
+
+    const status = /^status:[ \t]*(\S+)[ \t]*$/m.exec(frontmatter)?.[1];
+    const checkedOn = /^sourceCheckedOn:[ \t]*(\S+)[ \t]*$/m.exec(frontmatter)?.[1];
+    if (status === undefined || checkedOn === undefined) return null;
+
+    return { status, checkedOn };
+  }
+
+  const specsIn = (locale: string): string[] =>
+    readdirSync(`${SPECS_DIR}/${locale}`).filter((name) => name.endsWith('.md'));
+
+  it('reads a status and a check date out of every spec in the tree', () => {
+    // Guards the guard. If either pattern drifts — a renamed field, a quoted date,
+    // frontmatter reformatted — the scan below would examine nothing and pass.
+    let scanned = 0;
+    for (const locale of locales) {
+      for (const name of specsIn(locale)) {
+        expect(readClaim(locale, name), `${locale}/${name} frontmatter is unreadable`).not.toBeNull();
+        scanned += 1;
+      }
+    }
+    expect(scanned, 'no specs were scanned at all').toBeGreaterThanOrEqual(60);
+  });
+
+  it('never publishes a translation on the English check date', () => {
+    let compared = 0;
+    for (const locale of locales) {
+      if (locale === defaultLocale) continue;
+
+      for (const name of specsIn(locale)) {
+        const claim = readClaim(locale, name);
+        if (claim === null || claim.status !== 'verified') continue;
+
+        // A locale-only spec has no en-US original to have inherited a date from.
+        const source = existsSync(`${SPECS_DIR}/${defaultLocale}/${name}`)
+          ? readClaim(defaultLocale, name)
+          : null;
+        if (source === null) continue;
+
+        compared += 1;
+        expect(
+          claim.checkedOn,
+          `${locale}/${name} is verified but still carries the ${defaultLocale} ` +
+            `sourceCheckedOn (${source.checkedOn}), so the page would publish a check ` +
+            `that never happened in this language. Read the official source — the ` +
+            `authority's own page in this language where there is one — and set ` +
+            `sourceCheckedOn to the date you read it.`,
+        ).not.toBe(source.checkedOn);
+      }
+    }
+
+    // No assertion on `compared`: zero is the correct and current state, since
+    // nothing outside en-US is verified yet. Stated so the next reader does not
+    // mistake a passing run for a scan that found something.
+    expect(compared).toBeGreaterThanOrEqual(0);
   });
 });
