@@ -4,8 +4,6 @@ import { toPhotoSpec, type RawPhotoSpec } from './photo/raw-spec.js';
 import type { PhotoSpec } from './photo/types.js';
 import { matchesLocale } from './specs-locale.js';
 
-export { matchesLocale } from './specs-locale.js';
-
 export type SpecEntry = CollectionEntry<'specs'>;
 
 export interface SpecPage {

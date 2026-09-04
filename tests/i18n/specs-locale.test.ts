@@ -1,6 +1,9 @@
+import { readdirSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
 import { describe, expect, it } from 'vitest';
 
-import { locales, type Locale } from '@/i18n/config';
+import { isLocale, locales, type Locale } from '@/i18n/config';
 // Imported from the pure module rather than `@/lib/specs`, which re-exports it:
 // `specs.ts` imports `astro:content`, and plain vitest cannot resolve that.
 import { matchesLocale } from '@/lib/specs-locale';
@@ -20,6 +23,17 @@ function slugifyLocaleDir(locale: Locale): string {
 }
 
 describe('matchesLocale', () => {
+  it('pins the loader transform as data, not as its own expression', () => {
+    // slugifyLocaleDir is the same expression the implementation uses, so on its
+    // own it proves the two agree, not that the predicate inverts
+    // github-slugger. State the real id as a literal instead: this is what
+    // src/content/specs/en-US/us-passport.md arrives as, confirmed against the
+    // installed github-slugger in the Task 5 review.
+    expect(slugifyLocaleDir('en-US')).toBe('en-us');
+    expect(`${slugifyLocaleDir('en-US')}/us-passport`).toBe('en-us/us-passport');
+    expect(matchesLocale('en-us/us-passport', 'en-US')).toBe(true);
+  });
+
   it('matches the slugified id of every configured locale', () => {
     for (const locale of locales) {
       const id = `${slugifyLocaleDir(locale)}/us-passport`;
@@ -40,7 +54,15 @@ describe('matchesLocale', () => {
     for (const locale of locales) {
       const id = `${slugifyLocaleDir(locale)}/us-passport`;
       // The defect, reproduced: the brief's `id.split('/')[0] === locale`.
-      expect(id.split('/')[0]).not.toBe(locale);
+      //
+      // Guarded, because the slugified segment differs from the tag only while
+      // the tag carries an uppercase subtag. Add an all-lowercase locale — `en`,
+      // `pt`, `ja` — and an unguarded assertion here would go red against a
+      // matchesLocale that is entirely correct, which is a test asserting that a
+      // bug is still present.
+      if (locale !== locale.toLowerCase()) {
+        expect(id.split('/')[0]).not.toBe(locale);
+      }
       expect(matchesLocale(id, locale)).toBe(true);
     }
   });
@@ -98,5 +120,24 @@ describe('matchesLocale', () => {
     // A stray `src/content/specs/en-US.md` sits outside every locale directory.
     expect(matchesLocale('en-us', 'en-US')).toBe(false);
     expect(matchesLocale('de-de', 'de-DE')).toBe(false);
+  });
+});
+
+describe('src/content/specs layout', () => {
+  it('contains nothing but directories named after a configured locale', () => {
+    // matchesLocale drops an id whose first segment is not a configured locale,
+    // and an empty collection query is not an error — so a stray `en-GB/`,
+    // `en_US/`, or a file left at the top level, would disappear from the build
+    // at exit 0. That is the same silent-drop class as the bug this module was
+    // written to fix, and ten more locale directories are about to arrive,
+    // hand-edited. Read the tree rather than trusting the convention.
+    const specsDir = fileURLToPath(new URL('../../src/content/specs', import.meta.url));
+    const entries = readdirSync(specsDir, { withFileTypes: true });
+
+    expect(entries.length).toBeGreaterThan(0);
+    for (const entry of entries) {
+      expect(entry.isDirectory(), `${entry.name} must be a directory, not a file`).toBe(true);
+      expect(isLocale(entry.name), `${entry.name} is not a configured locale`).toBe(true);
+    }
   });
 });
