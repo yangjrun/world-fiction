@@ -8,6 +8,10 @@
   "footer.privacy-note": "Photos are processed entirely in your browser. Nothing you upload is sent to a server, stored, or seen by anyone else.",
   "skip.content": "Skip to content",
 
+  "aria.main-nav": "Main",
+  "aria.change-language": "Change language",
+  "aria.breadcrumb": "Breadcrumb",
+
   "home.title": "Passport and visa photos that actually meet the requirements",
   "home.subtitle": "Most rejected photos fail on head size, not on the crop. Pick a document below and this tool measures your face, positions it inside the permitted range, replaces the background and gives you a printable sheet.",
   "home.privacy": "Every step runs inside your browser. Your photo is never uploaded, never stored and never seen by anyone but you.",

@@ -1,30 +1,73 @@
 ---
 import '../styles/global.css';
+import { defaultLocale, isLocale, languages, locales, type Locale } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
 
 export interface Props {
+  /**
+   * Locale of the page. Optional only as a safety net: a handful of pages still
+   * render this layout without one until they move under `src/pages/[locale]/`.
+   */
+  locale?: Locale;
   title: string;
   description: string;
   /** Extra JSON-LD blocks, already serialisable. */
   structuredData?: unknown[];
 }
 
-const { title, description, structuredData = [] } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const { locale = defaultLocale, title, description, structuredData = [] } = Astro.props;
+
+const t = useTranslations(locale);
+await t.load();
+
+const origin = Astro.site ?? Astro.url.origin;
+const canonical = new URL(Astro.url.pathname, origin).href;
 const year = new Date().getFullYear();
 
+/**
+ * Rewrite `pathname` so it points at the same page in `target`.
+ *
+ * `trailingSlash: 'never'` plus `build.format: 'file'` means a locale home page
+ * is `/en-US` with no trailing slash, so a `/${locale}/` -> `/${target}/` string
+ * replace matches nothing and hands the current path straight back — every
+ * language would then link to the page you are already on. Swap the first path
+ * segment instead, or add one when a not-yet-relocated page has no locale
+ * prefix (`/us/passport` -> `/de-DE/us/passport`, not `/de-DE/passport`).
+ */
+function localizedPath(pathname: string, target: Locale): string {
+  const segments = pathname.split('/').filter(Boolean);
+  const [first] = segments;
+  if (first !== undefined && isLocale(first)) segments[0] = target;
+  else segments.unshift(target);
+  return `/${segments.join('/')}`;
+}
+
+// One list feeds both the hreflang alternates and the switcher hrefs, so the
+// two cannot disagree about where a locale lives.
+const alternates = locales.map((l) => {
+  const path = localizedPath(Astro.url.pathname, l);
+  return { locale: l, path, href: new URL(path, origin).href };
+});
+
+// x-default follows the configured default locale so the two cannot drift.
+const xDefault = new URL(localizedPath(Astro.url.pathname, defaultLocale), origin).href;
+
+// Open Graph wants `en_US`; `lang` and `hreflang` keep the hyphenated form.
+const ogLocale = locale.replace('-', '_');
+
 const navLinks = [
-  { href: '/', label: 'All photo specs' },
-  { href: '/about', label: 'About' },
+  { href: `/${locale}`, label: t.t('nav.home') },
+  { href: `/${locale}/about`, label: t.t('nav.about') },
 ];
 const footerLinks = [
-  { href: '/privacy', label: 'Privacy' },
-  { href: '/terms', label: 'Terms' },
-  { href: '/about', label: 'About' },
+  { href: `/${locale}/privacy`, label: t.t('footer.privacy') },
+  { href: `/${locale}/terms`, label: t.t('footer.terms') },
+  { href: `/${locale}/about`, label: t.t('footer.about') },
 ];
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={locale} dir={languages[locale].dir}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,10 +75,18 @@ const footerLinks = [
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
+    {
+      alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale} />
     <meta name="twitter:card" content="summary" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -50,15 +101,15 @@ const footerLinks = [
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2 focus:shadow"
     >
-      Skip to content
+      {t.t('skip.content')}
     </a>
 
     <header class="border-b border-ink-200">
       <div class="mx-auto flex max-w-5xl items-center justify-between gap-6 px-4 py-4">
-        <a href="/" class="text-lg font-semibold tracking-tight text-ink-900">
+        <a href={`/${locale}`} class="text-lg font-semibold tracking-tight text-ink-900">
           Passport Photo Maker
         </a>
-        <nav aria-label="Main">
+        <nav aria-label={t.t('aria.main-nav')} class="flex items-center gap-5">
           <ul class="flex items-center gap-5 text-sm">
             {
               navLinks.map((link) => (
@@ -68,6 +119,44 @@ const footerLinks = [
               ))
             }
           </ul>
+
+          <div class="relative" data-lang-switcher>
+            <button
+              type="button"
+              class="text-sm text-ink-600 hover:text-brand-700"
+              aria-label={t.t('aria.change-language')}
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="language-menu"
+              data-lang-button
+            >
+              {languages[locale].name} ▾
+            </button>
+            <ul
+              id="language-menu"
+              class="absolute right-0 z-50 mt-2 hidden w-48 rounded-lg border border-ink-200 bg-white py-1 shadow-lg"
+              data-lang-menu
+            >
+              {
+                alternates.map((alt) => (
+                  <li>
+                    <a
+                      class:list={[
+                        'block px-4 py-2 text-sm hover:bg-brand-50',
+                        { 'font-semibold text-brand-700': alt.locale === locale },
+                      ]}
+                      href={alt.path}
+                      lang={alt.locale}
+                      hreflang={alt.locale}
+                      aria-current={alt.locale === locale ? 'true' : undefined}
+                    >
+                      {languages[alt.locale].name}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
         </nav>
       </div>
     </header>
@@ -79,8 +168,7 @@ const footerLinks = [
     <footer class="border-t border-ink-200 bg-ink-50">
       <div class="mx-auto max-w-5xl px-4 py-8 text-sm text-ink-600">
         <p class="mb-3 max-w-2xl">
-          Photos are processed entirely in your browser. Nothing you upload is sent to a
-          server, stored, or seen by anyone else.
+          {t.t('footer.privacy-note')}
         </p>
         <ul class="flex flex-wrap gap-4">
           {
@@ -90,10 +178,71 @@ const footerLinks = [
           }
         </ul>
         <p class="mt-4 text-ink-400">
-          &copy; {year} Passport Photo Maker. Requirements are summarised from official
-          sources and can change; always check the authority's own page before applying.
+          &copy; {year} Passport Photo Maker. {t.t('footer.disclaimer')}
         </p>
       </div>
     </footer>
+
+    <script>
+      // Language switcher: pointer plus keyboard. Enter and Space come free with
+      // <button>; Escape closes and hands focus back, arrows step into the list,
+      // and moving focus or clicking outside closes it. No framework.
+      document.querySelectorAll<HTMLElement>('[data-lang-switcher]').forEach((switcher) => {
+        const button = switcher.querySelector<HTMLButtonElement>('[data-lang-button]');
+        const menu = switcher.querySelector<HTMLElement>('[data-lang-menu]');
+        // Narrow once, here: TypeScript does not carry `button?.` narrowing into
+        // the listener closures below, so an optional-chained guard would leave
+        // every `button.…` inside them possibly-null.
+        if (!button || !menu) return;
+
+        const items = () => Array.from(menu.querySelectorAll<HTMLAnchorElement>('a[href]'));
+        const isOpen = () => button.getAttribute('aria-expanded') === 'true';
+
+        const openMenu = () => {
+          button.setAttribute('aria-expanded', 'true');
+          menu.classList.remove('hidden');
+        };
+
+        const closeMenu = (returnFocus = false) => {
+          button.setAttribute('aria-expanded', 'false');
+          menu.classList.add('hidden');
+          if (returnFocus) button.focus();
+        };
+
+        button.addEventListener('click', () => {
+          if (isOpen()) closeMenu();
+          else openMenu();
+        });
+
+        button.addEventListener('keydown', (event) => {
+          if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+          event.preventDefault();
+          openMenu();
+          const links = items();
+          const target = event.key === 'ArrowDown' ? links[0] : links[links.length - 1];
+          target?.focus();
+        });
+
+        // Escape closes the menu and returns focus to the trigger.
+        switcher.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && isOpen()) {
+            event.preventDefault();
+            closeMenu(true);
+          }
+        });
+
+        // Tabbing out of the switcher closes it. `relatedTarget` is unreliable
+        // across browsers, so read the active element once focus has settled.
+        switcher.addEventListener('focusout', () => {
+          window.setTimeout(() => {
+            if (!switcher.contains(document.activeElement)) closeMenu();
+          }, 0);
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!switcher.contains(event.target as Node)) closeMenu();
+        });
+      });
+    </script>
   </body>
 </html>
