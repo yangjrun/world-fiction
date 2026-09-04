@@ -29,10 +29,15 @@
  * `src/layouts/BaseLayout.astro` both route through here for that reason.
  */
 export function inlineJson(value: unknown): string {
-  // `?? null` because JSON.stringify(undefined) returns undefined rather than a
-  // string: an absent block should serialise as `null` rather than throw inside
-  // a `set:html` attribute halfway through a build.
-  return JSON.stringify(value ?? null)
+  // JSON.stringify returns undefined — not a string — for undefined, and for a
+  // bare function or symbol, and `.replace` on that would end a build with a
+  // TypeError raised from inside a `set:html` attribute. Anything it declines to
+  // serialise becomes `null`, which every JSON-LD consumer skips. Its return is
+  // typed `string`, so the check has to be a runtime one.
+  const json: string | undefined = JSON.stringify(value);
+  if (typeof json !== 'string') return 'null';
+
+  return json
     .replace(/</g, String.raw`\u003c`)
     .replace(/\u2028/g, String.raw`\u2028`)
     .replace(/\u2029/g, String.raw`\u2029`);

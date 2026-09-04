@@ -69,11 +69,15 @@ describe('inlineJson', () => {
     expect(JSON.parse(escaped)).toEqual(value);
   });
 
-  it('serialises an absent block as null rather than throwing mid-build', () => {
-    // JSON.stringify(undefined) returns undefined, and `.replace` on that ends a
-    // build with a TypeError from inside an attribute.
+  it('serialises anything JSON cannot represent as null, rather than throwing', () => {
+    // JSON.stringify answers `undefined` for all three of these, and `.replace`
+    // on `undefined` is the mid-build TypeError the guard exists to prevent —
+    // raised from inside a `set:html` attribute, where the stack says nothing
+    // useful about which block was at fault.
     expect(inlineJson(undefined)).toBe('null');
     expect(inlineJson(null)).toBe('null');
+    expect(inlineJson(() => 'a block')).toBe('null');
+    expect(inlineJson(Symbol('a block'))).toBe('null');
   });
 });
 
