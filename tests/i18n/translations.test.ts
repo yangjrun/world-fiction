@@ -123,25 +123,37 @@ function expectWellFormedEmphasis(value: string, label: string): readonly string
   return spans;
 }
 
-const PRIVACY_PAGE = readFileSync(
-  fileURLToPath(new URL('../../src/pages/[locale]/privacy.astro', import.meta.url)),
-  'utf8',
-);
+const pageSource = (name: string): string =>
+  readFileSync(fileURLToPath(new URL(`../../src/pages/${name}`, import.meta.url)), 'utf8');
+
+const PRIVACY_PAGE = pageSource('[locale]/privacy.astro');
+const HOME_PAGE = pageSource('[locale]/index.astro');
 
 /**
- * How many links the privacy page lends its advertising paragraph.
+ * How many links a page lends one rich-text key, read off the `const <name>` array
+ * it declares them in.
  *
  * Read off the page rather than restated here: `{a3}` is junk only because the
- * page passes two links, and a third added there must widen this bound rather
- * than trip it.
+ * privacy page passes two links, and a third added there must widen the bound
+ * rather than trip it.
  */
-function adLinkCount(): number {
-  const declaration = /const adLinks[^=]*=\s*\[([\s\S]*?)\];/.exec(PRIVACY_PAGE);
-  expect(
-    declaration,
-    'privacy.astro no longer declares adLinks as an array literal',
-  ).not.toBeNull();
+function declaredLinkCount(page: string, source: string, name: string): number {
+  const declaration = new RegExp(`const ${name}[^=]*=\\s*\\[([\\s\\S]*?)\\];`).exec(source);
+  expect(declaration, `${page} no longer declares ${name} as an array literal`).not.toBeNull();
   return (declaration?.[1]?.match(/\bhref\s*:/g) ?? []).length;
+}
+
+/**
+ * Every key a page renders through `parseLinks`, and how many links it is given.
+ *
+ * Anything absent from this map is given none, so a link marker in it can only
+ * ever render with its braces showing.
+ */
+function suppliedLinks(): Map<string, number> {
+  return new Map([
+    ['privacy.ads-p2', declaredLinkCount('privacy.astro', PRIVACY_PAGE, 'adLinks')],
+    ['home.empty', declaredLinkCount('index.astro', HOME_PAGE, 'emptyLinks')],
+  ]);
 }
 
 describe('Translation system', () => {
@@ -526,7 +538,7 @@ describe('Static page translations', () => {
     // `{a1}` and `{a2}` say which words link where; src/pages/[locale]/privacy.astro
     // says where that is. A bundle that grew a URL of its own would mean a
     // translator had been handed a destination to get wrong — or to redirect.
-    const linkCount = adLinkCount();
+    const linkCount = suppliedLinks().get('privacy.ads-p2') ?? 0;
     expect(linkCount, 'the privacy page no longer lends its ad paragraph two links').toBe(2);
 
     for (const locale of locales) {
@@ -562,18 +574,34 @@ describe('Static page translations', () => {
     }
   });
 
-  it('never uses a link marker in a string the page lends no links to', async () => {
-    // parseLinks runs on privacy.ads-p2 and on nothing else, so an `{a1}` in any
-    // other string is not a link and never becomes one: it renders, braces and
-    // all, in the middle of a sentence.
+  it('resolves every link marker against the links its own page supplies', async () => {
+    // parseLinks runs on two keys, and each is given its links by the page that
+    // renders it. An `{a1}` in any other string is not a link and never becomes
+    // one: it renders, braces and all, in the middle of a sentence. An `{a2}` in
+    // `home.empty`, which is lent one link, does the same.
+    const supplied = suppliedLinks();
+    expect(supplied.size, 'no key is recorded as being lent links').toBeGreaterThan(1);
+
     for (const locale of locales) {
       const dict = await getTranslations(locale);
       for (const [key, value] of Object.entries(dict)) {
-        if (!isRenderedKey(key) || key === 'privacy.ads-p2') continue;
+        if (!isRenderedKey(key)) continue;
+        const count = supplied.get(key) ?? 0;
+
         expect(
-          malformedLinkMarkers(value, 0),
-          `${locale} ${key} carries a link marker on a string with no links`,
+          malformedLinkMarkers(value, count),
+          `${locale} ${key} carries a link marker its page cannot resolve`,
         ).toEqual([]);
+
+        // Every link the page lends has to be used, exactly once, around
+        // something. A page supplying a link no copy names is dead code, and a
+        // translator who drops the pair loses the link in silence.
+        for (let index = 1; index <= count; index += 1) {
+          const { problem, spans } = scanPairs(value, `{a${index}}`, `{/a${index}}`);
+          expect(problem, `${locale} ${key} has a broken {a${index}} pair`).toBeNull();
+          expect(spans, `${locale} ${key} does not wrap one phrase in {a${index}}`).toHaveLength(1);
+          expect(spans[0]?.trim(), `${locale} ${key} links an empty phrase`).not.toBe('');
+        }
       }
     }
   });

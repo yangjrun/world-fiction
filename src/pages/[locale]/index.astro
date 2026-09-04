@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getVerifiedSpecPages } from '@/lib/specs';
-import { isLocale, locales } from '@/i18n/config';
-import { parseEmphasis } from '@/i18n/rich-text';
+import { defaultLocale, isLocale, locales } from '@/i18n/config';
+import { parseEmphasis, parseLinks, type RichTextLink } from '@/i18n/rich-text';
 import { useTranslations } from '@/i18n/ui';
 import { createSpecLabels } from '@/lib/spec-labels';
 
@@ -41,6 +41,17 @@ const labels = createSpecLabels(locale, t.t);
 const howParagraphs = ['home.how-p1', 'home.how-p2', 'home.how-p3'].map((key) =>
   parseEmphasis(t.t(key)),
 );
+
+// Ten of the eleven locales have no verified spec yet, so ten home pages rendered
+// "Choose your document" above nothing at all. The empty state says why and sends
+// the reader somewhere that works, rather than leaving them to conclude the tool
+// is broken.
+//
+// The destination lives in the page, like the privacy page's two: the copy says
+// which words link where, and the page says where that is. See src/i18n/rich-text.ts
+// for why a translator is never handed an address.
+const emptyLinks: readonly RichTextLink[] = [{ href: `/${defaultLocale}` }];
+const emptyState = pages.length === 0 ? parseLinks(t.t('home.empty'), emptyLinks) : null;
 ---
 
 <BaseLayout
@@ -59,22 +70,34 @@ const howParagraphs = ['home.how-p1', 'home.how-p2', 'home.how-p3'].map((key) =>
   </p>
 
   <h2 class="mt-12 text-xl font-semibold text-ink-900">{t.t('home.choose')}</h2>
-  <ul class="mt-4 grid gap-3 sm:grid-cols-2">
-    {
-      pages.map(({ entry, spec, href }) => (
-        <li>
-          <a
-            href={href}
-            class="block h-full rounded-xl border border-ink-200 p-5 transition-colors hover:border-brand-500 hover:bg-brand-50"
-          >
-            <span class="block font-medium text-ink-900">{entry.data.documentName}</span>
-            <span class="mt-1 block text-sm text-ink-600">{entry.data.countryName}</span>
-            <span class="mt-3 block text-sm text-ink-400">{labels.size(spec)}</span>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+  {
+    emptyState !== null ? (
+      <p class="mt-4 max-w-2xl rounded-xl border border-ink-200 bg-ink-50 p-5 text-ink-600">
+        {emptyState.map((chunk) =>
+          chunk.link === null ? (
+            chunk.text
+          ) : (
+            <a class="underline hover:text-brand-700" href={chunk.link.href}>{chunk.text}</a>
+          ),
+        )}
+      </p>
+    ) : (
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {pages.map(({ entry, spec, href }) => (
+          <li>
+            <a
+              href={href}
+              class="block h-full rounded-xl border border-ink-200 p-5 transition-colors hover:border-brand-500 hover:bg-brand-50"
+            >
+              <span class="block font-medium text-ink-900">{entry.data.documentName}</span>
+              <span class="mt-1 block text-sm text-ink-600">{entry.data.countryName}</span>
+              <span class="mt-3 block text-sm text-ink-400">{labels.size(spec)}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
 
   <section class="mt-16 max-w-2xl" aria-labelledby="how">
     <h2 id="how" class="text-xl font-semibold text-ink-900">{t.t('home.how-heading')}</h2>
