@@ -48,6 +48,18 @@ const description =
     */}
     <script is:inline set:html={apexRedirectScript} />
 
+    {/*
+      The apex is the URL people paste into chat and social, so it needs a
+      preview of its own. `og:url` carries the canonical rather than `/`: a
+      preview should point where search engines are told to look, and the apex
+      would only redirect a visitor there anyway.
+    */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
   <body>

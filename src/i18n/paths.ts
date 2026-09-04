@@ -35,6 +35,12 @@ export function stripHtmlExtension(pathname: string): string {
  * Only a whole final segment counts, and only once: `/reindex`, `/indexes` and
  * `/index-cards` are ordinary pages, and `/index/index` reduces to `/index`
  * because only the last segment is a file name.
+ *
+ * The inverse case is indistinguishable from a path alone, and is left as a
+ * note rather than guarded: a document slug literally named `index` would build
+ * `dist/us/index.html`, normalise to `/us`, and 301 to a stub for a page that
+ * does exist. No spec carries such a slug — they are `passport`, `visa` and
+ * `dv-lottery` — and a slug is a content-authoring choice, not a path property.
  */
 export function toRoutePath(pathname: string): string {
   const route = stripHtmlExtension(pathname).replace(/\/index$/, '');

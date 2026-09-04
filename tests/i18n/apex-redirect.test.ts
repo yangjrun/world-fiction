@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { apexRedirectScript } from '@/i18n/apex-redirect';
 import { defaultLocale, locales } from '@/i18n/config';
-import { detectLocale } from '@/i18n/detect-locale';
+import { detectLocale, writtenForms } from '@/i18n/detect-locale';
 
 // `src/pages/index.astro` ships this script inline, so nothing bundles or
 // type-checks it and no browser is involved in running it. These tests execute
@@ -66,12 +66,24 @@ const TAG_LISTS: readonly (readonly string[])[] = [
   ...locales.map((locale) => [locale]),
   // Language-only tags, and regional variants the site does not publish.
   ['zh'],
-  ['zh-Hant'],
   ['pt-BR', 'pt'],
   ['en-GB', 'en'],
   ['es-MX', 'es'],
   ['nl-BE'],
   ['ko'],
+  // Chinese written forms: the script or the region decides, not the bare `zh`.
+  ['zh-Hant'],
+  ['zh-Hant-HK'],
+  ['zh-Hant-TW'],
+  ['zh-HK'],
+  ['zh-MO'],
+  ['zh-tw'],
+  ['zh-Hans'],
+  ['zh-SG'],
+  ['zh-Hant-HK', 'zh-HK', 'zh', 'en-US'],
+  // Two or more exact matches: the visitor's order decides, not the site's.
+  ['zh-TW', 'en-US'],
+  ['ja-JP', 'de-DE'],
   // A later exact match must beat an earlier prefix-only one.
   ['de-AT', 'fr-FR'],
   // Nothing configured matches.
@@ -119,9 +131,39 @@ describe('apex redirect script', () => {
 
   it('carries the configured locale list and nothing else', () => {
     // The list is injected from src/i18n/config.ts; this catches a hand-edit.
-    const quoted = apexRedirectScript.match(/"[A-Za-z]{2}-[A-Za-z]{2}"/g) ?? [];
+    // Canonical `ll-RR` shape only: the written-form table's keys are lower-case
+    // (`"zh-tw"`) or carry a four-letter script (`"zh-hant"`), so this picks out
+    // the locale codes and leaves the table's keys alone.
+    const quoted = apexRedirectScript.match(/"[a-z]{2}-[A-Z]{2}"/g) ?? [];
     const found = [...new Set(quoted.map((q) => q.slice(1, -1)))];
     expect(found.sort()).toEqual([...locales].sort());
+  });
+
+  it('carries the written-form table as injected data, not a hand copy', () => {
+    const json = apexRedirectScript.match(/var forms = ({.*?});/)?.[1];
+    if (json === undefined) throw new Error('the script carries no written-form table');
+    expect(JSON.parse(json)).toEqual(writtenForms);
+  });
+
+  it('sends every Traditional Chinese tag to Traditional, not just zh-TW', () => {
+    // Absolute values, not parity: reduce these to `zh` on *both* sides and the
+    // parity block below stays green while every Traditional reader outside
+    // Taiwan is handed Simplified.
+    for (const tag of ['zh-Hant', 'zh-Hant-HK', 'zh-Hant-TW', 'zh-HK', 'zh-MO', 'zh-TW', 'zh-tw']) {
+      expect(target({ languages: [tag] })).toBe('/zh-TW');
+    }
+    for (const tag of ['zh-Hans', 'zh-Hans-CN', 'zh-CN', 'zh-SG', 'zh']) {
+      expect(target({ languages: [tag] })).toBe('/zh-CN');
+    }
+  });
+
+  it('honours the visitor order when two tags match exactly', () => {
+    // The nested loops this shape invites can be written either way round, and
+    // iterating the site's locale list on the outside passes every single-tag
+    // case in this file: it answers these with the alphabetically earlier locale.
+    expect(target({ languages: ['zh-TW', 'en-US'] })).toBe('/zh-TW');
+    expect(target({ languages: ['ja-JP', 'de-DE'] })).toBe('/ja-JP');
+    expect(target({ languages: ['zh-Hant-HK', 'en-US'] })).toBe('/zh-TW');
   });
 
   describe('agrees with detectLocale', () => {
