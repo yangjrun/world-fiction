@@ -4,9 +4,12 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import SpecTable from '@/components/SpecTable.astro';
 import PhotoEditor from '@/components/editor/PhotoEditor.vue';
 import { getVerifiedSpecPages } from '@/lib/specs';
+import { defaultLocale } from '@/i18n/config';
 
 export async function getStaticPaths() {
-  const pages = await getVerifiedSpecPages();
+  // Interim: this route is still the non-localized one. Task 6 moves it under
+  // src/pages/[locale]/ and takes the locale from the route instead.
+  const pages = await getVerifiedSpecPages(defaultLocale);
   return pages.map((page) => ({
     params: { country: page.entry.data.country, document: page.entry.data.document },
     props: { page },

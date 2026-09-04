@@ -1,8 +1,11 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getVerifiedSpecPages } from '@/lib/specs';
+import { defaultLocale } from '@/i18n/config';
 
-const pages = await getVerifiedSpecPages();
+// Interim: this page is still the non-localized one. Task 6 moves it under
+// src/pages/[locale]/ and takes the locale from the route instead.
+const pages = await getVerifiedSpecPages(defaultLocale);
 ---
 
 <BaseLayout
