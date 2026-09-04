@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { defaultLocale, isLocale, languages, locales, type Locale } from '@/i18n/config';
+import { defaultLocale, languages, locales, type Locale } from '@/i18n/config';
+import { localizedPath, stripHtmlExtension } from '@/i18n/paths';
 import { useTranslations } from '@/i18n/ui';
 
 export interface Props {
@@ -21,36 +22,25 @@ const t = useTranslations(locale);
 await t.load();
 
 const origin = Astro.site ?? Astro.url.origin;
-const canonical = new URL(Astro.url.pathname, origin).href;
-const year = new Date().getFullYear();
 
-/**
- * Rewrite `pathname` so it points at the same page in `target`.
- *
- * `trailingSlash: 'never'` plus `build.format: 'file'` means a locale home page
- * is `/en-US` with no trailing slash, so a `/${locale}/` -> `/${target}/` string
- * replace matches nothing and hands the current path straight back — every
- * language would then link to the page you are already on. Swap the first path
- * segment instead, or add one when a not-yet-relocated page has no locale
- * prefix (`/us/passport` -> `/de-DE/us/passport`, not `/de-DE/passport`).
- */
-function localizedPath(pathname: string, target: Locale): string {
-  const segments = pathname.split('/').filter(Boolean);
-  const [first] = segments;
-  if (first !== undefined && isLocale(first)) segments[0] = target;
-  else segments.unshift(target);
-  return `/${segments.join('/')}`;
-}
+// `build.format: 'file'` hands a prerendered page its own file path, so this
+// arrives as `/en-US/about.html` while the site addresses that page as
+// `/en-US/about`. Normalise once, here: canonical, og:url, the hreflang
+// alternates and the switcher hrefs all derive from it, so none of them can
+// advertise a URL shape `trailingSlash: 'never'` does not serve.
+const pathname = stripHtmlExtension(Astro.url.pathname);
+const canonical = new URL(pathname, origin).href;
+const year = new Date().getFullYear();
 
 // One list feeds both the hreflang alternates and the switcher hrefs, so the
 // two cannot disagree about where a locale lives.
 const alternates = locales.map((l) => {
-  const path = localizedPath(Astro.url.pathname, l);
+  const path = localizedPath(pathname, l);
   return { locale: l, path, href: new URL(path, origin).href };
 });
 
 // x-default follows the configured default locale so the two cannot drift.
-const xDefault = new URL(localizedPath(Astro.url.pathname, defaultLocale), origin).href;
+const xDefault = new URL(localizedPath(pathname, defaultLocale), origin).href;
 
 // Open Graph wants `en_US`; `lang` and `hreflang` keep the hyphenated form.
 const ogLocale = locale.replace('-', '_');

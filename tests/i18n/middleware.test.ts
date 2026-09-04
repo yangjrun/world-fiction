@@ -105,4 +105,44 @@ describe('i18n middleware', () => {
     expect(next).toHaveBeenCalledTimes(1);
     expect(locals.locale).toBe('en-US');
   });
+
+  // `build.format: 'file'` means the prerenderer passes the file path, not the
+  // published URL, so these are the paths the middleware actually sees at build
+  // time. Reading the locale out of the unnormalised path made
+  // `isLocale('en-US.html')` false: the locale home page looked unprefixed and
+  // every one of them was replaced by a redirect stub to `/en-US/en-US.html`.
+  it('passes a prerendered locale home page through, extension and all', async () => {
+    const { context, redirects, locals } = createStub('/en-US.html');
+    const next = createNext();
+
+    await onRequest(context, next);
+
+    expect(next).toHaveBeenCalledTimes(1);
+    expect(locals.locale).toBe('en-US');
+    expect(redirects).toEqual([]);
+  });
+
+  it('passes a prerendered nested page through', async () => {
+    const { context, redirects, locals } = createStub('/zh-CN/about.html');
+    const next = createNext();
+
+    await onRequest(context, next);
+
+    expect(next).toHaveBeenCalledTimes(1);
+    expect(locals.locale).toBe('zh-CN');
+    expect(redirects).toEqual([]);
+  });
+
+  it('strips the extension from the missing-prefix redirect target', async () => {
+    // `/en-US/about.html` would send the reader to a URL shape the site does not
+    // publish, and it is the shape that leaks on into canonical and hreflang.
+    const { context, redirects } = createStub('/about.html');
+    const next = createNext();
+
+    await onRequest(context, next);
+
+    expect(redirects).toEqual([{ path: '/en-US/about', status: 301 }]);
+    expect(redirects[0]?.path).not.toMatch(/\.html$/);
+    expect(next).not.toHaveBeenCalled();
+  });
 });
