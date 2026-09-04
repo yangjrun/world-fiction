@@ -1,4 +1,4 @@
-import { readdirSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { describe, expect, it } from 'vitest';
@@ -7,6 +7,7 @@ import { isLocale, locales, type Locale } from '@/i18n/config';
 // Imported from the pure module rather than `@/lib/specs`, which re-exports it:
 // `specs.ts` imports `astro:content`, and plain vitest cannot resolve that.
 import {
+  countDistinctDocuments,
   localesWithDocument,
   matchesLocale,
   type LocalePublications,
@@ -133,8 +134,8 @@ describe('src/content/specs layout', () => {
     // and an empty collection query is not an error — so a stray `en-GB/`,
     // `en_US/`, or a file left at the top level, would disappear from the build
     // at exit 0. That is the same silent-drop class as the bug this module was
-    // written to fix, and ten more locale directories are about to arrive,
-    // hand-edited. Read the tree rather than trusting the convention.
+    // written to fix, and all eleven locale directories are now hand-edited
+    // territory. Read the tree rather than trusting the convention.
     const specsDir = fileURLToPath(new URL('../../src/content/specs', import.meta.url));
     const entries = readdirSync(specsDir, { withFileTypes: true });
 
@@ -144,11 +145,95 @@ describe('src/content/specs layout', () => {
       expect(isLocale(entry.name), `${entry.name} is not a configured locale`).toBe(true);
     }
   });
+
+  it('has a directory for every configured locale', () => {
+    // The inverse of the check above, and now the half that bites. A locale with
+    // no directory at all is not a stray entry that scan can see: matchesLocale
+    // simply matches nothing for it, an empty collection query is not an error,
+    // and that locale's home page ships with no documents on it at exit 0.
+    // Forgetting one while renaming a directory is an ordinary mistake; catching
+    // it by reading eleven built pages is not.
+    const specsDir = fileURLToPath(new URL('../../src/content/specs', import.meta.url));
+    const directories = readdirSync(specsDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name);
+
+    for (const locale of locales) {
+      expect(directories, `${locale} has no directory under src/content/specs`).toContain(locale);
+    }
+  });
+});
+
+// The about page says "there are currently N verified specifications on the site".
+// N used to be this locale's own count, which is 0 in the ten locales that have no
+// verified content — a false sentence, in the section that exists to say the
+// numbers here are checked. countDistinctDocuments answers the question the
+// sentence asks instead, without counting one document once per language.
+describe('countDistinctDocuments', () => {
+  it('counts a document once however many locales publish it', () => {
+    const passport = { country: 'us', document: 'passport' };
+    expect(countDistinctDocuments([passport, passport, passport])).toBe(1);
+  });
+
+  it('counts different documents separately', () => {
+    expect(
+      countDistinctDocuments([
+        { country: 'us', document: 'passport' },
+        { country: 'us', document: 'dv-lottery' },
+        { country: 'uk', document: 'passport' },
+      ]),
+    ).toBe(3);
+  });
+
+  it('keys on the pair, not on either half', () => {
+    // `us/passport` and `uk/passport` share a document slug; `us/passport` and
+    // `us/dv-lottery` share a country. Keying on either alone undercounts.
+    expect(
+      countDistinctDocuments([
+        { country: 'schengen', document: 'visa' },
+        { country: 'cn', document: 'visa' },
+      ]),
+    ).toBe(2);
+  });
+
+  it('counts nothing as nothing', () => {
+    // The honest answer while no spec is verified, and not a reason to throw.
+    expect(countDistinctDocuments([])).toBe(0);
+  });
+
+  it('accepts spec frontmatter whole, extra fields and all', () => {
+    // getVerifiedDocumentCount passes `entry.data` in without projecting it.
+    const entryData = {
+      country: 'us',
+      countryName: 'United States',
+      document: 'passport',
+      documentName: 'US passport photo',
+      status: 'verified',
+    };
+    expect(countDistinctDocuments([entryData, entryData])).toBe(1);
+  });
+});
+
+// Reading the page's source, for the reason tests/i18n/base-layout.test.ts gives at
+// length: vitest runs with no Astro compiler in front of it. Swapping the site-wide
+// count back for a per-locale one is a one-identifier edit that every assertion
+// above stays green through, and the sentence it feeds then reads "0" in ten of the
+// eleven locales.
+describe('the about page counts the site, not the locale', () => {
+  const page = readFileSync(
+    fileURLToPath(new URL('../../src/pages/[locale]/about.astro', import.meta.url)),
+    'utf8',
+  );
+
+  it('feeds about.honest-p1 from the site-wide count', () => {
+    expect(page).toContain('getVerifiedDocumentCount()');
+    expect(page).not.toContain('getVerifiedSpecPages');
+  });
 });
 
 // `localesWithDocument` decides the hreflang set of one document page. The whole
 // point is that it is NOT "every locale": a spec becomes a page only once a human
-// marks it `verified`, and the ten non-English bundles arrive marked
+// marks it `verified`, and every one of the sixty non-English specs is marked
 // `needs-review`, so a document existing in en-US alone is the steady state for a
 // while rather than a transient. hreflang naming a URL that 404s is an error
 // Google can charge to the entire cluster, so this is the guard on it.

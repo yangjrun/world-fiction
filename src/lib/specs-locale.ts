@@ -38,6 +38,25 @@ export interface LocalePublications {
 }
 
 /**
+ * How many distinct documents `documents` names, counting each one once however
+ * many locales publish it.
+ *
+ * The about page states a fact about the site — "there are currently N verified
+ * specifications on the site" — and it used to take that from one locale's own
+ * catalogue, which made the sentence read "0" in the ten locales that have no
+ * content yet: a false claim in the one section whose subject is that the numbers
+ * here are kept honest. Counting entries instead would be false the other way,
+ * claiming 55 specifications once eleven locales have each verified five of them.
+ *
+ * `country` and `document` are both lowercase slugs per `src/content.config.ts`,
+ * so neither can contain the separator and two different pairs cannot collide on
+ * one key.
+ */
+export function countDistinctDocuments(documents: readonly DocumentId[]): number {
+  return new Set(documents.map(({ country, document }) => `${country}/${document}`)).size;
+}
+
+/**
  * The locales that publish `country`/`document`, in the order given.
  *
  * This is the hreflang set for one document page, and it is not "every locale".

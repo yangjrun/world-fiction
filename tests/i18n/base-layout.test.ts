@@ -53,6 +53,46 @@ describe('BaseLayout advertises the narrowed hreflang set', () => {
   });
 });
 
+/**
+ * The document page is the only page that narrows its own hreflang set, and it
+ * does that by handing the layout one prop. Everything above pins which of the
+ * layout's two lists renders where, tests/i18n/alternates.test.ts pins the
+ * narrowing itself, and tests/i18n/specs-locale.test.ts pins the list handed in —
+ * nothing pinned the line that connects them.
+ *
+ * Drop `availableLocales` from that tag and the layout falls back to its default
+ * of every locale: the guard that a page appears in its own hreflang set is
+ * satisfied, no test goes red, and every document page advertises ten alternates
+ * that 404. That is the defect the narrowing exists to prevent, shipping at exit 0.
+ */
+describe('the document page hands the layout its narrowed list', () => {
+  const page = readFileSync(
+    fileURLToPath(
+      new URL('../../src/pages/[locale]/[country]/[document].astro', import.meta.url),
+    ),
+    'utf8',
+  );
+
+  /** The opening `<BaseLayout …>` tag, attributes and all. */
+  function openingTag(): string {
+    const start = page.indexOf('<BaseLayout');
+    expect(start, 'the document page no longer renders BaseLayout').toBeGreaterThan(-1);
+    const end = page.indexOf('>', start);
+    expect(end, 'the BaseLayout tag is never closed').toBeGreaterThan(start);
+    return page.slice(start, end + 1);
+  }
+
+  it('passes availableLocales to BaseLayout', () => {
+    expect(openingTag()).toContain('availableLocales={availableLocales}');
+  });
+
+  it('builds that list from the locales that publish this document', () => {
+    // The prop can be present and still wrong: passing `locales` there is the
+    // same eleven-alternate regression spelled differently.
+    expect(page).toContain('availableLocales: localesWithDocument(published, page.entry.data),');
+  });
+});
+
 describe('the language switcher says when it leads somewhere else', () => {
   // On a document page "Deutsch" goes to the German home page, not to the German
   // version of that document, and the word "Deutsch" alone does not say so.

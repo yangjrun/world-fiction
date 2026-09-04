@@ -2,7 +2,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Locale } from '@/i18n/config';
 import { toPhotoSpec, type RawPhotoSpec } from './photo/raw-spec.js';
 import type { PhotoSpec } from './photo/types.js';
-import { matchesLocale } from './specs-locale.js';
+import { countDistinctDocuments, matchesLocale } from './specs-locale.js';
 
 export type SpecEntry = CollectionEntry<'specs'>;
 
@@ -47,6 +47,18 @@ export async function getVerifiedSpecPages(locale: Locale): Promise<SpecPage[]> 
       a.entry.data.countryName.localeCompare(b.entry.data.countryName) ||
       a.entry.data.documentName.localeCompare(b.entry.data.documentName),
     );
+}
+
+/**
+ * How many distinct documents the site publishes, in any language.
+ *
+ * Deliberately not per locale, and deliberately not a count of entries: see
+ * `countDistinctDocuments` in ./specs-locale.ts for what each of those two
+ * readings gets wrong about the sentence on the about page.
+ */
+export async function getVerifiedDocumentCount(): Promise<number> {
+  const entries = await getCollection('specs', ({ data }) => data.status === 'verified');
+  return countDistinctDocuments(entries.map(({ data }) => data));
 }
 
 /** Specs awaiting verification, in every locale, for the maintenance view. */

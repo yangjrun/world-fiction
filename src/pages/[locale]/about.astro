@@ -3,7 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { isLocale, locales } from '@/i18n/config';
 import { parseEmphasis } from '@/i18n/rich-text';
 import { useTranslations } from '@/i18n/ui';
-import { getVerifiedSpecPages } from '@/lib/specs';
+import { getVerifiedDocumentCount } from '@/lib/specs';
 
 export function getStaticPaths() {
   return locales.map((locale) => ({ params: { locale } }));
@@ -23,14 +23,15 @@ const locale = param;
 const t = useTranslations(locale);
 await t.load();
 
-// The count below is what *this locale* publishes, which is exactly the list its
-// own home page renders. Quoting the English catalogue on a German page would
-// contradict the documents a German reader can actually see, and this section is
-// the one that promises the numbers on this site are kept honest.
-const pages = await getVerifiedSpecPages(locale);
+// A claim about the site, so counted across the site: once per document, in
+// whatever language it is verified in. Taken from this locale's own catalogue it
+// read "There are currently 0 verified specifications on the site." in the ten
+// locales that have no content yet — a false sentence in the one section whose
+// subject is that the numbers here are kept honest.
+//
 // Formatted rather than interpolated raw, for the same reason
 // src/lib/spec-labels.ts formats every number it prints: 1,024 is 1.024 in German.
-const verifiedCount = new Intl.NumberFormat(locale).format(pages.length);
+const verifiedCount = new Intl.NumberFormat(locale).format(await getVerifiedDocumentCount());
 
 // Body copy carries its emphasis as {em}…{/em} placeholders, parsed here and
 // mapped onto real <em> elements below. Every chunk interpolates as text, so no
