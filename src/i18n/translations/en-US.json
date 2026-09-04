@@ -20,7 +20,7 @@
   "home.choose": "Choose your document",
   "home.how-heading": "How the measurements work",
   "home.how-p1": "Every authority publishes two numbers that matter more than the outer size: how tall your head must be from the bottom of the chin to the top of the head, and sometimes how far your eyes must sit above the bottom edge. These are narrow ranges, often only five millimetres wide, and a crop that looks right by eye lands outside them more often than not.",
-  "home.how-p2": "Head height is measured to the top of the head <em>including hair</em>, which is why this tool separates you from the background first: the outline of your hair is what reveals where the top of your head really is. Face-detection models stop at the hairline and consistently underestimate it. Once the crown, chin and eye line are known, the crop is computed to land in the middle of each permitted range rather than at its edge, which leaves the most room for error.",
+  "home.how-p2": "Head height is measured to the top of the head {em}including hair{/em}, which is why this tool separates you from the background first: the outline of your hair is what reveals where the top of your head really is. Face-detection models stop at the hairline and consistently underestimate it. Once the crown, chin and eye line are known, the crop is computed to land in the middle of each permitted range rather than at its edge, which leaves the most room for error.",
   "home.how-p3": "If your original photo is framed too tightly to produce a compliant result, the tool says which edge falls short instead of cropping in further and handing you something that will be turned down at the counter.",
 
   "editor.heading": "Make your {documentName}",

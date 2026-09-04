@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { locales } from '@/i18n/config';
 import { useTranslations, getTranslations } from '@/i18n/ui';
 
 describe('Translation system', () => {
@@ -60,17 +61,56 @@ describe('Home page translations', () => {
     }
   });
 
-  it('keeps the emphasis that the measurement explanation turns on', async () => {
+  /** Balanced, non-nested `{em}` / `{/em}` markers, in order. No regex: the
+   *  scan reports the three ways a translator breaks a pair. */
+  function emphasisMarkersAreBalanced(value: string): boolean {
+    let index = 0;
+    let open = false;
+
+    while (index < value.length) {
+      if (value.startsWith('{em}', index)) {
+        if (open) return false; // nested
+        open = true;
+        index += '{em}'.length;
+      } else if (value.startsWith('{/em}', index)) {
+        if (!open) return false; // stray closer
+        open = false;
+        index += '{/em}'.length;
+      } else {
+        index += 1;
+      }
+    }
+
+    return !open; // unclosed opener
+  }
+
+  it('carries inline emphasis as balanced placeholders and no raw markup', async () => {
+    // The page maps `{em}…{/em}` onto real <em> elements and interpolates every
+    // chunk as text, so a raw `<` in a translated value can only ever render as
+    // visible junk — and an unbalanced pair loses the emphasis silently. Asserted
+    // across every locale, not just the source one: ten bundles are still to be
+    // written by translators who never see this compiled.
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      for (const key of paragraphKeys) {
+        const value = required(dict, key);
+        expect(value.includes('<'), `${locale} ${key} carries a raw <`).toBe(false);
+        expect(value.includes('>'), `${locale} ${key} carries a raw >`).toBe(false);
+        expect(emphasisMarkersAreBalanced(value), `${locale} ${key} has unbalanced {em}`).toBe(
+          true,
+        );
+      }
+    }
+  });
+
+  it('still emphasises something in the source copy', async () => {
     // "including hair" is the whole distinction between this tool and a face
-    // crop, so the page renders these paragraphs with set:html rather than as
-    // text. Which paragraph carries the <em> is a translator's choice; losing
-    // it altogether is a copy regression.
+    // crop. Which paragraph carries it is a translator's choice; dropping the
+    // emphasis from all three is a copy regression, and the balance check above
+    // is happy with zero pairs.
     const dict = await getTranslations('en-US');
-    const withEmphasis = paragraphKeys.filter((key) => {
-      const text = required(dict, key);
-      return text.includes('<em>') && text.includes('</em>');
-    });
-    expect(withEmphasis.length).toBeGreaterThan(0);
+    const emphasised = paragraphKeys.filter((key) => required(dict, key).includes('{em}'));
+    expect(emphasised.length).toBeGreaterThan(0);
   });
 
   it('keeps the document-head strings separate from the on-page headings', async () => {

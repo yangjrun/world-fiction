@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getVerifiedSpecPages } from '@/lib/specs';
 import { isLocale, locales } from '@/i18n/config';
+import { parseEmphasis } from '@/i18n/rich-text';
 import { useTranslations } from '@/i18n/ui';
 import { resolvePhysicalSize, resolvePixelSize } from '@/lib/photo/units';
 
@@ -33,6 +34,15 @@ function sizeLabel(spec: (typeof pages)[number]['spec']): string {
   const { widthPx, heightPx } = resolvePixelSize(spec.output);
   return `${widthPx} × ${heightPx} px`;
 }
+
+// Body copy carries its emphasis as {em}…{/em} placeholders, parsed here and
+// mapped onto real <em> elements below. Every chunk interpolates as text, so no
+// translated string reaches a raw-HTML sink: markup inside a translation renders
+// escaped and inert rather than as elements. See src/i18n/rich-text.ts for why
+// the emphasis is a placeholder pair and not a tag.
+const howParagraphs = ['home.how-p1', 'home.how-p2', 'home.how-p3'].map((key) =>
+  parseEmphasis(t.t(key)),
+);
 ---
 
 <BaseLayout
@@ -70,18 +80,10 @@ function sizeLabel(spec: (typeof pages)[number]['spec']): string {
 
   <section class="mt-16 max-w-2xl" aria-labelledby="how">
     <h2 id="how" class="text-xl font-semibold text-ink-900">{t.t('home.how-heading')}</h2>
-    {/*
-      These three render with `set:html`, not as text, because the second
-      paragraph emphasises <em>including hair</em> — the one distinction the
-      whole measurement approach turns on — and interpolating it as text would
-      ship the literal tag. All three go through the same path so a translator
-      can place emphasis in any of them without one silently rendering as
-      escaped markup. Not a sanitiser gap: the values come from the locale JSON
-      bundled at build time, the same trust level as the prose that was hardcoded
-      here before, and never from user input or a network fetch.
-    */}
-    <p class="mt-3 text-ink-600" set:html={t.t('home.how-p1')} />
-    <p class="mt-3 text-ink-600" set:html={t.t('home.how-p2')} />
-    <p class="mt-3 text-ink-600" set:html={t.t('home.how-p3')} />
+    {
+      howParagraphs.map((chunks) => (
+        <p class="mt-3 text-ink-600">{chunks.map((chunk) => (chunk.emphasis ? <em>{chunk.text}</em> : chunk.text))}</p>
+      ))
+    }
   </section>
 </BaseLayout>
