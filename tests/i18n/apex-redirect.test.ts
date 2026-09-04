@@ -84,8 +84,28 @@ const TAG_LISTS: readonly (readonly string[])[] = [
   // Two or more exact matches: the visitor's order decides, not the site's.
   ['zh-TW', 'en-US'],
   ['ja-JP', 'de-DE'],
-  // A later exact match must beat an earlier prefix-only one.
+  // A prefix match on the top tag beats an exact match further down: the
+  // matcher walks the reader's list rather than the site's.
   ['de-AT', 'fr-FR'],
+  ['en-GB', 'ja-JP'],
+  // A Chinese tag must not outrank a non-Chinese first preference — the mirror
+  // image of the fault the written-form table fixes.
+  ['en-HK', 'en', 'zh-HK'],
+  ['ja', 'zh-Hant'],
+  ['pt-MO', 'zh-MO'],
+  ['de-AT', 'zh-SG'],
+  ['fr-CA', 'zh-tw'],
+  // A Chinese first preference must not lose to a lower-ranked exact match.
+  ['zh-SG', 'en-US'],
+  ['zh-Hans', 'en-US'],
+  ['zh-HK', 'en-US'],
+  // Case variants: the table lower-cases its lookup, the other steps do not.
+  ['ZH-TW'],
+  ['ZH-CN'],
+  ['ZH-SG'],
+  ['ZH-HANS'],
+  ['JA-JP'],
+  ['zh-QQ'],
   // Nothing configured matches.
   ['ru-RU'],
   ['ar-SA', 'fa-IR'],
@@ -115,7 +135,16 @@ describe('apex redirect script', () => {
     // a Taiwanese reader must not be handed Simplified Chinese.
     expect(target({ languages: ['zh-TW'] })).toBe('/zh-TW');
     expect(target({ languages: ['zh'] })).toBe('/zh-CN');
-    expect(target({ languages: ['de-AT', 'fr-FR'] })).toBe('/fr-FR');
+  });
+
+  it('prefers the top tag language over an exact match further down', () => {
+    // A retired expectation, deliberately: this line asserted /fr-FR until the
+    // matcher became a per-tag cascade. de-AT is the visitor's first choice and
+    // the site publishes German, so answering with the exact fr-FR sitting
+    // second overrode a preference the visitor had stated. RFC 4647 lookup walks
+    // the list in order and takes the best available match for each tag.
+    expect(target({ languages: ['de-AT', 'fr-FR'] })).toBe('/de-DE');
+    expect(target({ languages: ['en-GB', 'ja-JP'] })).toBe('/en-US');
   });
 
   it('falls back to navigator.language when navigator.languages is unusable', () => {
@@ -164,6 +193,36 @@ describe('apex redirect script', () => {
     expect(target({ languages: ['zh-TW', 'en-US'] })).toBe('/zh-TW');
     expect(target({ languages: ['ja-JP', 'de-DE'] })).toBe('/ja-JP');
     expect(target({ languages: ['zh-Hant-HK', 'en-US'] })).toBe('/zh-TW');
+  });
+
+  it('does not let a Chinese tag outrank a non-Chinese first preference', () => {
+    // Absolute values for the five headers the earlier placement inverted. Parity
+    // alone would not have caught it: both matchers shared the placement.
+    expect(target({ languages: ['en-HK', 'en', 'zh-HK'] })).toBe('/en-US');
+    expect(target({ languages: ['ja', 'zh-Hant'] })).toBe('/ja-JP');
+    expect(target({ languages: ['pt-MO', 'zh-MO'] })).toBe('/pt-PT');
+    expect(target({ languages: ['de-AT', 'zh-SG'] })).toBe('/de-DE');
+    expect(target({ languages: ['fr-CA', 'zh-tw'] })).toBe('/fr-FR');
+  });
+
+  it('keeps a Chinese first preference ahead of a lower-ranked exact match', () => {
+    // The other direction, and the reason the cascade runs per tag: the exact
+    // en-US at position two must not beat the visitor's own first choice.
+    expect(target({ languages: ['zh-SG', 'en-US'] })).toBe('/zh-CN');
+    expect(target({ languages: ['zh-Hans', 'en-US'] })).toBe('/zh-CN');
+    expect(target({ languages: ['zh-HK', 'en-US'] })).toBe('/zh-TW');
+    expect(target({ languages: ['zh-Hant-HK', 'zh-HK', 'zh', 'en-US'] })).toBe('/zh-TW');
+  });
+
+  it('resolves a zh tag whatever its case, and only a zh tag', () => {
+    // The written-form lookup lower-cases the tag, so the zh family is
+    // case-insensitive and the other ten are not. Browsers emit canonical case;
+    // this pins the asymmetry rather than endorsing it.
+    expect(target({ languages: ['ZH-TW'] })).toBe('/zh-TW');
+    expect(target({ languages: ['ZH-CN'] })).toBe('/zh-CN');
+    expect(target({ languages: ['ZH-SG'] })).toBe('/zh-CN');
+    expect(target({ languages: ['ZH-HANS'] })).toBe('/zh-CN');
+    expect(target({ languages: ['JA-JP'] })).toBe('/en-US');
   });
 
   describe('agrees with detectLocale', () => {

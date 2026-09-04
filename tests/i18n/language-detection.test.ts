@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
+import { locales } from '@/i18n/config';
 import { detectLocale } from '@/i18n/detect-locale';
 
 describe('Language detection', () => {
@@ -80,12 +81,59 @@ describe('Chinese written forms', () => {
     expect(detectLocale('zh-HK,zh-CN;q=0.9')).toBe('zh-TW');
   });
 
-  it('leaves the other ten locales alone', () => {
-    // The table is keyed on two subtags, so only a zh-* tag can reach it: en-HK
-    // and pt-MO share a region with a Traditional entry and are unaffected.
+  it('does not let a Chinese tag outrank a non-Chinese first preference', () => {
+    // The mirror image of the bug the table fixes, and the reason the matcher
+    // cascades per tag rather than running the table across the whole list: as a
+    // second whole-list pass it sent every one of these headers to Chinese. The
+    // earlier name for this test, "leaves the other ten locales alone", checked
+    // only isolated tags — the shapes that never changed — so it read as a
+    // guarantee it was not making. These are mixed headers, which is where the
+    // inversion actually happened.
+    expect(detectLocale('en-HK,en;q=0.9,zh-HK;q=0.8')).toBe('en-US');
+    expect(detectLocale('ja,zh-Hant')).toBe('ja-JP');
+    expect(detectLocale('pt-MO,zh-MO')).toBe('pt-PT');
+    expect(detectLocale('de-AT,zh-SG')).toBe('de-DE');
+    expect(detectLocale('fr-CA,zh-tw')).toBe('fr-FR');
+  });
+
+  it('reaches the table only through a zh tag', () => {
+    // Keyed on two subtags, so sharing a region with a Traditional entry cannot
+    // pull a non-Chinese tag into the table.
     expect(detectLocale('en-HK')).toBe('en-US');
     expect(detectLocale('pt-MO')).toBe('pt-PT');
-    expect(detectLocale('de-AT,fr-FR')).toBe('fr-FR');
+    expect(detectLocale('en-TW')).toBe('en-US');
+  });
+
+  it('takes zh-CN for an unmarked zh tag, because it is the first zh locale', () => {
+    // Also the reason the table needs Traditional rows and not Simplified ones:
+    // the prefix step lands on the first configured zh-*. If that order ever
+    // changes, this fails first and the table has to be revisited.
+    expect(locales.filter((l) => l.startsWith('zh-'))[0]).toBe('zh-CN');
+    expect(detectLocale('zh')).toBe('zh-CN');
+    expect(detectLocale('zh-QQ')).toBe('zh-CN');
+  });
+
+  it('matches a zh tag whatever its case, which is what the Simplified rows earn', () => {
+    // The lookup lower-cases the tag, so the table is what makes the zh family
+    // case-insensitive. Drop the three Simplified rows and ZH-CN, ZH-SG and
+    // ZH-HANS match nothing at all — `locales` holds `zh-CN`, and the prefix
+    // step compares `ZH-` case-sensitively — so they fall back to English while
+    // ZH-TW still resolves.
+    expect(detectLocale('ZH-TW')).toBe('zh-TW');
+    expect(detectLocale('ZH-CN')).toBe('zh-CN');
+    expect(detectLocale('ZH-SG')).toBe('zh-CN');
+    expect(detectLocale('ZH-HANS')).toBe('zh-CN');
+    // The other ten are case-sensitive by contrast. Browsers emit canonical
+    // case, so the asymmetry is documented rather than fixed.
+    expect(detectLocale('JA-JP')).toBe('en-US');
+  });
+
+  it('keeps a Chinese first preference ahead of a lower-ranked exact match', () => {
+    // The cascade rather than the table: without it the exact en-US at position
+    // two beats the reader's own first choice.
+    expect(detectLocale('zh-SG,en-US')).toBe('zh-CN');
+    expect(detectLocale('zh-Hans,en-US')).toBe('zh-CN');
+    expect(detectLocale('zh-HK,en-US')).toBe('zh-TW');
   });
 });
 
@@ -96,5 +144,16 @@ describe('Preference order', () => {
     // en-US and de-DE, and no single-match test in this file would notice.
     expect(detectLocale('zh-TW,en-US')).toBe('zh-TW');
     expect(detectLocale('ja-JP,de-DE')).toBe('ja-JP');
+  });
+
+  it('prefers the top tag language over an exact match further down', () => {
+    // A retired expectation, deliberately: this asserted fr-FR until the matcher
+    // became a per-tag cascade. de-AT is the reader's first choice and the site
+    // publishes German, so answering with the exact fr-FR sitting second
+    // overrode a preference the reader had stated. RFC 4647 lookup walks the
+    // list in order and takes the best available match for each tag, which is
+    // the better reading and now the implemented one.
+    expect(detectLocale('de-AT,fr-FR')).toBe('de-DE');
+    expect(detectLocale('en-GB,ja-JP')).toBe('en-US');
   });
 });

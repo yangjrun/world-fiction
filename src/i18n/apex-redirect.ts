@@ -37,27 +37,37 @@ export const apexRedirectScript = `(function (w) {
   var target = '';
   var i, j, tag, parts, form, prefix;
 
-  // An exact locale, or a written form the tag names outright: zh-Hant-HK is
-  // Traditional however it is spelled, and zh-TW must never be answered with
-  // zh-CN. Both settle here, in the visitor's own order of preference.
-  for (i = 0; i < offered.length && !target; i++) {
+  // One cascade per tag, in the visitor's own order of preference: an exact
+  // locale, then the written form the tag names (zh-Hant-HK is Traditional
+  // however it is spelled), then the language on its own. The first tag that
+  // resolves at all wins.
+  //
+  // Per tag, not a pass per rule: every exact match first sends a Hong Kong
+  // reader offering zh-Hant-HK,zh-HK,zh,en-US to the English sitting fourth,
+  // and every written form first sends en-HK,en,zh-HK to Chinese. Mirror images
+  // of one fault. Walking the list once, best match per tag, answers both.
+  for (i = 0; i < offered.length; i++) {
     tag = offered[i] || '';
+
     for (j = 0; j < locales.length; j++) {
       if (locales[j] === tag) { target = locales[j]; break; }
     }
-    if (!target) {
-      parts = tag.toLowerCase().split('-');
-      form = parts.length > 1 ? forms[parts[0] + '-' + parts[1]] : '';
-      if (form) { target = form; }
-    }
-  }
+    if (target) { break; }
 
-  // Then language-only: zh takes the first configured zh-*.
-  for (i = 0; i < offered.length && !target; i++) {
-    prefix = (offered[i] || '').split('-')[0] + '-';
+    parts = tag.toLowerCase().split('-');
+    if (parts.length > 1) {
+      form = forms[parts[0] + '-' + parts[1]];
+      if (form) { target = form; break; }
+    }
+
+    // Case-sensitive, like the exact step and like detectLocale: a lower-cased
+    // prefix here would answer ZH-QQ with zh-CN while the reference answers
+    // en-US, and the two must not disagree.
+    prefix = tag.split('-')[0] + '-';
     for (j = 0; j < locales.length; j++) {
       if (locales[j].indexOf(prefix) === 0) { target = locales[j]; break; }
     }
+    if (target) { break; }
   }
 
   // replace(), not assign(): the apex must not enter session history, or Back
