@@ -1,15 +1,7 @@
+import { inlineJson } from '@/lib/inline-json';
+
 import { defaultLocale, locales } from './config';
 import { writtenForms } from './detect-locale';
-
-// `set:html` writes this string into the document verbatim, so a `<` in a value
-// would close the script element early. This escapes that one character and
-// nothing else — not U+2028 or U+2029, which are also raw-newline hazards in a
-// script body. Neither can appear in a BCP-47 tag, so the values here are safe
-// on both counts; the escape is here because `<` is the one that would be
-// reachable if this ever carried something other than locale codes.
-function inlineJson(value: unknown): string {
-  return JSON.stringify(value).replace(/</g, String.raw`\u003c`);
-}
 
 /**
  * The language-detection script `src/pages/index.astro` inlines into `/`.

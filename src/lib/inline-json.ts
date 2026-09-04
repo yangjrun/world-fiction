@@ -1,0 +1,39 @@
+/**
+ * JSON destined for the body of an inline `<script>` element.
+ *
+ * `JSON.stringify` is a JSON serialiser, not an HTML one: it escapes nothing an
+ * HTML parser cares about, `<` and `/` included. Inside a `<script>` the parser
+ * scans raw text for `</script`, so a single `</script>` anywhere in a serialised
+ * value ends the element early and everything after it is parsed as markup —
+ * a `<script>` of the payload author's choosing included. `type` is no shield:
+ * the tokenizer treats `application/ld+json` content exactly like executable
+ * script content.
+ *
+ * Escaping `<` closes that off completely, because every exit from script-data
+ * state (`</script`, `<!--`, `<script`) has to begin with one. With none left in
+ * the output, the only `</script` in the document is the one the template wrote.
+ * `\u003c` is a JSON string escape, so what a parser reads back is unchanged:
+ * this changes the encoding, never the data.
+ *
+ * U+2028 and U+2029 go too. JSON permits them raw inside a string, but they are
+ * line terminators in JavaScript, so a value carrying one breaks any consumer
+ * that reads the block with an eval-shaped parser rather than a JSON one.
+ *
+ * `&` and `>` are deliberately left alone: neither can begin an escape sequence
+ * in script data, and escaping them would only make the emitted JSON-LD harder
+ * to read in view-source.
+ *
+ * Callers serialise content frontmatter and translation bundles — prose that
+ * humans, and shortly translators, edit — so this is the only serialiser allowed
+ * to write into an inline script. `src/i18n/apex-redirect.ts` and
+ * `src/layouts/BaseLayout.astro` both route through here for that reason.
+ */
+export function inlineJson(value: unknown): string {
+  // `?? null` because JSON.stringify(undefined) returns undefined rather than a
+  // string: an absent block should serialise as `null` rather than throw inside
+  // a `set:html` attribute halfway through a build.
+  return JSON.stringify(value ?? null)
+    .replace(/</g, String.raw`\u003c`)
+    .replace(/\u2028/g, String.raw`\u2028`)
+    .replace(/\u2029/g, String.raw`\u2029`);
+}

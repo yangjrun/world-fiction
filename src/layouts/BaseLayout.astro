@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { defaultLocale, languages, locales, type Locale } from '@/i18n/config';
 import { localizedPath, stripHtmlExtension } from '@/i18n/paths';
 import { useTranslations } from '@/i18n/ui';
+import { inlineJson } from '@/lib/inline-json';
 
 export interface Props {
   /**
@@ -12,7 +13,14 @@ export interface Props {
   locale?: Locale;
   title: string;
   description: string;
-  /** Extra JSON-LD blocks, already serialisable. */
+  /**
+   * Extra JSON-LD blocks, already serialisable.
+   *
+   * Serialised with `inlineJson`, never `JSON.stringify`: callers feed these from
+   * spec frontmatter and FAQ prose, and `set:html` writes the result into a
+   * `<script>` body verbatim, where a single `</script>` inside a value would end
+   * the element early and hand the rest of the string to the HTML parser.
+   */
   structuredData?: unknown[];
 }
 
@@ -82,7 +90,7 @@ const footerLinks = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {
       structuredData.map((block) => (
-        <script is:inline type="application/ld+json" set:html={JSON.stringify(block)} />
+        <script is:inline type="application/ld+json" set:html={inlineJson(block)} />
       ))
     }
   </head>
