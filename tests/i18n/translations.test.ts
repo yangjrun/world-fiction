@@ -1,6 +1,148 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { readdirSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+import { describe, it, expect } from 'vitest';
+
 import { locales } from '@/i18n/config';
-import { useTranslations, getTranslations } from '@/i18n/ui';
+import { getTranslations, interpolate, useTranslations } from '@/i18n/ui';
+
+/** A key the bundle must carry, named in the failure rather than `undefined`. */
+function required(dict: Record<string, string>, key: string): string {
+  const value = dict[key];
+  if (value === undefined) throw new Error(`missing translation key: ${key}`);
+  return value;
+}
+
+const NOTE = '__note';
+
+/**
+ * Keys that are strings the app renders, as opposed to the `__readme` header and
+ * the `<key>__note` documentation beside it.
+ *
+ * There is no longer a `test.` prefix to exclude. `test.greeting` and
+ * `test.repeated` were fixtures for this file that shipped inside the production
+ * bundle; with them gone, an exclusion for that prefix would quietly exempt any
+ * real key beginning with `test.` from every check below.
+ */
+const isRenderedKey = (key: string): boolean => !key.startsWith('__') && !key.endsWith(NOTE);
+
+const placeholdersIn = (value: string): string[] => value.match(/\{[^}]+}/g) ?? [];
+
+/** Every `{…}` group in `value`, exactly as written. */
+const braceGroups = (value: string): string[] => value.match(/\{[^{}]*\}/g) ?? [];
+
+/** A group plainly meant as an emphasis marker, spelled canonically or not. */
+const EM_SHAPED = /^\{\s*\/?\s*em\s*\}$/i;
+/** A group plainly meant as a numbered link marker, spelled canonically or not. */
+const LINK_SHAPED = /^\{\s*(\/?)\s*a\s*(\d+)\s*\}$/i;
+
+/**
+ * Emphasis markers in `value` that `src/i18n/rich-text.ts` will not recognise.
+ *
+ * The parser compares against the literal strings `{em}` and `{/em}`, so `{EM}`,
+ * `{em }` and `{/ em}` are not markers at all: the pair is lost and the braces
+ * render as visible junk. A balance scan and a raw-angle scan are both blind to
+ * that, because neither looks at how a marker is spelled.
+ */
+function malformedEmMarkers(value: string): string[] {
+  return braceGroups(value).filter(
+    (group) => EM_SHAPED.test(group) && group !== '{em}' && group !== '{/em}',
+  );
+}
+
+/**
+ * Link markers in `value` the page cannot resolve: misspelled, or numbered past
+ * the `linkCount` links it supplies.
+ *
+ * `parseLinks` matches `{a([1-9][0-9]*)}` and looks the number up in the page's
+ * own list, so `{A1}`, `{a1 }`, `{a01}` and `{a3}` against two links are all
+ * literal text — and a counting check that only looks for the markers it expects
+ * never sees any of them.
+ */
+function malformedLinkMarkers(value: string, linkCount: number): string[] {
+  return braceGroups(value).filter((group) => {
+    const shaped = LINK_SHAPED.exec(group);
+    if (shaped === null) return false;
+    const digits = shaped[2];
+    if (digits === undefined) return true;
+    if (group !== `{${shaped[1] ?? ''}a${digits}}`) return true;
+    if (!/^[1-9][0-9]*$/.test(digits)) return true;
+    return Number(digits) > linkCount;
+  });
+}
+
+interface PairScan {
+  /** Which of the three ways a pair breaks happened, or `null`. */
+  readonly problem: string | null;
+  /** What each pair wraps, in order. */
+  readonly spans: readonly string[];
+}
+
+/**
+ * Scan `value` for balanced, non-nested `open`/`close` pairs and return what each
+ * pair wraps.
+ *
+ * No regex, so the failure names which mistake was made. It hands back the spans
+ * because balance alone cannot tell a translated pair from a lost one: `{em}{/em}`
+ * is balanced, carries nothing, and `splitMarked` drops an empty span silently.
+ */
+function scanPairs(value: string, open: string, close: string): PairScan {
+  const spans: string[] = [];
+  let index = 0;
+  let openedAt: number | null = null;
+
+  while (index < value.length) {
+    if (value.startsWith(open, index)) {
+      if (openedAt !== null) return { problem: `nested ${open}`, spans };
+      index += open.length;
+      openedAt = index;
+    } else if (value.startsWith(close, index)) {
+      if (openedAt === null) return { problem: `stray ${close}`, spans };
+      spans.push(value.slice(openedAt, index));
+      openedAt = null;
+      index += close.length;
+    } else {
+      index += 1;
+    }
+  }
+
+  return { problem: openedAt === null ? null : `unclosed ${open}`, spans };
+}
+
+/** Assert every emphasis marker in `value` is one the parser matches, paired, and
+ *  wrapped around something. Returns the emphasised spans. */
+function expectWellFormedEmphasis(value: string, label: string): readonly string[] {
+  expect(malformedEmMarkers(value), `${label} carries a near-miss emphasis marker`).toEqual([]);
+
+  const { problem, spans } = scanPairs(value, '{em}', '{/em}');
+  expect(problem, `${label} has a broken {em} pair`).toBeNull();
+  for (const span of spans) {
+    expect(span.trim(), `${label} emphasises an empty phrase`).not.toBe('');
+  }
+
+  return spans;
+}
+
+const PRIVACY_PAGE = readFileSync(
+  fileURLToPath(new URL('../../src/pages/[locale]/privacy.astro', import.meta.url)),
+  'utf8',
+);
+
+/**
+ * How many links the privacy page lends its advertising paragraph.
+ *
+ * Read off the page rather than restated here: `{a3}` is junk only because the
+ * page passes two links, and a third added there must widen this bound rather
+ * than trip it.
+ */
+function adLinkCount(): number {
+  const declaration = /const adLinks[^=]*=\s*\[([\s\S]*?)\];/.exec(PRIVACY_PAGE);
+  expect(
+    declaration,
+    'privacy.astro no longer declares adLinks as an array literal',
+  ).not.toBeNull();
+  return (declaration?.[1]?.match(/\bhref\s*:/g) ?? []).length;
+}
 
 describe('Translation system', () => {
   it('should load English translations', async () => {
@@ -21,21 +163,129 @@ describe('Translation system', () => {
     const result = t.t('editor.heading', { documentName: 'US passport' });
     expect(result).toBe('Make your US passport');
   });
+});
 
-  it('should handle multiple parameters', async () => {
-    const t = useTranslations('en-US');
-    await t.load();
-    // Assuming we have a key like "greeting": "Hello {name}, welcome to {place}"
-    const result = t.t('test.greeting', { name: 'Alice', place: 'Tokyo' });
-    expect(result).toContain('Alice');
-    expect(result).toContain('Tokyo');
+/**
+ * Placeholder substitution, on strings written here for the purpose.
+ *
+ * These two rules used to be tested through `test.greeting` and `test.repeated`,
+ * fixture keys that lived in the production bundle. That bundle now exists in
+ * eleven copies, so a fixture inside it is a string every translator is asked to
+ * translate — and a placeholder rule they are asked to honour — for a page that
+ * does not exist. `interpolate` is the function `t()` runs, exported so the rules
+ * can be stated without shipping their inputs to eleven languages.
+ */
+describe('interpolate', () => {
+  it('substitutes several distinct placeholders', () => {
+    expect(
+      interpolate('Hello {name}, welcome to {place}', { name: 'Alice', place: 'Tokyo' }),
+    ).toBe('Hello Alice, welcome to Tokyo');
   });
 
-  it('should handle repeated parameters', async () => {
-    const t = useTranslations('en-US');
-    await t.load();
-    const result = t.t('test.repeated', { name: 'Bob' });
-    expect(result).toBe('Hello Bob, goodbye Bob');
+  it('substitutes every occurrence of a repeated placeholder', () => {
+    // Not hypothetical: spec.band-length prints {unit} twice, so a
+    // first-occurrence-only substitution would ship "33.0 mm – 36.0 {unit}".
+    expect(interpolate('Hello {name}, goodbye {name}', { name: 'Bob' })).toBe(
+      'Hello Bob, goodbye Bob',
+    );
+  });
+
+  it('leaves a placeholder the caller did not supply', () => {
+    expect(interpolate('Hello {name}', {})).toBe('Hello {name}');
+    expect(interpolate('Hello {name}')).toBe('Hello {name}');
+  });
+});
+
+/**
+ * Every locale is served from the file named after it.
+ *
+ * `src/i18n/ui.ts` used to hold a hand-written map of eleven dynamic imports in
+ * which ten entries pointed at `en-US.json`, and nothing here noticed: every
+ * assertion below that iterates `locales` was reading the same English bundle
+ * eleven times, so eleven "in every locale" guarantees were one guarantee about
+ * en-US. The loader is derived from the locale now; this is the guard that it
+ * resolves where it claims to, stated against the files on disk rather than
+ * against the loader that reads them.
+ */
+describe('Locale bundles', () => {
+  const TRANSLATIONS_DIR = new URL('../../src/i18n/translations/', import.meta.url);
+
+  it('loads each locale from the file named after it', async () => {
+    for (const locale of locales) {
+      const onDisk: unknown = JSON.parse(
+        readFileSync(fileURLToPath(new URL(`${locale}.json`, TRANSLATIONS_DIR)), 'utf8'),
+      );
+      expect(
+        await getTranslations(locale),
+        `${locale} is not loaded from ${locale}.json`,
+      ).toEqual(onDisk);
+    }
+  });
+
+  it('carries exactly the en-US key set, in every locale', async () => {
+    // A key missing from a bundle renders its own name as body copy, and a key
+    // no other bundle has is a string nobody renders. Both are invisible until
+    // somebody reads that page in that language, which for ten of these is
+    // nobody on this team.
+    const expected = Object.keys(await getTranslations('en-US')).sort();
+    expect(expected.length, 'the en-US bundle has shrunk unexpectedly').toBeGreaterThan(100);
+
+    for (const locale of locales) {
+      expect(Object.keys(await getTranslations(locale)).sort(), `${locale} key set`).toEqual(
+        expected,
+      );
+    }
+  });
+
+  it('holds a bundle for every configured locale and nothing else', () => {
+    // A bundle with no locale — `en-GB.json`, or a leftover `en-US.json.bak` —
+    // is never served and never noticed. A locale with no bundle now fails the
+    // build inside getTranslations, which the test above exercises.
+    const bundles = readdirSync(fileURLToPath(TRANSLATIONS_DIR)).sort();
+    expect(bundles).toEqual(locales.map((locale) => `${locale}.json`).sort());
+  });
+});
+
+/**
+ * Marker spelling, across every string in every bundle.
+ *
+ * `src/i18n/rich-text.ts` matches the literal strings `{em}`, `{/em}`, `{aN}` and
+ * `{/aN}`; anything else is not a marker. The per-page checks further down look at
+ * the two keys the pages actually parse, which leaves two gaps: a near-miss
+ * spelling passes every one of them, and a marker in a key no page parses is junk
+ * on the page just the same.
+ */
+describe('Rich-text markers', () => {
+  it('spells every emphasis marker the way the parser matches it, in every locale', async () => {
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      for (const [key, value] of Object.entries(dict)) {
+        if (!isRenderedKey(key)) continue;
+        expectWellFormedEmphasis(value, `${locale} ${key}`);
+      }
+    }
+  });
+
+  it('catches the near misses these scans exist for', () => {
+    // Guards the guard: every case here passed the balance-and-raw-angle pair of
+    // checks that used to stand alone.
+    expect(malformedEmMarkers('{EM}hair{/EM}')).toEqual(['{EM}', '{/EM}']);
+    expect(malformedEmMarkers('{em }hair{/em }')).toEqual(['{em }', '{/em }']);
+    expect(malformedEmMarkers('{ /em }')).toEqual(['{ /em }']);
+    expect(malformedEmMarkers('{em}hair{/em}')).toEqual([]);
+
+    expect(scanPairs('{em}{/em}', '{em}', '{/em}').spans).toEqual(['']);
+    expect(scanPairs('{em}hair', '{em}', '{/em}').problem).toBe('unclosed {em}');
+    expect(scanPairs('hair{/em}', '{em}', '{/em}').problem).toBe('stray {/em}');
+    expect(scanPairs('{em}{em}hair{/em}', '{em}', '{/em}').problem).toBe('nested {em}');
+    expect(scanPairs('{em}hair{/em}', '{em}', '{/em}')).toEqual({ problem: null, spans: ['hair'] });
+
+    expect(malformedLinkMarkers('{A1}x{/a1}', 2)).toEqual(['{A1}']);
+    expect(malformedLinkMarkers('{a1 }x{/a1}', 2)).toEqual(['{a1 }']);
+    expect(malformedLinkMarkers('{a3}x{/a3}', 2)).toEqual(['{a3}', '{/a3}']);
+    expect(malformedLinkMarkers('{a01}x{/a01}', 2)).toEqual(['{a01}', '{/a01}']);
+    expect(malformedLinkMarkers('{a1}x{/a1}{a2}y{/a2}', 2)).toEqual([]);
+    expect(malformedLinkMarkers('{count} verified', 2)).toEqual([]);
   });
 });
 
@@ -46,12 +296,6 @@ describe('Translation system', () => {
  * the document head being collapsed onto the on-page headings.
  */
 describe('Home page translations', () => {
-  function required(dict: Record<string, string>, key: string): string {
-    const value = dict[key];
-    if (value === undefined) throw new Error(`missing translation key: ${key}`);
-    return value;
-  }
-
   const paragraphKeys = ['home.how-p1', 'home.how-p2', 'home.how-p3'];
 
   it('carries the how-it-works body copy as keys, not hardcoded prose', async () => {
@@ -61,56 +305,40 @@ describe('Home page translations', () => {
     }
   });
 
-  /** Balanced, non-nested `{em}` / `{/em}` markers, in order. No regex: the
-   *  scan reports the three ways a translator breaks a pair. */
-  function emphasisMarkersAreBalanced(value: string): boolean {
-    let index = 0;
-    let open = false;
-
-    while (index < value.length) {
-      if (value.startsWith('{em}', index)) {
-        if (open) return false; // nested
-        open = true;
-        index += '{em}'.length;
-      } else if (value.startsWith('{/em}', index)) {
-        if (!open) return false; // stray closer
-        open = false;
-        index += '{/em}'.length;
-      } else {
-        index += 1;
-      }
-    }
-
-    return !open; // unclosed opener
-  }
-
-  it('carries inline emphasis as balanced placeholders and no raw markup', async () => {
+  it('carries inline emphasis as placeholders and no raw markup, in every locale', async () => {
     // The page maps `{em}…{/em}` onto real <em> elements and interpolates every
     // chunk as text, so a raw `<` in a translated value can only ever render as
-    // visible junk — and an unbalanced pair loses the emphasis silently. Asserted
-    // across every locale, not just the source one: ten bundles are still to be
-    // written by translators who never see this compiled.
+    // visible junk. Asserted across every locale, not just the source one: ten
+    // bundles are still to be written by translators who never see this compiled.
     for (const locale of locales) {
       const dict = await getTranslations(locale);
       for (const key of paragraphKeys) {
         const value = required(dict, key);
         expect(value.includes('<'), `${locale} ${key} carries a raw <`).toBe(false);
         expect(value.includes('>'), `${locale} ${key} carries a raw >`).toBe(false);
-        expect(emphasisMarkersAreBalanced(value), `${locale} ${key} has unbalanced {em}`).toBe(
-          true,
-        );
+        expectWellFormedEmphasis(value, `${locale} ${key}`);
       }
     }
   });
 
-  it('still emphasises something in the source copy', async () => {
+  it('still emphasises something, in every locale', async () => {
     // "including hair" is the whole distinction between this tool and a face
     // crop. Which paragraph carries it is a translator's choice; dropping the
-    // emphasis from all three is a copy regression, and the balance check above
-    // is happy with zero pairs.
-    const dict = await getTranslations('en-US');
-    const emphasised = paragraphKeys.filter((key) => required(dict, key).includes('{em}'));
-    expect(emphasised.length).toBeGreaterThan(0);
+    // emphasis from all three is a copy regression that every structural check
+    // above waves through, because a bundle with no pairs at all is well-formed.
+    //
+    // Per locale rather than en-US only: the mistake this catches is a translator
+    // losing the pair, and the source copy cannot show that.
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      const emphasised = paragraphKeys.flatMap((key) =>
+        expectWellFormedEmphasis(required(dict, key), `${locale} ${key}`),
+      );
+      expect(
+        emphasised.length,
+        `${locale} emphasises nothing in the how-it-works copy`,
+      ).toBeGreaterThan(0);
+    }
   });
 
   it('keeps the document-head strings separate from the on-page headings', async () => {
@@ -182,12 +410,6 @@ describe('Document page translations', () => {
  * which only holds while no bundle starts carrying a URL of its own.
  */
 describe('Static page translations', () => {
-  function required(dict: Record<string, string>, key: string): string {
-    const value = dict[key];
-    if (value === undefined) throw new Error(`missing translation key: ${key}`);
-    return value;
-  }
-
   const aboutKeys = [
     'about.meta-title',
     'about.meta-description',
@@ -293,6 +515,10 @@ describe('Static page translations', () => {
       expect(value.split('{em}'), `${locale} opens {em} more than once`).toHaveLength(2);
       expect(value.split('{/em}'), `${locale} closes {/em} more than once`).toHaveLength(2);
       expect(value.includes('<'), `${locale} carries a raw <`).toBe(false);
+      // Exactly one pair, spelled the way the parser matches it, around something:
+      // the two counts above are satisfied by `{em}{/em}`, which emphasises
+      // nothing and which parseEmphasis drops without a word.
+      expect(expectWellFormedEmphasis(value, `${locale} about.measures-p1`)).toHaveLength(1);
     }
   });
 
@@ -300,6 +526,9 @@ describe('Static page translations', () => {
     // `{a1}` and `{a2}` say which words link where; src/pages/[locale]/privacy.astro
     // says where that is. A bundle that grew a URL of its own would mean a
     // translator had been handed a destination to get wrong — or to redirect.
+    const linkCount = adLinkCount();
+    expect(linkCount, 'the privacy page no longer lends its ad paragraph two links').toBe(2);
+
     for (const locale of locales) {
       const value = required(await getTranslations(locale), 'privacy.ads-p2');
 
@@ -311,6 +540,41 @@ describe('Static page translations', () => {
 
       expect(value, `${locale} carries a URL in its copy`).not.toMatch(/https?:\/\//);
       expect(value.includes('<'), `${locale} carries a raw <`).toBe(false);
+
+      // `{A1}`, `{a1 }` and `{a3}` all survive the four counts above: the first
+      // two because they are different strings from the markers being counted,
+      // the third because nothing counts it. None is a marker the parser matches.
+      // The first two render with their braces showing; `{a3}` names a link the
+      // page never passed, which parseLinks also leaves in the copy as plain text.
+      expect(
+        malformedLinkMarkers(value, linkCount),
+        `${locale} privacy.ads-p2 carries a link marker the page cannot resolve`,
+      ).toEqual([]);
+
+      // And each pair has to wrap something. `{a1}{/a1}` is one `{a1}` and one
+      // `{/a1}`, links no words at all, and is dropped without a word.
+      for (let index = 1; index <= linkCount; index += 1) {
+        const { problem, spans } = scanPairs(value, `{a${index}}`, `{/a${index}}`);
+        expect(problem, `${locale} has a broken {a${index}} pair`).toBeNull();
+        expect(spans, `${locale} does not wrap one phrase in {a${index}}`).toHaveLength(1);
+        expect(spans[0]?.trim(), `${locale} links an empty phrase in {a${index}}`).not.toBe('');
+      }
+    }
+  });
+
+  it('never uses a link marker in a string the page lends no links to', async () => {
+    // parseLinks runs on privacy.ads-p2 and on nothing else, so an `{a1}` in any
+    // other string is not a link and never becomes one: it renders, braces and
+    // all, in the middle of a sentence.
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      for (const [key, value] of Object.entries(dict)) {
+        if (!isRenderedKey(key) || key === 'privacy.ads-p2') continue;
+        expect(
+          malformedLinkMarkers(value, 0),
+          `${locale} ${key} carries a link marker on a string with no links`,
+        ).toEqual([]);
+      }
     }
   });
 
@@ -333,7 +597,7 @@ describe('Static page translations', () => {
  * every consumer treat it as one, so the documentation a translator needs has to
  * live in that same flat shape: a `__readme` at the top, and a `<key>__note`
  * beside anything carrying a placeholder. A separate notes file would not travel
- * with the ten copies of this bundle that a later task hands out, and JSON has no
+ * with the ten copies of this bundle that now sit beside it, and JSON has no
  * comment syntax, so a header block has to be a key regardless.
  *
  * The specific hazards these notes exist for: `{minPercent}` and `{maxPercent}`
@@ -342,14 +606,6 @@ describe('Static page translations', () => {
  * `spec.dimensions`, not bare numbers. Neither is guessable from the pattern.
  */
 describe('Translator documentation', () => {
-  const NOTE = '__note';
-
-  /** Keys that are strings the app renders, as opposed to notes or fixtures. */
-  const isRenderedKey = (key: string): boolean =>
-    !key.startsWith('__') && !key.endsWith(NOTE) && !key.startsWith('test.');
-
-  const placeholdersIn = (value: string): string[] => value.match(/\{[^}]+}/g) ?? [];
-
   it('keeps the bundle a flat map of strings', async () => {
     // Nesting notes under an object per key is the tidier-looking shape, and it
     // would break `getTranslations`, `t()` and every test in this file at once.
