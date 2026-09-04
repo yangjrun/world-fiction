@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getVerifiedSpecPages } from '@/lib/specs';
+import { isLocale, locales } from '@/i18n/config';
+import { useTranslations } from '@/i18n/ui';
+import { resolvePhysicalSize, resolvePixelSize } from '@/lib/photo/units';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+// Astro types a route param as `string | undefined`. getStaticPaths emits only
+// the 11 real locales, so this guard never fires in a normal build; it is here
+// to narrow that type without an `as Locale` cast, and to fail the build loudly
+// rather than render a page whose `lang`, hreflang set and content query would
+// all disagree with its URL if the route were ever reached another way.
+const { locale: param } = Astro.params;
+if (param === undefined || !isLocale(param)) {
+  throw new Error(`[locale]/index.astro: "${param}" is not a supported locale`);
+}
+const locale = param;
+
+const t = useTranslations(locale);
+await t.load();
+
+// `href` already carries the locale prefix (`/en-US/us/passport`). Prefixing it
+// again here would produce `/en-US/en-US/...`.
+const pages = await getVerifiedSpecPages(locale);
+
+function sizeLabel(spec: (typeof pages)[number]['spec']): string {
+  const physical = resolvePhysicalSize(spec.output);
+  if (physical) return `${physical.widthMm} × ${physical.heightMm} mm`;
+  const { widthPx, heightPx } = resolvePixelSize(spec.output);
+  return `${widthPx} × ${heightPx} px`;
+}
+---
+
+<BaseLayout
+  locale={locale}
+  title={t.t('home.meta-title')}
+  description={t.t('home.meta-description')}
+>
+  <h1 class="max-w-3xl text-4xl font-semibold tracking-tight text-ink-900">
+    {t.t('home.title')}
+  </h1>
+  <p class="mt-4 max-w-2xl text-lg text-ink-600">
+    {t.t('home.subtitle')}
+  </p>
+  <p class="mt-3 max-w-2xl text-ink-600">
+    {t.t('home.privacy')}
+  </p>
+
+  <h2 class="mt-12 text-xl font-semibold text-ink-900">{t.t('home.choose')}</h2>
+  <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+    {
+      pages.map(({ entry, spec, href }) => (
+        <li>
+          <a
+            href={href}
+            class="block h-full rounded-xl border border-ink-200 p-5 transition-colors hover:border-brand-500 hover:bg-brand-50"
+          >
+            <span class="block font-medium text-ink-900">{entry.data.documentName}</span>
+            <span class="mt-1 block text-sm text-ink-600">{entry.data.countryName}</span>
+            <span class="mt-3 block text-sm text-ink-400">{sizeLabel(spec)}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <section class="mt-16 max-w-2xl" aria-labelledby="how">
+    <h2 id="how" class="text-xl font-semibold text-ink-900">{t.t('home.how-heading')}</h2>
+    {/*
+      These three render with `set:html`, not as text, because the second
+      paragraph emphasises <em>including hair</em> — the one distinction the
+      whole measurement approach turns on — and interpolating it as text would
+      ship the literal tag. All three go through the same path so a translator
+      can place emphasis in any of them without one silently rendering as
+      escaped markup. Not a sanitiser gap: the values come from the locale JSON
+      bundled at build time, the same trust level as the prose that was hardcoded
+      here before, and never from user input or a network fetch.
+    */}
+    <p class="mt-3 text-ink-600" set:html={t.t('home.how-p1')} />
+    <p class="mt-3 text-ink-600" set:html={t.t('home.how-p2')} />
+    <p class="mt-3 text-ink-600" set:html={t.t('home.how-p3')} />
+  </section>
+</BaseLayout>
