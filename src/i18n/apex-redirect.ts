@@ -35,42 +35,54 @@ export const apexRedirectScript = `(function (w) {
   var nav = w.navigator || {};
   var offered = nav.languages && nav.languages.length ? nav.languages : [nav.language];
   var target = '';
-  var i, j, tag, parts, form, prefix;
+  var provisional = '';
+  var i, j, tag, parts, language, precise, form, prefix;
 
-  // One cascade per tag, in the visitor's own order of preference: an exact
-  // locale, then the written form the tag names (zh-Hant-HK is Traditional
-  // however it is spelled), then the language on its own. The first tag that
-  // resolves at all wins.
+  // Walk the visitor's list once, in their order of preference. A tag that names
+  // a locale precisely — an exact match, or a written form out of the table above
+  // — settles it where it stands. A tag that only shares a language with
+  // something published is a guess, so it is held rather than returned.
   //
-  // Per tag, not a pass per rule: every exact match first sends a Hong Kong
-  // reader offering zh-Hant-HK,zh-HK,zh,en-US to the English sitting fourth,
-  // and every written form first sends en-HK,en,zh-HK to Chinese. Mirror images
-  // of one fault. Walking the list once, best match per tag, answers both.
+  // Per tag, because either whole-list pass order inverts somebody's
+  // preferences: every exact match first sends a Hong Kong reader offering
+  // zh-Hant-HK,zh-HK,zh,en-US to the English sitting fourth, and every written
+  // form first sends en-HK,en,zh-HK to Chinese.
+  //
+  // Held, not returned, because returning the guess consumed the rest of the
+  // list: Chrome and Edge both offer a plain "Chinese" alongside "Chinese
+  // (Traditional)", so zh,zh-TW is a shape readers really send, and zh resolving
+  // to zh-CN on the spot meant the Traditional tag behind it was never read. Only
+  // a later tag in the same language may supersede the guess; a different
+  // language must not, or de-AT,fr-FR would answer fr-FR.
   for (i = 0; i < offered.length; i++) {
     tag = offered[i] || '';
-
-    for (j = 0; j < locales.length; j++) {
-      if (locales[j] === tag) { target = locales[j]; break; }
-    }
-    if (target) { break; }
-
     parts = tag.toLowerCase().split('-');
-    if (parts.length > 1) {
+    language = parts[0];
+
+    precise = '';
+    for (j = 0; j < locales.length; j++) {
+      if (locales[j] === tag) { precise = locales[j]; break; }
+    }
+    if (!precise && parts.length > 1) {
       form = forms[parts[0] + '-' + parts[1]];
-      if (form) { target = form; break; }
+      if (form) { precise = form; }
+    }
+    if (precise) {
+      if (!provisional || provisional.indexOf(language + '-') === 0) { target = precise; break; }
+      continue;
     }
 
-    // Case-sensitive, like the exact step and like detectLocale: a lower-cased
-    // prefix here would answer ZH-QQ with zh-CN while the reference answers
-    // en-US, and the two must not disagree.
-    prefix = tag.split('-')[0] + '-';
-    for (j = 0; j < locales.length; j++) {
-      if (locales[j].indexOf(prefix) === 0) { target = locales[j]; break; }
+    if (!provisional) {
+      // Case-sensitive, unlike the table lookup and like detectLocale: locales
+      // holds zh-CN, so ZH-QQ matches no prefix and falls through.
+      prefix = tag.split('-')[0] + '-';
+      for (j = 0; j < locales.length; j++) {
+        if (locales[j].indexOf(prefix) === 0) { provisional = locales[j]; break; }
+      }
     }
-    if (target) { break; }
   }
 
   // replace(), not assign(): the apex must not enter session history, or Back
   // from a locale home returns here and is bounced straight forward again.
-  w.location.replace('/' + (target || fallback));
+  w.location.replace('/' + (target || provisional || fallback));
 })(window);`;

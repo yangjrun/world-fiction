@@ -69,7 +69,7 @@ describe('Chinese written forms', () => {
 
   it('leaves bare zh on Simplified', () => {
     // No script and no region: nothing has been said about the written form, so
-    // the language-prefix pass takes the first configured zh-* as it always did.
+    // the language-prefix step takes the first configured zh-* as it always did.
     expect(detectLocale('zh')).toBe('zh-CN');
     expect(detectLocale('zh;q=0.9,en;q=0.8')).toBe('zh-CN');
   });
@@ -123,9 +123,36 @@ describe('Chinese written forms', () => {
     expect(detectLocale('ZH-CN')).toBe('zh-CN');
     expect(detectLocale('ZH-SG')).toBe('zh-CN');
     expect(detectLocale('ZH-HANS')).toBe('zh-CN');
-    // The other ten are case-sensitive by contrast. Browsers emit canonical
-    // case, so the asymmetry is documented rather than fixed.
+    // The property stops where the table's reach does: a bare ZH has no second
+    // subtag, so it never gets there and falls back like the other ten locales,
+    // which are case-sensitive throughout. Browsers emit canonical case, so the
+    // asymmetry is documented rather than fixed.
+    expect(detectLocale('ZH')).toBe('en-US');
     expect(detectLocale('JA-JP')).toBe('en-US');
+  });
+
+  it('lets an explicit Traditional tag behind a bare zh still win', () => {
+    // Chrome and Edge both list a plain "Chinese" next to "Chinese (Traditional)",
+    // so a reader who ranks the first above the second sends exactly this. While a
+    // language-prefix hit was returned on the spot, bare zh resolved to zh-CN and
+    // consumed the list before the Traditional tag behind it was read. A
+    // prefix-only hit is a guess about the written form, so it is held and a later
+    // tag in the same language may supersede it.
+    expect(detectLocale('zh,zh-TW')).toBe('zh-TW');
+    expect(detectLocale('zh,zh-Hant-HK')).toBe('zh-TW');
+    expect(detectLocale('zh,zh-HK,en-US')).toBe('zh-TW');
+    expect(detectLocale('zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7')).toBe('zh-TW');
+    // An unrecognised region is the same kind of guess.
+    expect(detectLocale('zh-QQ,zh-TW')).toBe('zh-TW');
+  });
+
+  it('lets only the same language supersede a held prefix match', () => {
+    // The other half of that rule, and the reason de-AT,fr-FR still answers
+    // de-DE: a precise tag in a *different* language must not override a first
+    // preference the reader stated, however imprecisely.
+    expect(detectLocale('zh,en-US')).toBe('zh-CN');
+    expect(detectLocale('zh-QQ,ja-JP')).toBe('zh-CN');
+    expect(detectLocale('en-HK,zh-TW')).toBe('en-US');
   });
 
   it('keeps a Chinese first preference ahead of a lower-ranked exact match', () => {

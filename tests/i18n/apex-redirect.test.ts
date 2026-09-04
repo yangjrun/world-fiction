@@ -99,12 +99,22 @@ const TAG_LISTS: readonly (readonly string[])[] = [
   ['zh-SG', 'en-US'],
   ['zh-Hans', 'en-US'],
   ['zh-HK', 'en-US'],
+  // A precise tag behind a bare zh must still win: browsers offer plain
+  // "Chinese" as a selectable language, so this is a shape readers send.
+  ['zh', 'zh-TW'],
+  ['zh', 'zh-Hant-HK'],
+  ['zh', 'zh-HK', 'en-US'],
+  ['zh-QQ', 'zh-TW'],
+  // ...but only the same language may supersede a held prefix match.
+  ['zh', 'en-US'],
+  ['en-HK', 'zh-TW'],
   // Case variants: the table lower-cases its lookup, the other steps do not.
   ['ZH-TW'],
   ['ZH-CN'],
   ['ZH-SG'],
   ['ZH-HANS'],
   ['JA-JP'],
+  ['ZH'],
   ['zh-QQ'],
   // Nothing configured matches.
   ['ru-RU'],
@@ -131,8 +141,10 @@ describe('apex redirect script', () => {
   });
 
   it('prefers an exact locale over a language-only match', () => {
-    // The reason the exact pass runs over the whole list before the prefix pass:
-    // a Taiwanese reader must not be handed Simplified Chinese.
+    // Within a single tag the exact match is tried before the language prefix: a
+    // Taiwanese reader must not be handed Simplified Chinese. (The whole-list
+    // passes the earlier wording referred to are gone — the matcher cascades per
+    // tag, and a prefix-only hit is held rather than returned.)
     expect(target({ languages: ['zh-TW'] })).toBe('/zh-TW');
     expect(target({ languages: ['zh'] })).toBe('/zh-CN');
   });
@@ -222,7 +234,29 @@ describe('apex redirect script', () => {
     expect(target({ languages: ['ZH-CN'] })).toBe('/zh-CN');
     expect(target({ languages: ['ZH-SG'] })).toBe('/zh-CN');
     expect(target({ languages: ['ZH-HANS'] })).toBe('/zh-CN');
+    // And it stops where the table's reach does: a bare ZH has no second subtag,
+    // so it never reaches the table and falls back like the other ten.
+    expect(target({ languages: ['ZH'] })).toBe('/en-US');
     expect(target({ languages: ['JA-JP'] })).toBe('/en-US');
+  });
+
+  it('lets an explicit Traditional tag behind a bare zh still win', () => {
+    // Chrome and Edge list a plain "Chinese" next to "Chinese (Traditional)", so a
+    // visitor who ranks the first above the second sends exactly this. Returning
+    // the bare zh prefix hit on the spot answered /zh-CN and never read the
+    // Traditional tag behind it.
+    expect(target({ languages: ['zh', 'zh-TW'] })).toBe('/zh-TW');
+    expect(target({ languages: ['zh', 'zh-Hant-HK'] })).toBe('/zh-TW');
+    expect(target({ languages: ['zh', 'zh-HK', 'en-US'] })).toBe('/zh-TW');
+    expect(target({ languages: ['zh-QQ', 'zh-TW'] })).toBe('/zh-TW');
+  });
+
+  it('lets only the same language supersede a held prefix match', () => {
+    // Which is why de-AT,fr-FR still answers /de-DE: a precise tag in another
+    // language must not override the visitor's own first preference.
+    expect(target({ languages: ['zh', 'en-US'] })).toBe('/zh-CN');
+    expect(target({ languages: ['en-HK', 'zh-TW'] })).toBe('/en-US');
+    expect(target({ languages: ['de-AT', 'fr-FR'] })).toBe('/de-DE');
   });
 
   describe('agrees with detectLocale', () => {
