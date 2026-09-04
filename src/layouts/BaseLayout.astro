@@ -22,9 +22,26 @@ export interface Props {
    * the element early and hand the rest of the string to the HTML parser.
    */
   structuredData?: unknown[];
+  /**
+   * The locales that actually publish this page, for the hreflang set.
+   *
+   * Defaults to every locale, which is correct for a page that exists in all of
+   * them: the locale home, and the static pages once they move. A page built from
+   * per-locale content passes the subset that has content, because an `hreflang`
+   * pointing at a 404 is an error Google can charge to the whole cluster.
+   *
+   * The language switcher is deliberately not narrowed by this — see below.
+   */
+  availableLocales?: readonly Locale[];
 }
 
-const { locale = defaultLocale, title, description, structuredData = [] } = Astro.props;
+const {
+  locale = defaultLocale,
+  title,
+  description,
+  structuredData = [],
+  availableLocales = locales,
+} = Astro.props;
 
 const t = useTranslations(locale);
 await t.load();
@@ -40,15 +57,31 @@ const pathname = stripHtmlExtension(Astro.url.pathname);
 const canonical = new URL(pathname, origin).href;
 const year = new Date().getFullYear();
 
-// One list feeds both the hreflang alternates and the switcher hrefs, so the
-// two cannot disagree about where a locale lives.
+// One list, two consumers, so neither can disagree with the other about where a
+// locale lives. They part company only on a locale that does not publish this
+// page: `hreflang` is a claim that a URL exists, so it names published locales
+// only, while the switcher keeps all eleven — a reader who lands on a page that
+// exists in one language still needs a route into their own, and sending them to
+// that locale's home page is a better answer than a 404.
 const alternates = locales.map((l) => {
   const path = localizedPath(pathname, l);
-  return { locale: l, path, href: new URL(path, origin).href };
+  const published = availableLocales.includes(l);
+  return {
+    locale: l,
+    published,
+    href: new URL(path, origin).href,
+    switcherPath: published ? path : `/${l}`,
+  };
 });
 
-// x-default follows the configured default locale so the two cannot drift.
-const xDefault = new URL(localizedPath(pathname, defaultLocale), origin).href;
+const publishedAlternates = alternates.filter((alt) => alt.published);
+
+// x-default follows the configured default locale so the two cannot drift, and
+// is dropped entirely when that locale does not publish the page: pointing
+// x-default at a 404 is the same error as an alternate that 404s.
+const xDefault = availableLocales.includes(defaultLocale)
+  ? new URL(localizedPath(pathname, defaultLocale), origin).href
+  : null;
 
 // Open Graph wants `en_US`; `lang` and `hreflang` keep the hyphenated form.
 const ogLocale = locale.replace('-', '_');
@@ -74,11 +107,11 @@ const footerLinks = [
     <link rel="canonical" href={canonical} />
 
     {
-      alternates.map((alt) => (
+      publishedAlternates.map((alt) => (
         <link rel="alternate" hreflang={alt.locale} href={alt.href} />
       ))
     }
-    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    {xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -143,7 +176,7 @@ const footerLinks = [
                         'block px-4 py-2 text-sm hover:bg-brand-50',
                         { 'font-semibold text-brand-700': alt.locale === locale },
                       ]}
-                      href={alt.path}
+                      href={alt.switcherPath}
                       lang={alt.locale}
                       hreflang={alt.locale}
                       aria-current={alt.locale === locale ? 'true' : undefined}

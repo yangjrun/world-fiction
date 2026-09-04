@@ -6,6 +6,7 @@ import PhotoEditor from '@/components/editor/PhotoEditor.vue';
 import { getVerifiedSpecPages, type SpecPage } from '@/lib/specs';
 import { locales, type Locale } from '@/i18n/config';
 import { useTranslations } from '@/i18n/ui';
+import { localesWithDocument } from '@/lib/specs-locale';
 
 export async function getStaticPaths() {
   // Each locale is asked for its own verified specs, in parallel. A locale with
@@ -14,28 +15,45 @@ export async function getStaticPaths() {
   // reader, and for search, than no page at all. Today that means en-US alone —
   // the other ten start emitting pages as their spec bundles land.
   const perLocale = await Promise.all(
-    locales.map(async (locale) => {
-      const pages = await getVerifiedSpecPages(locale);
-      return pages.map((page) => ({
-        params: {
-          locale,
-          country: page.entry.data.country,
-          document: page.entry.data.document,
-        },
-        props: { page, locale },
-      }));
-    }),
+    locales.map(async (locale) => ({ locale, pages: await getVerifiedSpecPages(locale) })),
   );
-  return perLocale.flat();
+
+  // Which locales publish each document, which is what each page hands the layout
+  // as its hreflang set. Derived from the same query that decides which pages
+  // exist, so the alternates cannot name a URL the build did not write.
+  const published = perLocale.map(({ locale, pages }) => ({
+    locale,
+    documents: pages.map(({ entry }) => entry.data),
+  }));
+
+  return perLocale.flatMap(({ locale, pages }) =>
+    pages.map((page) => ({
+      params: {
+        locale,
+        country: page.entry.data.country,
+        document: page.entry.data.document,
+      },
+      props: {
+        page,
+        locale,
+        availableLocales: localesWithDocument(published, page.entry.data),
+      },
+    })),
+  );
 }
 
 export interface Props {
   page: SpecPage;
   /** Locale of this page, from the route. Every string below is loaded for it. */
   locale: Locale;
+  /**
+   * Locales with a verified spec for this same country and document, which is
+   * the hreflang set the layout may advertise. Today: en-US and nothing else.
+   */
+  availableLocales: readonly Locale[];
 }
 
-const { page, locale } = Astro.props;
+const { page, locale, availableLocales } = Astro.props;
 const { entry, spec } = page;
 const { Content } = await render(entry);
 
@@ -47,11 +65,16 @@ await t.load();
 // 09/03/2026 does not.
 const checked = entry.data.sourceCheckedOn.toISOString().slice(0, 10);
 
+// Both blocks carry `inLanguage`, which is what tells a crawler which of the
+// hreflang alternates a block belongs to. The FAQ is the block that holds
+// locale-specific prose — every question and answer a translator writes — so
+// leaving it unmarked while marking the application block had it backwards.
 const faqSchema =
   entry.data.faq.length > 0
     ? {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
+        inLanguage: locale,
         mainEntity: entry.data.faq.map((item) => ({
           '@type': 'Question',
           name: item.q,
@@ -60,9 +83,8 @@ const faqSchema =
       }
     : null;
 
-// `inLanguage` is what tells a crawler which of the eleven hreflang alternates
-// this block belongs to, so the one human-readable string in it is translated
-// rather than left in English beside a claim that the page is German.
+// The one human-readable string here is translated rather than left in English
+// beside a claim that the page is German.
 const appSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
@@ -76,6 +98,7 @@ const appSchema = {
 
 <BaseLayout
   locale={locale}
+  availableLocales={availableLocales}
   title={entry.data.title}
   description={entry.data.description}
   structuredData={[appSchema, ...(faqSchema ? [faqSchema] : [])]}

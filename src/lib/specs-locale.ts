@@ -24,3 +24,40 @@ export function matchesLocale(entryId: string, locale: Locale): boolean {
   if (separator < 0) return false;
   return entryId.slice(0, separator).toLowerCase() === locale.toLowerCase();
 }
+
+/** A country and document slug pair, identifying one page across locales. */
+export interface DocumentId {
+  readonly country: string;
+  readonly document: string;
+}
+
+/** What one locale publishes, as fed to `localesWithDocument`. */
+export interface LocalePublications {
+  readonly locale: Locale;
+  readonly documents: readonly DocumentId[];
+}
+
+/**
+ * The locales that publish `country`/`document`, in the order given.
+ *
+ * This is the hreflang set for one document page, and it is not "every locale".
+ * A locale contributes a page only once its spec is marked `verified`, so a
+ * document can exist in en-US and nowhere else — which is the state of every
+ * document today. An `hreflang` naming a URL that 404s is an error Google can
+ * charge to the whole cluster, discounting the locales that do exist along with
+ * the ones that do not, so the page has to advertise what it actually built.
+ *
+ * Pure, and therefore here rather than in `./specs.ts`, for the same reason as
+ * `matchesLocale`: `specs.ts` imports `astro:content`, which resolves only inside
+ * an Astro build, and this is the logic worth unit-testing.
+ */
+export function localesWithDocument(
+  published: readonly LocalePublications[],
+  { country, document }: DocumentId,
+): Locale[] {
+  return published
+    .filter(({ documents }) =>
+      documents.some((entry) => entry.country === country && entry.document === document),
+    )
+    .map(({ locale }) => locale);
+}
