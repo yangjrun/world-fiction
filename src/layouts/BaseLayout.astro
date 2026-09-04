@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { buildAlternates } from '@/i18n/alternates';
 import { defaultLocale, languages, locales, type Locale } from '@/i18n/config';
 import { stripHtmlExtension } from '@/i18n/paths';
+import { getTranslatedLocales } from '@/i18n/translated';
 import { useTranslations } from '@/i18n/ui';
 import { inlineJson } from '@/lib/inline-json';
 
@@ -24,14 +25,17 @@ export interface Props {
    */
   structuredData?: unknown[];
   /**
-   * The locales that actually publish this page, for the hreflang set.
+   * The locales that actually have this page built.
    *
    * Defaults to every locale, which is correct for a page that exists in all of
-   * them: the locale home, and the static pages once they move. A page built from
-   * per-locale content passes the subset that has content, because an `hreflang`
-   * pointing at a 404 is an error Google can charge to the whole cluster.
+   * them: the locale home and the three static pages. A page built from per-locale
+   * content passes the subset that has content, because an `hreflang` pointing at a
+   * 404 is an error Google can charge to the whole cluster.
    *
-   * The language switcher is deliberately not narrowed by this — see below.
+   * This is not the hreflang set on its own. It is narrowed again, in
+   * `buildAlternates`, to the locales whose bundle has actually been translated —
+   * a built page serving English under `lang="de-DE"` is not a German version of
+   * anything. The language switcher is deliberately narrowed by neither.
    */
   availableLocales?: readonly Locale[];
 }
@@ -55,19 +59,20 @@ const origin = Astro.site ?? Astro.url.origin;
 // alternates and the switcher hrefs all derive from it, so none of them can
 // advertise a URL shape `trailingSlash: 'never'` does not serve.
 const pathname = stripHtmlExtension(Astro.url.pathname);
-const canonical = new URL(pathname, origin).href;
 const year = new Date().getFullYear();
 
-// The hreflang set, the `x-default` and the switcher targets all come from one
-// list, so none of them can disagree with the others about where a locale lives.
-// Which of the three narrows to the locales that actually publish this page, and
-// why, is documented in src/i18n/alternates.ts — as is the guard that a page has
-// to appear in its own hreflang set.
+// The hreflang set, the `x-default`, the canonical URL and the switcher targets
+// all come from one list, so none of them can disagree with the others about where
+// a locale lives. Which of them narrow to the locales that publish this page,
+// which narrow again to the locales that have actually been translated, and why,
+// is documented in src/i18n/alternates.ts — as is the guard that a page has to
+// appear in the set of locales said to publish it.
 const {
   all: alternates,
-  published: publishedAlternates,
+  translations: translationAlternates,
   xDefault,
-} = buildAlternates(pathname, locale, availableLocales, origin);
+  canonical,
+} = buildAlternates(pathname, locale, availableLocales, await getTranslatedLocales(), origin);
 
 // Shown on a switcher entry whose target is not this same page in that language.
 const switcherFallbackHint = t.t('switcher.home-fallback');
@@ -96,7 +101,7 @@ const footerLinks = [
     <link rel="canonical" href={canonical} />
 
     {
-      publishedAlternates.map((alt) => (
+      translationAlternates.map((alt) => (
         <link rel="alternate" hreflang={alt.locale} href={alt.href} />
       ))
     }

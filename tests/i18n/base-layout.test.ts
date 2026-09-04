@@ -32,9 +32,12 @@ function listRendering(tag: string): string {
 }
 
 describe('BaseLayout advertises the narrowed hreflang set', () => {
-  it('maps the published alternates into <link rel="alternate">, not all of them', () => {
+  it('maps the translated alternates into <link rel="alternate">, not all of them', () => {
+    // Two narrowings stand between `all` and this list -- the locales that publish
+    // the page, then the locales whose bundle has actually been translated -- and
+    // rendering `alternates` here undoes both in one identifier.
     expect(listRendering('<link rel="alternate" hreflang={alt.locale}')).toBe(
-      'publishedAlternates',
+      'translationAlternates',
     );
   });
 
@@ -44,12 +47,26 @@ describe('BaseLayout advertises the narrowed hreflang set', () => {
     expect(listRendering('{languages[alt.locale].name}')).toBe('alternates');
   });
 
-  it('takes both lists from buildAlternates rather than deriving either locally', () => {
-    expect(layout).toContain('} = buildAlternates(pathname, locale, availableLocales, origin);');
-    // x-default comes from the same call, so it cannot disagree with the
-    // alternates about which locales publish this page.
+  it('takes every list from buildAlternates rather than deriving any locally', () => {
+    expect(layout).toContain(
+      '} = buildAlternates(pathname, locale, availableLocales, await getTranslatedLocales(), origin);',
+    );
+    // x-default and the canonical URL come from the same call, so neither can
+    // disagree with the alternates about which locales carry this page in which
+    // language. A locally computed canonical is how the untranslated locales end
+    // up self-canonical again, each declaring itself the authority on an English
+    // page it merely copies.
     expect(layout).toContain('xDefault,');
+    expect(layout).toContain('canonical,');
     expect(layout).not.toMatch(/const xDefault =/);
+    expect(layout).not.toMatch(/const canonical =/);
+  });
+
+  it('asks for the translated locales rather than assuming every locale', () => {
+    // Passing `locales` as that argument is the whole regression spelled in one
+    // word: eleven near-duplicate English pages, each advertised as a translation.
+    expect(layout).toContain("import { getTranslatedLocales } from '@/i18n/translated';");
+    expect(layout).not.toMatch(/buildAlternates\([^)]*availableLocales,\s*locales,/);
   });
 });
 

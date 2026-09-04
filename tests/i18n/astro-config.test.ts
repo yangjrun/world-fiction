@@ -73,3 +73,32 @@ describe('astro.config.mjs keeps the apex out of the sitemap', () => {
     expect(CONFIG_SOURCE).toMatch(SITEMAP_EXCLUDES_APEX);
   });
 });
+
+// An untranslated locale's pages are English served under a foreign `lang`. They
+// canonicalise to the en-US page they duplicate (see src/i18n/alternates.ts), and a
+// sitemap that lists a non-canonical URL asks Google to index a duplicate — so the
+// same filter drops them. Deleting this half is invisible in every built page and
+// shows up only in sitemap-0.xml, which nothing else reads.
+const SITEMAP_EXCLUDES_UNTRANSLATED = /sitemap\(\{[\s\S]*?\bfilter\s*:[^\n]*isTranslatedPage\(/;
+const TRANSLATED_DERIVED = /const TRANSLATED\s*=\s*readTranslatedLocales\(\)/;
+const TRANSLATED_RESTATED_AS_LITERAL = /const TRANSLATED\s*=\s*[[{]/;
+
+describe('astro.config.mjs keeps untranslated locales out of the sitemap', () => {
+  it('filters pages whose locale has not been translated', () => {
+    expect(CONFIG_SOURCE).toMatch(SITEMAP_EXCLUDES_UNTRANSLATED);
+  });
+
+  it('reads that list from the bundles rather than restating it', () => {
+    // A literal here would be a fourth hand-maintained locale list, and the one
+    // most likely to rot: it changes every time a translator finishes a language.
+    expect(CONFIG_SOURCE).toMatch(TRANSLATED_DERIVED);
+    expect(CONFIG_SOURCE).not.toMatch(TRANSLATED_RESTATED_AS_LITERAL);
+  });
+
+  it('still hands Astro every locale, so the pages stay built and reachable', () => {
+    // The narrowing is a claim to crawlers, not a routing change. Narrowing
+    // Astro's own i18n would 404 ten locales for readers.
+    expect(CONFIG_SOURCE).toMatch(ASTRO_LOCALES_PASSED_THROUGH);
+    expect(CONFIG_SOURCE).not.toMatch(/\blocales\s*:\s*TRANSLATED\b/);
+  });
+});

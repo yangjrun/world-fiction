@@ -5,10 +5,20 @@ import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 
 import { DEFAULT_LOCALE, LOCALES } from './astro.locales.mjs';
+import { readTranslatedLocales } from './astro.translations.mjs';
 
 // TODO(deploy): replace with the real apex domain before the first production build.
 // `site` must be correct or sitemap.xml and canonical URLs ship wrong absolute URLs.
 const SITE = process.env.SITE_URL ?? 'https://example.com';
+
+// Which locales a translator has actually started on. Read here, once, from the
+// bundles on disk -- see astro.translations.mjs for the rule and for why this list
+// is not a third hand-maintained copy of anything.
+const TRANSLATED = readTranslatedLocales();
+
+// `/de-DE/about` -> `de-DE`. Every built page carries a locale as its first
+// segment; the apex is the one exception and is excluded separately below.
+const isTranslatedPage = (pathname) => TRANSLATED.includes(pathname.split('/')[1] ?? '');
 
 export default defineConfig({
   site: SITE,
@@ -36,7 +46,14 @@ export default defineConfig({
       // page and emits a second `hreflang="en-US"` for it beside `/en-US`: one
       // language mapped to two URLs, which Google treats as invalid and may
       // discard for the whole cluster — taking all eleven locale pages with it.
-      filter: (page) => new URL(page).pathname !== '/',
+      //
+      // An untranslated locale's pages are dropped for the same reason, one step
+      // further on: they are English served under a foreign `lang`, they
+      // canonicalise to the en-US page they duplicate (see src/i18n/alternates.ts),
+      // and a sitemap listing a non-canonical URL asks Google to index a duplicate.
+      // The pages stay built and reachable and the switcher still links them; each
+      // locale rejoins this list the moment its bundle diverges from en-US.json.
+      filter: (page) => new URL(page).pathname !== '/' && isTranslatedPage(new URL(page).pathname),
       i18n: {
         defaultLocale: DEFAULT_LOCALE,
         locales: Object.fromEntries(LOCALES.map(locale => [locale, locale])),
