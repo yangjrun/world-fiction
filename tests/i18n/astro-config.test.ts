@@ -58,3 +58,18 @@ describe('astro.config.mjs passes those locales through unmodified', () => {
     expect(CONFIG_SOURCE).not.toMatch(LOCALES_RESTATED_AS_LITERAL);
   });
 });
+
+// `src/pages/index.astro` is a client-side language chooser whose canonical is
+// `/en-US`, and a sitemap should list canonical URLs only. @astrojs/sitemap also
+// reads an unprefixed URL as the default-locale page, so with `/` listed the
+// apex cluster carries `hreflang="en-US"` twice — once for `/`, once for
+// `/en-US`. One language mapped to two URLs is invalid, and Google may drop the
+// cluster, taking all eleven locale pages with it. Deleting the filter is a
+// one-line, invisible regression, hence a guard.
+const SITEMAP_EXCLUDES_APEX = /sitemap\(\{[\s\S]*?\bfilter\s*:[^\n]*pathname\s*!==\s*'\/'/;
+
+describe('astro.config.mjs keeps the apex out of the sitemap', () => {
+  it('filters the root path out of @astrojs/sitemap', () => {
+    expect(CONFIG_SOURCE).toMatch(SITEMAP_EXCLUDES_APEX);
+  });
+});

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { defaultLocale, locales } from '@/i18n/config';
-import { localizedPath, stripHtmlExtension } from '@/i18n/paths';
+import { localizedPath, stripHtmlExtension, toRoutePath } from '@/i18n/paths';
 
 // Both helpers exist because of the same config pair: `trailingSlash: 'never'`
 // with `build.format: 'file'`. That combination means the URL a page is served
@@ -38,6 +38,52 @@ describe('stripHtmlExtension', () => {
   it('does not strip a lookalike extension', () => {
     expect(stripHtmlExtension('/en-US/report.htm')).toBe('/en-US/report.htm');
     expect(stripHtmlExtension('/en-US/sitemap.xml')).toBe('/en-US/sitemap.xml');
+  });
+});
+
+describe('toRoutePath', () => {
+  it('reduces a prerendered index page to the root', () => {
+    // The case that kept `src/pages/index.astro` from existing at all: the
+    // middleware is handed `/index.html`, so a `pathname === '/'` check misses,
+    // `index` fails `isLocale`, and the apex page is replaced by a 301 stub
+    // pointing at `/en-US/index` — a route with nothing behind it.
+    expect(toRoutePath('/index.html')).toBe('/');
+  });
+
+  it('reduces a nested index page to its parent', () => {
+    expect(toRoutePath('/en-US/index.html')).toBe('/en-US');
+    expect(toRoutePath('/en-US/us/index.html')).toBe('/en-US/us');
+  });
+
+  it('still drops the extension from a page that is not an index', () => {
+    expect(toRoutePath('/en-US.html')).toBe('/en-US');
+    expect(toRoutePath('/zh-CN/about.html')).toBe('/zh-CN/about');
+  });
+
+  it('leaves a segment that merely contains "index" alone', () => {
+    // `index.html` is only special as a whole file name; these are ordinary
+    // pages that happen to spell it inside a longer segment.
+    expect(toRoutePath('/en-US/reindex.html')).toBe('/en-US/reindex');
+    expect(toRoutePath('/en-US/indexes.html')).toBe('/en-US/indexes');
+    expect(toRoutePath('/en-US/index-cards.html')).toBe('/en-US/index-cards');
+    expect(toRoutePath('/en-US/index/passport.html')).toBe('/en-US/index/passport');
+  });
+
+  it('reduces only the final segment, and only once', () => {
+    expect(toRoutePath('/en-US/index/index.html')).toBe('/en-US/index');
+  });
+
+  it('is a no-op on a URL the site already publishes', () => {
+    expect(toRoutePath('/')).toBe('/');
+    expect(toRoutePath('/en-US')).toBe('/en-US');
+    expect(toRoutePath('/en-US/us/passport')).toBe('/en-US/us/passport');
+  });
+
+  it('never returns an empty path', () => {
+    // An empty return would fail the middleware's `route === '/'` check and
+    // rejoin as `/en-US` + `''`, sending the apex back into a 301.
+    expect(toRoutePath('/index')).toBe('/');
+    expect(toRoutePath('')).toBe('/');
   });
 });
 

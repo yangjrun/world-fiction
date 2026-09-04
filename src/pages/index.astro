@@ -1,0 +1,160 @@
+---
+import { apexRedirectScript } from '@/i18n/apex-redirect';
+import { defaultLocale, languages, locales } from '@/i18n/config';
+
+/*
+  The apex is a language chooser, not a twelfth copy of the home page.
+
+  It deliberately does not render BaseLayout. That layout takes a `locale` and
+  builds everything from it — `<html lang>`, the nav and footer links, the
+  switcher label, the translation bundle — defaulting to `en-US` when none is
+  passed. This page is reached before any locale is known, so rendering it would
+  ship English chrome to every visitor on the one URL whose whole job is to find
+  out which language they read. BaseLayout would also derive `canonical`,
+  `og:url` and eleven `hreflang` alternates from `Astro.url.pathname`, which at
+  prerender time is `/index.html`: the head would advertise `/index`,
+  `/de-DE/index` and so on — URLs this site does not serve — and would contradict
+  the canonical below even after overriding it. So: a self-contained document,
+  no chrome, no locale-specific copy beyond the fallback list.
+
+  One canonical, pointing at `/en-US`, and no alternates of its own. It matches
+  the `x-default` every locale page emits, so the apex reads as a duplicate of
+  the default-locale home rather than as a twelfth competitor for the same
+  queries. No `noindex`: this is the URL other sites link to, and the equity it
+  collects should pass to `/en-US` rather than be thrown away.
+*/
+
+const origin = Astro.site ?? Astro.url.origin;
+const canonical = new URL(`/${defaultLocale}`, origin).href;
+const title = 'Passport Photo Maker — Choose your language';
+const description =
+  'Choose your language to make a compliant passport or visa photo in your browser. Nothing you upload leaves your device.';
+---
+
+<!doctype html>
+<html lang={defaultLocale} dir={languages[defaultLocale].dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {/*
+      First script in the document, and inline: it redirects while the head is
+      still parsing, before the body renders and before Astro's own stylesheet
+      link — which it appends at the end of <head> — can block anything. See
+      src/i18n/apex-redirect.ts for why this is not a bundled module.
+    */}
+    <script is:inline set:html={apexRedirectScript} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main class="shell">
+      <h1>Passport Photo Maker</h1>
+      <p class="lead">
+        Make a compliant passport or visa photo in your browser. Nothing you upload leaves your
+        device.
+      </p>
+
+      {/*
+        The chooser lives inside <noscript> because with JavaScript on it is
+        never seen: the script above has already replaced this page. Without it,
+        this is the whole page, so it carries a heading of its own and every one
+        of the eleven locales — a visitor who cannot run the detection must still
+        be able to reach their language, and a crawler that does not execute
+        scripts still finds all eleven.
+      */}
+      <noscript>
+        <h2 id="choose">Choose your language</h2>
+        <ul class="languages" aria-labelledby="choose">
+          {
+            locales.map((locale) => (
+              <li>
+                <a href={`/${locale}`} lang={locale} hreflang={locale}>
+                  {languages[locale].name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </noscript>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  /*
+    Scoped styles would stamp a data-astro-cid-* attribute onto every element
+    they match; this page is a whole document of its own, so there is nothing to
+    scope against. Self-contained on purpose: importing the Tailwind entry would add a
+    render-blocking stylesheet to a page whose only job is to leave. These five
+    values are copied from the @theme block in src/styles/global.css (ink-900,
+    ink-600, ink-200, brand-700, brand-50) so the fallback looks like the site it
+    hands over to; if they ever drift, only this one page is affected.
+  */
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    background: #fff;
+    color: #151926;
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .shell {
+    margin: 0 auto;
+    max-width: 42rem;
+    padding: 4rem 1.25rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  h2 {
+    margin: 2.5rem 0 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .lead {
+    margin: 0.75rem 0 0;
+    color: #4d556a;
+    line-height: 1.6;
+  }
+
+  .languages {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .languages a {
+    display: block;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid #d5d9e2;
+    border-radius: 0.5rem;
+    color: #1c3fae;
+    text-decoration: none;
+  }
+
+  .languages a:hover {
+    background: #eef4ff;
+  }
+
+  .languages a:focus-visible {
+    outline: 2px solid #1c3fae;
+    outline-offset: 2px;
+  }
+</style>

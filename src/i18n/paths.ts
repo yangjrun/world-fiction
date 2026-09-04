@@ -19,6 +19,29 @@ export function stripHtmlExtension(pathname: string): string {
 }
 
 /**
+ * Turn a prerender file path into the URL the site publishes for it.
+ *
+ * Two normalisations, in this order: drop the `.html` extension, then reduce a
+ * trailing `/index` segment to its parent — `/index` to `/`, `/en-US/index` to
+ * `/en-US`. `index.html` is the file name a server resolves a directory request
+ * to, so it is never part of the address; carrying it into a locale check or a
+ * redirect target invents a URL the site does not serve.
+ *
+ * The second step is why `src/pages/index.astro` can exist at all. The
+ * prerenderer hands the middleware `/index.html`, so a check for `pathname ===
+ * '/'` misses, `index` fails `isLocale`, and the apex page is replaced by a
+ * 301 stub pointing at `/en-US/index` — a route with nothing behind it.
+ *
+ * Only a whole final segment counts, and only once: `/reindex`, `/indexes` and
+ * `/index-cards` are ordinary pages, and `/index/index` reduces to `/index`
+ * because only the last segment is a file name.
+ */
+export function toRoutePath(pathname: string): string {
+  const route = stripHtmlExtension(pathname).replace(/\/index$/, '');
+  return route === '' ? '/' : route;
+}
+
+/**
  * Rewrite `pathname` so it points at the same page in `target`.
  *
  * The tempting one-liner, `pathname.replace(`/${current}/`, `/${target}/`)`, is

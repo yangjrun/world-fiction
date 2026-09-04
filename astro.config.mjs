@@ -30,6 +30,13 @@ export default defineConfig({
     // Keys are URL path segments, values are hreflang codes — identical here,
     // so the map is derived from LOCALES rather than restated.
     sitemap({
+      // The apex is a client-side language chooser that canonicalises to
+      // `/${DEFAULT_LOCALE}`, and a sitemap should list canonical URLs only.
+      // Left in, this integration also reads `/` as the unprefixed default-locale
+      // page and emits a second `hreflang="en-US"` for it beside `/en-US`: one
+      // language mapped to two URLs, which Google treats as invalid and may
+      // discard for the whole cluster — taking all eleven locale pages with it.
+      filter: (page) => new URL(page).pathname !== '/',
       i18n: {
         defaultLocale: DEFAULT_LOCALE,
         locales: Object.fromEntries(LOCALES.map(locale => [locale, locale])),
