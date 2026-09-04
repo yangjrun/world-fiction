@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
+import { buildAlternates } from '@/i18n/alternates';
 import { defaultLocale, languages, locales, type Locale } from '@/i18n/config';
-import { localizedPath, stripHtmlExtension } from '@/i18n/paths';
+import { stripHtmlExtension } from '@/i18n/paths';
 import { useTranslations } from '@/i18n/ui';
 import { inlineJson } from '@/lib/inline-json';
 
@@ -57,31 +58,19 @@ const pathname = stripHtmlExtension(Astro.url.pathname);
 const canonical = new URL(pathname, origin).href;
 const year = new Date().getFullYear();
 
-// One list, two consumers, so neither can disagree with the other about where a
-// locale lives. They part company only on a locale that does not publish this
-// page: `hreflang` is a claim that a URL exists, so it names published locales
-// only, while the switcher keeps all eleven — a reader who lands on a page that
-// exists in one language still needs a route into their own, and sending them to
-// that locale's home page is a better answer than a 404.
-const alternates = locales.map((l) => {
-  const path = localizedPath(pathname, l);
-  const published = availableLocales.includes(l);
-  return {
-    locale: l,
-    published,
-    href: new URL(path, origin).href,
-    switcherPath: published ? path : `/${l}`,
-  };
-});
+// The hreflang set, the `x-default` and the switcher targets all come from one
+// list, so none of them can disagree with the others about where a locale lives.
+// Which of the three narrows to the locales that actually publish this page, and
+// why, is documented in src/i18n/alternates.ts — as is the guard that a page has
+// to appear in its own hreflang set.
+const {
+  all: alternates,
+  published: publishedAlternates,
+  xDefault,
+} = buildAlternates(pathname, locale, availableLocales, origin);
 
-const publishedAlternates = alternates.filter((alt) => alt.published);
-
-// x-default follows the configured default locale so the two cannot drift, and
-// is dropped entirely when that locale does not publish the page: pointing
-// x-default at a 404 is the same error as an alternate that 404s.
-const xDefault = availableLocales.includes(defaultLocale)
-  ? new URL(localizedPath(pathname, defaultLocale), origin).href
-  : null;
+// Shown on a switcher entry whose target is not this same page in that language.
+const switcherFallbackHint = t.t('switcher.home-fallback');
 
 // Open Graph wants `en_US`; `lang` and `hreflang` keep the hyphenated form.
 const ogLocale = locale.replace('-', '_');
@@ -180,8 +169,19 @@ const footerLinks = [
                       lang={alt.locale}
                       hreflang={alt.locale}
                       aria-current={alt.locale === locale ? 'true' : undefined}
+                      title={alt.published ? undefined : switcherFallbackHint}
                     >
                       {languages[alt.locale].name}
+                      {/*
+                        A locale that does not publish this page sends a reader to its home
+                        page instead, and nothing in the word "Deutsch" says so. `title`
+                        covers a mouse; this covers everyone else, by joining the accessible
+                        name of the link. `lang` is the page's own: the hint is written in
+                        the language the reader is currently reading, not the target's.
+                      */}
+                      {!alt.published && (
+                        <span class="sr-only" lang={locale}> ({switcherFallbackHint})</span>
+                      )}
                     </a>
                   </li>
                 ))
