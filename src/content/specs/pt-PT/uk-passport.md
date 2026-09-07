@@ -1,10 +1,10 @@
 ---
 country: uk
-countryName: United Kingdom
+countryName: Reino Unido
 document: passport
-documentName: UK passport photo
-title: UK Passport Photo Size and Requirements (35x45 mm)
-description: Make a compliant 35x45 mm UK passport photo in your browser. Correct 29-34 mm head height, plain light background and a printable sheet. Nothing is uploaded anywhere.
+documentName: fotografia de passaporte britânico
+title: "Fotografia de passaporte britânico: tamanho e requisitos (35x45 mm)"
+description: Crie no seu navegador uma fotografia de passaporte britânico de 35x45 mm conforme os requisitos. Altura da cabeça de 29 a 34 mm, fundo claro e uma folha imprimível.
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 29
   maxMm: 34
 background:
-  description: Plain cream or light grey, with no shadows
+  description: Creme ou cinzento-claro simples, sem sombras
   colors:
     - '#f5f0e6'
     - '#f0f0f0'
@@ -22,61 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://www.gov.uk/photos-for-passports
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head outside the 29 mm to 34 mm range from chin to crown
-  - Any shadow on the face or behind the head
-  - Head covering worn without a religious or medical reason
-  - Eyes obscured by hair, glasses frames or a glare on the lenses
-  - Anything else visible in the frame, including a second person or a chair back
-  - Photo taken more than one month before applying, if your appearance changed
+  - Cabeça fora do intervalo de 29 mm a 34 mm do queixo ao topo da cabeça
+  - Qualquer sombra no rosto ou atrás da cabeça
+  - Cobertura da cabeça usada sem motivo religioso ou médico
+  - Olhos tapados pelo cabelo, pela armação dos óculos ou por um brilho nas lentes
+  - Qualquer outra coisa visível no enquadramento, incluindo uma segunda pessoa ou as costas de uma cadeira
+  - Fotografia tirada mais de um mês antes do pedido, se a sua aparência mudou
 faq:
-  - q: What size is a UK passport photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How tall should my head be in the photo?
-    a: Between 29 mm and 34 mm from the bottom of your chin to the top of your head, hair included.
-  - q: Can I smile?
-    a: No. HM Passport Office requires a neutral expression with your mouth closed.
-  - q: Can I use this photo for the digital application?
-    a: Yes. The digital route needs at least 600 x 750 pixels, and the file this tool produces exceeds that.
+  - q: Que tamanho tem uma fotografia de passaporte britânico?
+    a: 35 mm de largura por 45 mm de altura. A 300 DPI são 413 x 531 píxeis.
+  - q: Que altura deve ter a minha cabeça na fotografia?
+    a: Entre 29 mm e 34 mm da base do queixo ao topo da cabeça, cabelo incluído.
+  - q: Posso sorrir?
+    a: Não. O HM Passport Office exige uma expressão neutra com a boca fechada.
+  - q: Posso usar esta fotografia no pedido em linha?
+    a: Sim. A via digital precisa de pelo menos 600 x 750 píxeis, e o ficheiro que esta ferramenta produz ultrapassa esse mínimo.
 ---
 
-## What HM Passport Office measures
+## O que o HM Passport Office mede
 
-A UK passport photo is 35 mm wide and 45 mm tall, and the measurement that
-matters inside it is head height: 29 mm to 34 mm from the bottom of your chin to
-the top of your head, including hair. That is a 5 mm window on a 45 mm photo, so
-a crop that is close by eye is often not close enough.
+Uma fotografia de passaporte britânico tem 35 mm de largura e 45 mm de altura, e a medida que conta lá dentro é a altura da cabeça: de 29 mm a 34 mm da base do queixo ao topo da cabeça, cabelo incluído. É uma janela de 5 mm numa fotografia de 45 mm, pelo que um recorte que a olho parece próximo muitas vezes não está próximo o suficiente.
 
-Note that this is a tighter and lower band than the Schengen visa format, even
-though both use the same 35 x 45 mm outer size. A photo made for a Schengen visa
-will usually be rejected for a UK passport, and the reverse is also true. If you
-are applying for both, make two photos.
+Note que esta faixa é mais estreita e mais baixa do que a do visto Schengen, ainda que ambos usem o mesmo tamanho exterior de 35 x 45 mm. Uma fotografia feita para um visto Schengen é normalmente recusada para um passaporte britânico, e o contrário também é verdade. Se está a pedir os dois, faça duas fotografias.
 
-## Background and lighting
+## Fundo e iluminação
 
-The requirement is a plain cream or light grey background with no shadows.
-Shadows are the second most common failure after head size, and they usually come
-from standing too close to a wall. Stand at least half a metre away from the
-background and face a window rather than a ceiling light.
+O requisito é um fundo simples creme ou cinzento-claro sem sombras. As sombras são a segunda causa de chumbo mais comum depois do tamanho da cabeça, e vêm quase sempre de estar demasiado perto de uma parede. Fique a pelo menos meio metro do fundo e volte-se para uma janela em vez de uma luz de teto.
 
-This tool replaces the background with an even fill, which removes shadow
-problems behind the head. It cannot remove a shadow cast across your face, so
-light yourself from the front when you take the original.
+Esta ferramenta substitui o fundo por um preenchimento uniforme, o que elimina os problemas de sombra atrás da cabeça. Não consegue remover uma sombra projetada no seu rosto, por isso ilumine-se de frente ao tirar a fotografia original.
 
-## How this tool works
+## Como esta ferramenta funciona
 
-Upload a photo. The tool finds your chin, crown and eye line, then computes the
-crop that puts your head at 31.5 mm, the centre of the permitted range. If your
-photo lacks the margin to make a compliant crop, it reports which edge falls
-short rather than cropping tighter and producing a photo that fails.
+Carregue uma fotografia. A ferramenta encontra o queixo, o topo da cabeça e a linha dos olhos, e depois calcula o recorte que coloca a cabeça em 31,5 mm, o centro do intervalo permitido. Se à sua fotografia faltar margem para um recorte conforme, indica que margem está curta em vez de recortar mais e produzir uma fotografia que vai chumbar.
 
-Every step runs locally in your browser through WebAssembly. Your photo is never
-uploaded.
+Cada passo corre localmente no seu navegador através de WebAssembly. A sua fotografia nunca é carregada.
 
-## Printing or applying online
+## Imprimir ou pedir em linha
 
-For a paper application, download the 4 x 6 inch sheet, which holds eight copies
-of a 35 x 45 mm photo, and print it at any photo counter. For the online
-application, download the single JPEG and upload it directly; it comfortably
-exceeds the 600 x 750 pixel minimum.
+Para um pedido em papel, descarregue a folha de 4 x 6 polegadas, que leva oito cópias de uma fotografia de 35 x 45 mm, e mande imprimi-la em qualquer balcão de fotografia. Para o pedido em linha, descarregue o JPEG único e carregue-o diretamente; ultrapassa com folga o mínimo de 600 x 750 píxeis.

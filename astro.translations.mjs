@@ -1,24 +1,32 @@
-// Build-time view of the translation bundles: which locales a translator has
-// actually started on, as opposed to which locales have a file.
+// Build-time view of the translation bundles: which locales are cleared to be
+// advertised as translations.
 //
-// A locale whose bundle is still byte-for-byte en-US serves English prose under
-// its own `lang`, so claiming it as an `hreflang` alternate, or listing its pages
-// in the sitemap, invites Google to index eleven near-duplicate English pages and
-// to discount the cluster they belong to. Both of those claims are narrowed to the
-// locales this module reports.
+// A locale whose bundle is still English serves English prose under its own `lang`,
+// so claiming it as an `hreflang` alternate, or listing its pages in the sitemap,
+// invites Google to index eleven near-duplicate English pages and to discount the
+// cluster they belong to. Both of those claims are narrowed to the locales this
+// module reports.
 //
-// Two readers, one rule. `astro.config.mjs` needs the list to filter the sitemap
-// and loads inside Astro's config loader, where there is no Vite transform and no
-// TS path alias -- hence a plain `.mjs` at the root, beside `astro.locales.mjs`,
-// and hence `node:fs` rather than Vite's import glob. `src/i18n/translated.ts`
-// needs the same list for the layout and gets it through `getTranslations`, which
-// is the loader the app already uses; it imports `isTranslatedBundle` from here so
-// the rule itself exists once. tests/i18n/translated.test.ts asserts the two
-// readers agree.
+// The clearance is a declaration, not an inference. This used to deep-compare each
+// bundle against en-US.json and call any difference a translation, which meant one
+// changed string out of 122 advertised a German version of 121 English ones -- and
+// meant nobody could tell, from a diff, when a locale started being advertised. It
+// now reads a `__status` key out of the bundle, mirroring the `status: verified`
+// gate every spec passes through: advertising a language is a deliberate human act,
+// visible in review, and never a side effect of editing copy.
 //
-// Nothing here runs at import time: `src/i18n/translated.ts` pulls this module
-// into the Vite SSR graph, and a top-level `readFileSync` there would resolve
-// against the bundle's location rather than the project's.
+// Two readers, one rule. `astro.config.mjs` needs the list to filter the sitemap and
+// loads inside Astro's config loader, where there is no Vite transform and no TS
+// path alias -- hence a plain `.mjs` at the root, beside `astro.locales.mjs`, and
+// hence `node:fs`. `src/i18n/translated.ts` needs the same list for the layout and
+// reads through the import glob the pages render from. Both call
+// `translatedLocalesFrom`, and tests/i18n/translated.test.ts asserts they agree.
+//
+// Nothing here runs at import time: src/i18n/translated.ts pulls this module into
+// the Vite SSR graph, and a top-level `readFileSync` there would resolve against the
+// bundle's location rather than the project's. One consequence worth knowing: the
+// sitemap's copy of this list is computed when Astro loads its config, so editing a
+// `__status` during `astro dev` moves nothing until the config reloads.
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -27,45 +35,41 @@ import { DEFAULT_LOCALE, LOCALES } from './astro.locales.mjs';
 
 const TRANSLATIONS_DIR = new URL('./src/i18n/translations/', import.meta.url);
 
-/**
- * Whether `key` names a string the site renders.
- *
- * The bundle also carries a `__readme` header and a `<key>__note` beside anything
- * with a placeholder. Those are documentation written for translators, not copy:
- * a locale whose notes have been translated and whose copy has not is not a
- * translated locale, and must not be advertised as one.
- *
- * @param {string} key
- * @returns {boolean}
- */
-export function isRenderedKey(key) {
-  return !key.startsWith('__') && !key.endsWith('__note');
-}
+/** The key each bundle declares its clearance in. */
+export const STATUS_KEY = '__status';
 
 /**
- * Whether `bundle` has been translated away from `source`.
+ * Every clearance a bundle may declare.
  *
- * True as soon as one rendered string differs, which is deliberately generous: a
- * translator works through a 120-key file over days, and a locale that is half
- * done is still a locale whose pages are worth finding. It is also the only rule
- * that cannot be gamed by coincidence in the other direction -- several strings
- * are legitimately identical in every language (`mm`, `px`, `DPI`, the comma that
- * joins two file limits), so "every string differs" would never be true.
+ * `draft` is the honest state of a bundle that is still English, or part way
+ * through: the pages build and a reader can open them, and nothing claims they are
+ * a translation. `translated` is a person saying it is ready to be advertised.
+ */
+export const BUNDLE_STATUSES = ['draft', 'translated'];
+
+/**
+ * Whether `bundle` is cleared to be advertised as a translation.
  *
- * Compares the union of both key sets, so a bundle that grew a rendered key en-US
- * does not have counts as translated too. Key-set parity is separately asserted
- * in tests/i18n/translations.test.ts.
+ * Throws on a missing or unrecognised `__status` rather than defaulting either way.
+ * Defaulting to `draft` would silently drop a finished language out of the sitemap;
+ * defaulting to `translated` would silently advertise an English one. A build that
+ * dies naming the file is the only outcome that cannot ship wrong.
  *
  * @param {Record<string, string>} bundle
- * @param {Record<string, string>} source
+ * @param {string} [label] Names the bundle in the failure.
  * @returns {boolean}
  */
-export function isTranslatedBundle(bundle, source) {
-  for (const key of new Set([...Object.keys(source), ...Object.keys(bundle)])) {
-    if (!isRenderedKey(key)) continue;
-    if (bundle[key] !== source[key]) return true;
+export function isTranslatedBundle(bundle, label = 'a translation bundle') {
+  const status = bundle[STATUS_KEY];
+  if (!BUNDLE_STATUSES.includes(status)) {
+    throw new Error(
+      `${label} declares ${STATUS_KEY} ${JSON.stringify(status)}; ` +
+        `it must be one of ${BUNDLE_STATUSES.map((s) => JSON.stringify(s)).join(', ')}. ` +
+        `Set "draft" until the strings in it have been translated, then "translated" ` +
+        `to advertise that locale in the hreflang set and the sitemap.`,
+    );
   }
-  return false;
+  return status === 'translated';
 }
 
 /**
@@ -80,26 +84,32 @@ export function readBundle(locale) {
 }
 
 /**
- * The locales worth advertising as translations, in configured order.
- *
- * The default locale is the source every other bundle is compared against, so it
- * is always in the list; there is nothing for it to diverge from.
+ * The locales cleared to be advertised as translations, in configured order.
  *
  * Takes the loader rather than reading files itself, so the one thing both callers
- * share is this composition and not a copy of it: `readTranslatedLocales` loads
- * with `node:fs` for the config loader, `getTranslatedLocales` in
- * src/i18n/translated.ts loads through the same import glob the pages render from,
- * and a test can hand it bundles of its own to prove that a diverged locale
- * rejoins the list rather than only that an identical one stays out.
+ * share is this composition and not a copy of it -- and so a test can hand it
+ * bundles of its own to prove that a locale rejoins the list when its marker flips,
+ * rather than only that a draft one stays out.
  *
  * @param {(locale: string) => Record<string, string>} load
  * @returns {string[]}
  */
 export function translatedLocalesFrom(load) {
-  const source = load(DEFAULT_LOCALE);
-  return LOCALES.filter(
-    (locale) => locale === DEFAULT_LOCALE || isTranslatedBundle(load(locale), source),
+  const translated = LOCALES.filter((locale) =>
+    isTranslatedBundle(load(locale), `${locale}.json`),
   );
+
+  // The source language is the fallback every untranslated locale canonicalises to
+  // and the target of every x-default. A site advertising no locale at all has no
+  // cluster, no sitemap and no canonical worth following.
+  if (!translated.includes(DEFAULT_LOCALE)) {
+    throw new Error(
+      `${DEFAULT_LOCALE}.json declares ${STATUS_KEY} "draft", but it is the source ` +
+        `bundle every other locale falls back to and must be "translated".`,
+    );
+  }
+
+  return translated;
 }
 
 /**

@@ -1,10 +1,10 @@
 ---
 country: schengen
-countryName: Schengen Area
+countryName: 申根區
 document: visa
-documentName: Schengen visa photo
-title: Schengen Visa Photo Size and Requirements (35x45 mm)
-description: Create a compliant 35x45 mm Schengen visa photo in your browser. Correct 70-80% face height, light background and a printable sheet. Your photo never leaves your device.
+documentName: 申根簽證相片
+title: 申根簽證相片尺寸與規定（35x45 公釐）
+description: 在瀏覽器中製作符合規定的 35x45 公釐申根簽證相片。臉部占高度 70–80%、淺色背景都正確，並產生可列印的拼版。相片絕不會離開你的裝置。
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 32
   maxMm: 36
 background:
-  description: Plain light grey or cream, evenly lit
+  description: 淺灰色或米色的純色背景，光線均勻
   colors:
     - '#f0f0f0'
     - '#f5f0e6'
@@ -22,60 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy_en
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face fills less than 70% or more than 80% of the frame height
-  - A pure white background, which several consulates read as overexposed
-  - Head tilted or turned rather than square to the camera
-  - Hair covering the eyes or the outline of the face
-  - Reflections or heavy frames if glasses are worn
-  - Photo older than six months
+  - 臉部占畫面高度不足 70% 或超過 80%
+  - 使用純白背景，若干領事館會判定為曝光過度
+  - 頭部歪斜或轉向，而不是正對鏡頭
+  - 頭髮遮住眼睛或臉部輪廓
+  - 戴眼鏡時出現反光，或鏡框過粗
+  - 相片拍攝於六個月以前
 faq:
-  - q: What size is a Schengen visa photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How much of the photo should my face fill?
-    a: Between 70% and 80% of the height, which works out to a head between 32 mm and 36 mm from chin to crown.
-  - q: Should the background be white?
-    a: Prefer plain light grey or cream. The requirement is a light, uniform, contrasting background, and a pure white one can be read as overexposed.
-  - q: Does one photo work for every Schengen country?
-    a: The 35x45 mm format and the 70-80% face rule are common to all of them, but individual consulates add their own notes. Check the consulate you are applying to.
+  - q: 申根簽證相片是多大尺寸？
+    a: 寬 35 公釐、高 45 公釐。在 300 DPI 下是 413 x 531 像素。
+  - q: 臉部應該占相片多少？
+    a: 占高度的 70% 到 80%，換算下來是頭部從下巴到頭頂 32 公釐到 36 公釐。
+  - q: 背景應該是白色的嗎？
+    a: 建議用淺灰色或米色的純色背景。規定是淺色、均勻、與臉部有對比，而純白背景可能被判定為曝光過度。
+  - q: 一張相片能用於所有申根國家嗎？
+    a: 35x45 公釐的規格和 70–80% 的臉部比例是所有申根國家共通的，但各個領事館會另加自己的說明。請查看你申請的那個領事館。
 ---
 
-## The rule that decides it: 70 to 80 percent
+## 決定成敗的那條規則：70% 到 80%
 
-Every Schengen consulate works from the same photo format, 35 mm wide by 45 mm
-tall, and the same central requirement: your face must fill 70% to 80% of the
-frame height. In millimetres that is a head between 32 mm and 36 mm measured from
-the bottom of the chin to the top of the head, hair included.
+所有申根領事館使用同一種相片規格，寬 35 公釐、高 45 公釐，也使用同一條核心規定：你的臉部必須占畫面高度的 70% 到 80%。換成公釐，就是從下巴底部到頭頂（含頭髮）在 32 公釐到 36 公釐之間。
 
-That band is narrower than it sounds. A crop that looks reasonable to the eye
-frequently lands at 60% or 85%, and either one is grounds for rejection. It is
-the most common reason Schengen photo submissions come back.
+這個區間比聽起來更窄。一個看上去挺合理的裁切，經常落在 60% 或 85%，而這兩者都構成退件理由。它是申根相片被退回最常見的原因。
 
-## Why not a white background
+## 為什麼不用白色背景
 
-The published requirement is a light, uniform background that contrasts with the
-face. Plain white technically satisfies "light", but in practice a white
-background photographed with a bright flash loses the outline of light hair and
-shoulders, and several consulates treat that as overexposed. Light grey or cream
-is the safer read of the same rule, so this tool defaults to light grey.
+公布的規定是淺色、均勻、與臉部形成對比的背景。純白從字面上滿足淺色，但實際上，用強閃光拍攝的白背景會失去淺色頭髮和肩部的輪廓，而若干領事館會把這判定為曝光過度。淺灰或米色是對同一條規則更穩妥的解讀，所以本工具預設使用淺灰色。
 
-## How this tool works
+## 這個工具如何運作
 
-Upload any reasonably front-facing photo. The tool locates your chin, crown and
-eye line, then computes the crop that lands your head at 34 mm, the middle of the
-permitted range, giving the widest possible margin for measurement error. The
-background is replaced with an even light grey.
+上傳任何一張大致正面的相片。工具會定位你的下巴、頭頂和眼睛位置，然後計算出把頭部放在 34 公釐（允許範圍中點）的裁切方案，為測量誤差留下盡可能寬的餘地。背景會被替換成均勻的淺灰色。
 
-If your source photo is cropped too tightly to produce a compliant result, the
-tool tells you which edge is short rather than cropping in further and handing
-you a photo that fails. Retake it standing further from the camera.
+如果你的原始相片裁得太緊、無法產出合規的結果，工具會告訴你哪一邊不夠，而不是繼續往內裁、交給你一張不合格的相片。這時請站遠一些重拍。
 
-All processing happens in your browser through WebAssembly. Nothing is uploaded.
+所有處理都透過 WebAssembly 在你的瀏覽器中完成。什麼都不會被上傳。
 
-## Printing
+## 列印
 
-A 35 x 45 mm photo tiles eight to a 4 x 6 inch print, four across and two down.
-Download the sheet, have it printed as an ordinary photo, and cut along the guide
-lines. Most consulates ask for two identical photos, so one sheet covers four
-applications.
+35 x 45 公釐的相片在一張 4 x 6 吋的相紙上正好排八張，橫四直二。下載拼版，當普通相片沖印，然後沿參考線裁開。多數領事館要求兩張完全相同的相片，所以一張拼版夠辦四次申請。

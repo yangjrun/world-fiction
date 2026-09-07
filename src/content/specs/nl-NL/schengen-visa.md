@@ -1,10 +1,10 @@
 ---
 country: schengen
-countryName: Schengen Area
+countryName: Schengengebied
 document: visa
-documentName: Schengen visa photo
-title: Schengen Visa Photo Size and Requirements (35x45 mm)
-description: Create a compliant 35x45 mm Schengen visa photo in your browser. Correct 70-80% face height, light background and a printable sheet. Your photo never leaves your device.
+documentName: Schengenvisumfoto
+title: "Schengenvisumfoto: formaat en eisen (35x45 mm)"
+description: Maak in je browser een Schengenvisumfoto van 35x45 mm die aan de eisen voldoet. Gezicht op 70-80% van de hoogte, lichte achtergrond en een printbaar vel.
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 32
   maxMm: 36
 background:
-  description: Plain light grey or cream, evenly lit
+  description: Effen lichtgrijs of crème, gelijkmatig uitgelicht
   colors:
     - '#f0f0f0'
     - '#f5f0e6'
@@ -22,60 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy_en
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face fills less than 70% or more than 80% of the frame height
-  - A pure white background, which several consulates read as overexposed
-  - Head tilted or turned rather than square to the camera
-  - Hair covering the eyes or the outline of the face
-  - Reflections or heavy frames if glasses are worn
-  - Photo older than six months
+  - Het gezicht vult minder dan 70% of meer dan 80% van de hoogte van het kader
+  - Een zuiver witte achtergrond, die verschillende consulaten als overbelicht lezen
+  - Hoofd gekanteld of gedraaid in plaats van recht naar de camera
+  - Haar dat de ogen of de contour van het gezicht bedekt
+  - Weerspiegelingen of dikke monturen als er een bril wordt gedragen
+  - Foto ouder dan zes maanden
 faq:
-  - q: What size is a Schengen visa photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How much of the photo should my face fill?
-    a: Between 70% and 80% of the height, which works out to a head between 32 mm and 36 mm from chin to crown.
-  - q: Should the background be white?
-    a: Prefer plain light grey or cream. The requirement is a light, uniform, contrasting background, and a pure white one can be read as overexposed.
-  - q: Does one photo work for every Schengen country?
-    a: The 35x45 mm format and the 70-80% face rule are common to all of them, but individual consulates add their own notes. Check the consulate you are applying to.
+  - q: Welk formaat heeft een Schengenvisumfoto?
+    a: 35 mm breed en 45 mm hoog. Bij 300 DPI is dat 413 x 531 pixels.
+  - q: Hoeveel van de foto moet mijn gezicht vullen?
+    a: Tussen 70% en 80% van de hoogte, wat neerkomt op een hoofd van 32 mm tot 36 mm van kin tot kruin.
+  - q: Moet de achtergrond wit zijn?
+    a: Neem liever effen lichtgrijs of crème. De eis is een lichte, gelijkmatige achtergrond met contrast, en een zuiver witte kan als overbelicht worden gelezen.
+  - q: Werkt één foto voor elk Schengenland?
+    a: Het formaat 35x45 mm en de regel van 70-80% gelden voor alle landen, maar afzonderlijke consulaten voegen eigen aanwijzingen toe. Controleer het consulaat waar je aanvraagt.
 ---
 
-## The rule that decides it: 70 to 80 percent
+## De regel die de uitslag bepaalt: 70 tot 80 procent
 
-Every Schengen consulate works from the same photo format, 35 mm wide by 45 mm
-tall, and the same central requirement: your face must fill 70% to 80% of the
-frame height. In millimetres that is a head between 32 mm and 36 mm measured from
-the bottom of the chin to the top of the head, hair included.
+Elk Schengenconsulaat werkt met hetzelfde fotoformaat, 35 mm breed en 45 mm hoog, en met dezelfde kerneis: je gezicht moet 70% tot 80% van de hoogte van het kader vullen. In millimeters is dat een hoofd tussen 32 mm en 36 mm, gemeten van de onderkant van de kin tot de kruin, haar inbegrepen.
 
-That band is narrower than it sounds. A crop that looks reasonable to the eye
-frequently lands at 60% or 85%, and either one is grounds for rejection. It is
-the most common reason Schengen photo submissions come back.
+Die band is smaller dan hij klinkt. Een uitsnede die op het oog redelijk lijkt komt vaak op 60% of 85% uit, en beide zijn een reden voor afkeuring. Het is de meest voorkomende reden dat ingestuurde Schengenfoto’s terugkomen.
 
-## Why not a white background
+## Waarom geen witte achtergrond
 
-The published requirement is a light, uniform background that contrasts with the
-face. Plain white technically satisfies "light", but in practice a white
-background photographed with a bright flash loses the outline of light hair and
-shoulders, and several consulates treat that as overexposed. Light grey or cream
-is the safer read of the same rule, so this tool defaults to light grey.
+De gepubliceerde eis is een lichte, gelijkmatige achtergrond die contrasteert met het gezicht. Zuiver wit voldoet technisch aan licht, maar in de praktijk verliest een witte achtergrond die met een felle flits is gefotografeerd de contour van licht haar en schouders, en verschillende consulaten behandelen dat als overbelicht. Lichtgrijs of crème is de veiligere lezing van dezelfde regel, dus dit hulpmiddel kiest standaard lichtgrijs.
 
-## How this tool works
+## Hoe dit hulpmiddel werkt
 
-Upload any reasonably front-facing photo. The tool locates your chin, crown and
-eye line, then computes the crop that lands your head at 34 mm, the middle of the
-permitted range, giving the widest possible margin for measurement error. The
-background is replaced with an even light grey.
+Upload een redelijk frontale foto. Het hulpmiddel bepaalt je kin, kruin en ooglijn en berekent dan de uitsnede die je hoofd op 34 mm laat uitkomen, het midden van het toegestane bereik, met de ruimste marge voor meetfouten. De achtergrond wordt vervangen door gelijkmatig lichtgrijs.
 
-If your source photo is cropped too tightly to produce a compliant result, the
-tool tells you which edge is short rather than cropping in further and handing
-you a photo that fails. Retake it standing further from the camera.
+Is je bronfoto te krap gesneden voor een geldig resultaat, dan zegt het hulpmiddel welke rand tekortkomt in plaats van verder in te snijden en je een foto te geven die wordt afgekeurd. Maak hem opnieuw, verder van de camera.
 
-All processing happens in your browser through WebAssembly. Nothing is uploaded.
+Alle verwerking gebeurt in je browser via WebAssembly. Er wordt niets geüpload.
 
-## Printing
+## Afdrukken
 
-A 35 x 45 mm photo tiles eight to a 4 x 6 inch print, four across and two down.
-Download the sheet, have it printed as an ordinary photo, and cut along the guide
-lines. Most consulates ask for two identical photos, so one sheet covers four
-applications.
+Een foto van 35 x 45 mm past acht keer op een afdruk van 4 x 6 inch, vier in de breedte en twee in de hoogte. Download het vel, laat het als gewone foto afdrukken en snijd langs de snijlijnen. De meeste consulaten vragen twee identieke foto’s, dus één vel dekt vier aanvragen.

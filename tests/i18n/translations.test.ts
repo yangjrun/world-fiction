@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 import { describe, it, expect } from 'vitest';
 
-import { locales } from '@/i18n/config';
+import { defaultLocale, locales } from '@/i18n/config';
 import { getTranslations, interpolate, useTranslations } from '@/i18n/ui';
 
 /** A key the bundle must carry, named in the failure rather than `undefined`. */
@@ -126,8 +126,42 @@ function expectWellFormedEmphasis(value: string, label: string): readonly string
 const pageSource = (name: string): string =>
   readFileSync(fileURLToPath(new URL(`../../src/pages/${name}`, import.meta.url)), 'utf8');
 
+/** Every .astro file under src/pages, as a path. */
+function astroFiles(): string[] {
+  const walk = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+      entry.isDirectory() ? walk(`${dir}/${entry.name}`) : [`${dir}/${entry.name}`],
+    );
+  return walk(fileURLToPath(new URL('../../src/pages', import.meta.url)))
+    .map((file) => file.replace(/\\/g, '/'))
+    .filter((file) => file.endsWith('.astro'));
+}
+
 const PRIVACY_PAGE = pageSource('[locale]/privacy.astro');
 const HOME_PAGE = pageSource('[locale]/index.astro');
+const ABOUT_PAGE = pageSource('[locale]/about.astro');
+
+/** Whether a brace group is a markup marker rather than a value to substitute. */
+const isMarker = (group: string): boolean => EM_SHAPED.test(group) || LINK_SHAPED.test(group);
+
+/**
+ * The placeholders a string substitutes a value into, markers excluded.
+ *
+ * A set, not a list: spec.band-length names {unit} twice in English and once is
+ * perfectly good German ("33,0 - 36,0 mm"), so repetition is the translator's
+ * business. Which values appear at all is not.
+ */
+const valuePlaceholders = (value: string): string[] =>
+  [...new Set(braceGroups(value).filter((group) => !isMarker(group)))].sort();
+
+/**
+ * The keys a page renders through parseEmphasis.
+ *
+ * Everything else in the bundle reaches the page as plain text, so an {em} in it
+ * renders with its braces showing. This list is the boundary that fact is asserted
+ * against, so it is checked against the pages rather than trusted.
+ */
+const EMPHASISED_KEYS = ['home.how-p1', 'home.how-p2', 'home.how-p3', 'about.measures-p1'];
 
 /**
  * How many links a page lends one rich-text key, read off the `const <name>` array
@@ -249,6 +283,30 @@ describe('Locale bundles', () => {
     }
   });
 
+  it('substitutes the same values as en-US in every key, in every locale', async () => {
+    // The per-key assertions elsewhere in this file name {count}, {date} and
+    // {documentName}, which leaves the other placeholders unguarded: a translator
+    // who drops {unit} from spec.band-length ships "33.0 mm - 36.0" with the unit
+    // missing, and one who invents {units} ships a sentence with braces in it.
+    // Neither is visible except by reading that row of that table in that language.
+    const source = await getTranslations(defaultLocale);
+
+    for (const locale of locales) {
+      if (locale === defaultLocale) continue;
+      const dict = await getTranslations(locale);
+
+      for (const [key, value] of Object.entries(source)) {
+        if (!isRenderedKey(key)) continue;
+        expect(
+          valuePlaceholders(required(dict, key)),
+          `${locale} ${key} does not substitute the same values as ${defaultLocale}: a ` +
+            `placeholder the page supplies and the copy never names leaves that fact out ` +
+            `of the sentence, and one the page does not supply renders as literal braces`,
+        ).toEqual(valuePlaceholders(value));
+      }
+    }
+  });
+
   it('holds a bundle for every configured locale and nothing else', () => {
     // A bundle with no locale — `en-GB.json`, or a leftover `en-US.json.bak` —
     // is never served and never noticed. A locale with no bundle now fails the
@@ -274,6 +332,51 @@ describe('Rich-text markers', () => {
       for (const [key, value] of Object.entries(dict)) {
         if (!isRenderedKey(key)) continue;
         expectWellFormedEmphasis(value, `${locale} ${key}`);
+      }
+    }
+  });
+
+  it('parses emphasis in exactly the keys named here', () => {
+    // The assertion below is only as good as this list, so the list is pinned to the
+    // pages. A third page that starts calling parseEmphasis without being added here
+    // would have its emphasis rejected as junk; one that stops calling it would leave
+    // its keys exempt from the rejection.
+    const parsers: readonly (readonly [string, string])[] = [
+      ['[locale]/index.astro', HOME_PAGE],
+      ['[locale]/about.astro', ABOUT_PAGE],
+    ];
+
+    for (const [name, source] of parsers) {
+      expect(source, `${name} no longer calls parseEmphasis`).toContain('parseEmphasis(');
+    }
+    for (const key of EMPHASISED_KEYS) {
+      expect(
+        parsers.some(([, source]) => source.includes(`'${key}'`)),
+        `${key} is not named by any page that parses emphasis`,
+      ).toBe(true);
+    }
+
+    const parsing = astroFiles().filter((file) =>
+      readFileSync(file, 'utf8').includes('parseEmphasis('),
+    );
+    expect(
+      parsing.map((file) => file.slice(file.indexOf('src/pages/') + 'src/pages/'.length)).sort(),
+      'a page has started or stopped parsing emphasis without EMPHASISED_KEYS being updated',
+    ).toEqual(parsers.map(([name]) => name).sort());
+  });
+
+  it('never emphasises a string no page parses', async () => {
+    // The inverse the link markers already had and emphasis did not: `{em}` is
+    // spelled correctly in all 99 of the keys parseEmphasis never sees, and every
+    // other assertion in this file waves it through while the page shows the braces.
+    for (const locale of locales) {
+      const dict = await getTranslations(locale);
+      for (const [key, value] of Object.entries(dict)) {
+        if (!isRenderedKey(key) || EMPHASISED_KEYS.includes(key)) continue;
+        expect(
+          braceGroups(value).filter((group) => EM_SHAPED.test(group)),
+          `${locale} ${key} carries an emphasis marker, and no page parses that key`,
+        ).toEqual([]);
       }
     }
   });

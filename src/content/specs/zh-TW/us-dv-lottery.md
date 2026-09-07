@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: 美國
 document: dv-lottery
-documentName: DV lottery photo
-title: DV Lottery Photo Requirements (600x600 px, under 240KB)
-description: Make a compliant Diversity Visa lottery photo in your browser. Exactly 600x600 pixels, under the 240KB limit, correct head and eye position. Nothing is uploaded.
+documentName: DV 抽籤相片
+title: DV 抽籤相片規定（600x600 像素，240KB 以內）
+description: 在瀏覽器中製作符合規定的多元化簽證抽籤相片。正好 600x600 像素、壓在 240KB 限制以內，頭部與眼睛位置都正確。相片不會上傳。
 output:
   kind: digital
   widthPx: 600
@@ -16,7 +16,7 @@ eyeLine:
   minRatio: 0.56
   maxRatio: 0.69
 background:
-  description: Plain white or off-white
+  description: 純白或接近白色
   colors:
     - '#ffffff'
 file:
@@ -24,63 +24,45 @@ file:
   maxBytes: 245760
 sourceUrl: https://travel.state.gov/content/travel/en/us-visas/immigrate/diversity-visa-program-entry/diversity-visa-submit-entry1/diversity-visa-photograph-requirements.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - File larger than 240KB, which the entry form rejects outright
-  - Image not exactly 600 x 600 pixels square
-  - Head height outside 50% to 69% of the image height
-  - Eyes outside the 56% to 69% band measured from the bottom edge
-  - Reusing the photo from a previous year's entry, which is automatically disqualified
-  - A photo of a photo, or a scan showing paper texture
+  - 檔案大於 240KB，報名表單會直接拒收
+  - 影像不是正好 600 x 600 像素的正方形
+  - 頭部高度不在影像高度的 50% 到 69% 之間
+  - 眼睛不在自下緣量起 56% 到 69% 的區間內
+  - 沿用往年報名時的相片，這會被自動取消資格
+  - 翻拍的相片，或者能看出紙張紋理的掃描檔
 faq:
-  - q: What size does a DV lottery photo need to be?
-    a: Exactly 600 x 600 pixels, square, and the file must be 240KB or smaller.
-  - q: Why does my photo get rejected for file size?
-    a: The entry form enforces a hard 240KB ceiling. This tool searches for the highest JPEG quality that still fits under it, so the file passes without looking over-compressed.
-  - q: Where do my eyes need to be?
-    a: Between 56% and 69% of the image height above the bottom edge, and your head must be between 50% and 69% of the image height.
-  - q: Can I reuse last year's photo?
-    a: No. A photo submitted in a previous year's entry disqualifies the new entry. You need a photo taken within the last six months.
+  - q: DV 抽籤相片需要多大？
+    a: 正好 600 x 600 像素的正方形，並且檔案必須不超過 240KB。
+  - q: 為什麼我的相片因為檔案大小被拒？
+    a: 報名表單設了 240KB 的硬上限。本工具會搜尋仍能壓在這個上限之下的最高 JPEG 品質，所以檔案既能通過，也不會看起來被過度壓縮。
+  - q: 眼睛需要在什麼位置？
+    a: 自下緣量起，在影像高度的 56% 到 69% 之間；頭部則必須占影像高度的 50% 到 69%。
+  - q: 可以用去年的相片嗎？
+    a: 不可以。往年報名時提交過的相片會導致新的報名被取消資格。你需要一張六個月內拍攝的相片。
 ---
 
-## Two hard limits, and one of them is a file size
+## 兩條硬性限制，其中一條是檔案大小
 
-The Diversity Visa entry form is stricter than most photo requirements because it
-enforces two things mechanically. The image must be exactly 600 x 600 pixels, and
-the file must be 240KB or smaller. Miss either and the form refuses the upload,
-with no explanation of which rule you broke.
+多元化簽證的報名表單比多數相片規定更嚴格，因為它會機械地強制執行兩件事。影像必須正好是 600 x 600 像素，檔案必須不超過 240KB。任何一條不滿足，表單就會拒絕上傳，而且不會說明你違反的是哪一條。
 
-The size ceiling is what trips people up. A clean 600 x 600 photo saved at full
-quality from most editors lands somewhere between 300KB and 600KB, well over the
-limit. Saving it again at a guessed lower quality either overshoots or produces a
-visibly mushy image.
+讓人吃虧的是那個容量上限。一張乾淨的 600 x 600 相片，用多數編輯器以最高品質儲存，通常在 300KB 到 600KB 之間，遠超限制。憑感覺降低品質再存一次，要麼還是超，要麼得到一張明顯模糊的圖。
 
-This tool searches for the answer instead of guessing. It encodes the photo
-repeatedly, narrowing in on the highest JPEG quality that still fits under 240KB,
-which gives you the best-looking file that the form will accept.
+本工具不靠猜，而是去搜尋答案。它會反覆編碼這張相片，逐步逼近仍能壓在 240KB 以下的最高 JPEG 品質，從而給你表單會接受的、畫質最好的那個檔案。
 
-## The positioning rules
+## 位置規則
 
-Inside the square, your head must occupy between 50% and 69% of the image height,
-measured from the bottom of your chin to the top of your head. Your eyes must sit
-between 56% and 69% of the image height above the bottom edge. These are the same
-proportions the passport photo requirement uses, expressed as percentages rather
-than inches because a DV photo is digital only.
+在這個正方形裡，你的頭部必須占影像高度的 50% 到 69%，從下巴底部量到頭頂。你的眼睛必須位於自下緣量起影像高度的 56% 到 69% 之間。這和護照相片規定用的是同樣的比例，只是因為 DV 相片只有電子版，所以用百分比而不是吋來表述。
 
-The tool measures your face, then computes the crop that puts your head and eyes
-at the centre of both permitted bands.
+工具會測量你的臉部，然後計算出把頭部和眼睛都放在兩個允許區間中段的裁切方案。
 
-## The disqualification most people do not know about
+## 大多數人不知道的那條取消資格規定
 
-Submitting a photo that was used in a previous year's DV entry disqualifies the
-entry. The photo must have been taken within the last six months, and it must not
-have been submitted before. If you entered last year, take a new photo.
+提交往年 DV 報名中用過的相片會導致本次報名被取消資格。相片必須是最近六個月內拍攝的，並且此前沒有提交過。如果你去年報過名，就重新拍一張。
 
-## Privacy
+## 隱私
 
-Every step runs inside your browser through WebAssembly: face detection,
-background replacement, cropping and encoding. Your photograph is never uploaded
-to a server, which matters more than usual here, because a DV entry is exactly the
-kind of document that attracts fraudulent copycat sites.
+每一步都透過 WebAssembly 在你的瀏覽器中執行：人臉偵測、背景替換、裁切和編碼。你的相片絕不會被上傳到伺服器——這一點在這裡比平時更重要，因為 DV 報名恰恰是最容易招來仿冒詐騙網站的那類事務。
 
-There is nothing to print. Download the 600 x 600 JPEG and attach it to your entry.
+沒有什麼需要列印。下載那張 600 x 600 的 JPEG，附到你的報名裡即可。

@@ -1,10 +1,10 @@
 ---
 country: uk
-countryName: United Kingdom
+countryName: イギリス
 document: passport
-documentName: UK passport photo
-title: UK Passport Photo Size and Requirements (35x45 mm)
-description: Make a compliant 35x45 mm UK passport photo in your browser. Correct 29-34 mm head height, plain light background and a printable sheet. Nothing is uploaded anywhere.
+documentName: イギリスのパスポート写真
+title: イギリスのパスポート写真のサイズと要件（35x45 mm）
+description: 規格に適合した 35x45 ミリのイギリス用パスポート写真をブラウザで作成。頭の高さ 29〜34 ミリ、無地の明るい背景を正しく整え、印刷用シートも出力します。どこにもアップロードしません。
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 29
   maxMm: 34
 background:
-  description: Plain cream or light grey, with no shadows
+  description: 無地のクリーム色または薄いグレーで、影のないもの
   colors:
     - '#f5f0e6'
     - '#f0f0f0'
@@ -22,61 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://www.gov.uk/photos-for-passports
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head outside the 29 mm to 34 mm range from chin to crown
-  - Any shadow on the face or behind the head
-  - Head covering worn without a religious or medical reason
-  - Eyes obscured by hair, glasses frames or a glare on the lenses
-  - Anything else visible in the frame, including a second person or a chair back
-  - Photo taken more than one month before applying, if your appearance changed
+  - あごから頭頂部までの頭の高さが 29 ミリから 34 ミリの範囲に入っていない
+  - 顔または頭の後ろに影がある
+  - 宗教上または医療上の理由なく頭部を覆うものを着用している
+  - 髪やメガネのフレーム、レンズのぎらつきで目が隠れている
+  - フレーム内に他のものが写っている。二人目の人物や椅子の背も含みます
+  - 外見が変わっているのに、申請の一か月以上前に撮影された写真である
 faq:
-  - q: What size is a UK passport photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How tall should my head be in the photo?
-    a: Between 29 mm and 34 mm from the bottom of your chin to the top of your head, hair included.
-  - q: Can I smile?
-    a: No. HM Passport Office requires a neutral expression with your mouth closed.
-  - q: Can I use this photo for the digital application?
-    a: Yes. The digital route needs at least 600 x 750 pixels, and the file this tool produces exceeds that.
+  - q: イギリスのパスポート写真のサイズは？
+    a: 幅 35 ミリ、高さ 45 ミリです。300 DPI なら 413 x 531 ピクセルになります。
+  - q: 写真の中で頭の高さはどれくらい必要ですか？
+    a: あごの先から髪を含めた頭頂部までで 29 ミリから 34 ミリの間です。
+  - q: 笑ってもいいですか？
+    a: いいえ。英国パスポート庁は口を閉じた無表情を求めています。
+  - q: この写真をオンライン申請に使えますか？
+    a: 使えます。オンラインの経路では最低 600 x 750 ピクセルが必要で、このツールが作るファイルはそれを上回ります。
 ---
 
-## What HM Passport Office measures
+## 英国パスポート庁が測るもの
 
-A UK passport photo is 35 mm wide and 45 mm tall, and the measurement that
-matters inside it is head height: 29 mm to 34 mm from the bottom of your chin to
-the top of your head, including hair. That is a 5 mm window on a 45 mm photo, so
-a crop that is close by eye is often not close enough.
+イギリスのパスポート写真は幅 35 ミリ、高さ 45 ミリで、その内側で問題になる寸法は頭の高さです。あごの先から髪を含めた頭頂部までで 29 ミリから 34 ミリ。45 ミリの写真に対して 5 ミリの窓しかないので、目で見て近いトリミングでは足りないことがよくあります。
 
-Note that this is a tighter and lower band than the Schengen visa format, even
-though both use the same 35 x 45 mm outer size. A photo made for a Schengen visa
-will usually be rejected for a UK passport, and the reverse is also true. If you
-are applying for both, make two photos.
+この帯はシェンゲンビザの規格より狭く、位置も低いことに注意してください。外形は同じ 35 x 45 ミリでも同じではありません。シェンゲンビザ用に作った写真はイギリスのパスポートでは通常不受理になり、その逆も同じです。両方申請するなら、写真は二種類作ってください。
 
-## Background and lighting
+## 背景と照明
 
-The requirement is a plain cream or light grey background with no shadows.
-Shadows are the second most common failure after head size, and they usually come
-from standing too close to a wall. Stand at least half a metre away from the
-background and face a window rather than a ceiling light.
+要件は無地のクリーム色か薄いグレーの背景で、影がないことです。影は頭のサイズに次いで二番目に多い失敗原因で、たいていは壁に近づきすぎたことから生じます。背景から少なくとも半メートル離れ、天井の照明ではなく窓のほうを向いてください。
 
-This tool replaces the background with an even fill, which removes shadow
-problems behind the head. It cannot remove a shadow cast across your face, so
-light yourself from the front when you take the original.
+このツールは背景を均一な塗りに置き換えるので、頭の後ろの影の問題は解消されます。顔に落ちた影は取り除けないため、元の写真を撮るときは正面から光を当ててください。
 
-## How this tool works
+## このツールの仕組み
 
-Upload a photo. The tool finds your chin, crown and eye line, then computes the
-crop that puts your head at 31.5 mm, the centre of the permitted range. If your
-photo lacks the margin to make a compliant crop, it reports which edge falls
-short rather than cropping tighter and producing a photo that fails.
+写真をアップロードします。ツールはあごと頭頂部と目の位置を見つけ、頭を許容範囲の中央である 31.5 ミリに置くトリミングを計算します。適合するトリミングを作る余白が写真にない場合は、さらに切り詰めて落ちる写真を作るのではなく、どの辺が足りないかを報告します。
 
-Every step runs locally in your browser through WebAssembly. Your photo is never
-uploaded.
+すべての工程が WebAssembly を通じてブラウザ内のローカルで動きます。あなたの写真がアップロードされることはありません。
 
-## Printing or applying online
+## 印刷またはオンライン申請
 
-For a paper application, download the 4 x 6 inch sheet, which holds eight copies
-of a 35 x 45 mm photo, and print it at any photo counter. For the online
-application, download the single JPEG and upload it directly; it comfortably
-exceeds the 600 x 750 pixel minimum.
+紙の申請なら、35 x 45 ミリの写真が八枚入る 4 x 6 インチのシートをダウンロードして、写真店のカウンターでプリントしてください。オンライン申請なら JPEG を一枚ダウンロードしてそのままアップロードします。600 x 750 ピクセルの下限を余裕で超えています。

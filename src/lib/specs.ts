@@ -2,7 +2,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Locale } from '@/i18n/config';
 import { toPhotoSpec, type RawPhotoSpec } from './photo/raw-spec.js';
 import type { PhotoSpec } from './photo/types.js';
-import { countDistinctDocuments, matchesLocale } from './specs-locale.js';
+import { countDistinctDocuments, isPublished, matchesLocale } from './specs-locale.js';
 
 export type SpecEntry = CollectionEntry<'specs'>;
 
@@ -39,7 +39,7 @@ function toSpecPage(entry: SpecEntry, locale: Locale): SpecPage {
 export async function getVerifiedSpecPages(locale: Locale): Promise<SpecPage[]> {
   const entries = await getCollection(
     'specs',
-    ({ id, data }) => matchesLocale(id, locale) && data.status === 'verified',
+    ({ id, data }) => matchesLocale(id, locale) && isPublished(data),
   );
   return entries
     .map((entry) => toSpecPage(entry, locale))
@@ -57,11 +57,17 @@ export async function getVerifiedSpecPages(locale: Locale): Promise<SpecPage[]> 
  * readings gets wrong about the sentence on the about page.
  */
 export async function getVerifiedDocumentCount(): Promise<number> {
-  const entries = await getCollection('specs', ({ data }) => data.status === 'verified');
+  const entries = await getCollection('specs', ({ data }) => isPublished(data));
   return countDistinctDocuments(entries.map(({ data }) => data));
 }
 
-/** Specs awaiting verification, in every locale, for the maintenance view. */
+/**
+ * Specs awaiting verification, in every locale, for the maintenance view.
+ *
+ * The exact complement of what the two queries above publish, expressed as the
+ * negation of the same predicate rather than as its own comparison -- otherwise a
+ * status added to the schema could be absent from both lists at once.
+ */
 export async function getPendingSpecEntries(): Promise<SpecEntry[]> {
-  return getCollection('specs', ({ data }) => data.status !== 'verified');
+  return getCollection('specs', ({ data }) => !isPublished(data));
 }

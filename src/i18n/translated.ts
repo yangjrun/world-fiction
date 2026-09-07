@@ -6,20 +6,23 @@ import { getTranslations } from './ui';
 // the `node:fs` reader in that module stays behind a function nothing in the app
 // calls, so nothing reads a file relative to a bundle's location.
 import { translatedLocalesFrom } from '../../astro.translations.mjs';
-
 /**
- * The locales a translator has actually started on.
+ * The locales cleared to be advertised as translations.
  *
- * This is the set the site may advertise as translations: an `hreflang` alternate
- * is a claim that a URL carries this page in that language, and a locale whose
- * bundle is still byte-for-byte en-US carries English under a foreign `lang`. Ten
- * such claims per URL is a duplicate-content cluster Google can discount whole,
- * taking the locales that are real translations down with the ones that are not.
+ * This is the set the site may claim as `hreflang` alternates: such a claim says a
+ * URL carries this page in that language, and a locale whose bundle is still English
+ * carries English under a foreign `lang`. Ten such claims per URL is a
+ * duplicate-content cluster Google can discount whole, taking the locales that are
+ * real translations down with the ones that are not.
  *
- * The pages themselves stay built and reachable, and the language switcher keeps
- * all eleven entries: this narrows what the site claims to a crawler, not what a
- * reader can open. Each locale rejoins the moment its bundle diverges, with no
- * list for anyone to remember to edit.
+ * Each bundle declares its own clearance in `__status`, the same shape as the
+ * `status: verified` gate every spec passes through — see ../../astro.translations.mjs
+ * for why that is a declaration rather than something inferred from the copy, and
+ * for what happens to a bundle that declares nothing.
+ *
+ * The pages themselves stay built and reachable, and the language switcher keeps all
+ * eleven entries: this narrows what the site claims to a crawler, not what a reader
+ * can open.
  *
  * Bundles come from `getTranslations`, the same loader the pages render from, so a
  * locale cannot be judged by a bundle other than the one it serves.

@@ -1,10 +1,10 @@
 ---
 country: ca
-countryName: Canada
+countryName: カナダ
 document: passport
-documentName: Canadian passport photo
-title: Canadian Passport Photo Size and Requirements (50x70 mm)
-description: Create a compliant 50x70 mm Canadian passport photo in your browser. Correct 31-36 mm face height, white background and a printable sheet. Nothing is uploaded.
+documentName: カナダのパスポート写真
+title: カナダのパスポート写真のサイズと要件（50x70 mm）
+description: 規格に適合した 50x70 ミリのカナダ用パスポート写真をブラウザで作成。顔の高さ 31〜36 ミリ、白背景を正しく整え、印刷用シートも出力します。アップロードはありません。
 output:
   kind: physical
   widthMm: 50
@@ -14,68 +14,50 @@ headHeight:
   minMm: 31
   maxMm: 36
 background:
-  description: Plain white, uniform and shadow-free
+  description: 純白で、均一かつ影のないもの
   colors:
     - '#ffffff'
 file:
   format: jpeg
 sourceUrl: https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/photos.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face height outside the 31 mm to 36 mm range from chin to crown
-  - Photo not printed on plain photographic paper with a matte or semi-matte finish
-  - Missing the photographer's name, address and date on the back of one copy
-  - A background that is not uniformly white, or shows a shadow behind the head
-  - Reflection or glare on glasses obscuring the eyes
-  - Photo taken more than twelve months before applying
+  - あごから頭頂部までの顔の高さが 31 ミリから 36 ミリの範囲に入っていない
+  - マットまたはセミマット仕上げの普通の印画紙にプリントされていない
+  - 一枚の裏面に撮影者の氏名、住所、撮影日が記載されていない
+  - 背景が均一な白ではない、または頭の後ろに影が出ている
+  - メガネの反射やぎらつきで目が隠れている
+  - 申請の十二か月以上前に撮影された写真である
 faq:
-  - q: What size is a Canadian passport photo?
-    a: 50 mm wide by 70 mm tall, which is unusually tall compared with most countries. At 300 DPI that is 591 x 827 pixels.
-  - q: How tall should my face be?
-    a: Between 31 mm and 36 mm measured from the bottom of the chin to the crown of the head.
-  - q: Do I need two photos?
-    a: Yes. Two identical photos are required, and the back of one must carry the photographer's name, address and the date the photo was taken.
-  - q: Can I submit a digital photo instead?
-    a: No. Canadian passport applications require physical printed photos, so you do need to print the sheet.
+  - q: カナダのパスポート写真のサイズは？
+    a: 幅 50 ミリ、高さ 70 ミリで、ほとんどの国の規格よりはっきり縦長です。300 DPI なら 591 x 827 ピクセルになります。
+  - q: 顔の高さはどれくらい必要ですか？
+    a: あごの先から頭頂部までで 31 ミリから 36 ミリの間です。
+  - q: 写真は二枚必要ですか？
+    a: はい。同一の写真が二枚必要で、そのうち一枚の裏面に撮影者の氏名、住所、撮影日を記載しなければなりません。
+  - q: デジタル写真での提出はできますか？
+    a: いいえ。カナダのパスポート申請では紙にプリントした写真が必要なので、シートの印刷は省けません。
 ---
 
-## An unusual size, and why it matters
+## 珍しいサイズと、それが問題になる理由
 
-A Canadian passport photo is 50 mm wide by 70 mm tall. That 5:7 shape is
-noticeably taller than the 35 x 45 mm format most of Europe uses and the 2 x 2
-inch square the United States uses, and a photo made for either of those will not
-work here. Inside the frame, your face must measure 31 mm to 36 mm from the
-bottom of the chin to the crown of the head.
+カナダのパスポート写真は幅 50 ミリ、高さ 70 ミリです。この 5:7 という形はヨーロッパの多くが使う 35 x 45 ミリより明らかに縦長で、アメリカの 2 x 2 インチの正方形とも違うため、どちらのために作った写真もここでは使えません。フレームの内側では、あごの先から頭頂部までの顔の寸法が 31 ミリから 36 ミリでなければなりません。
 
-Because the frame is tall, the crop includes more of your shoulders than other
-formats. If your source photo is cut off at the collar, there will not be enough
-image to work with, and this tool will tell you so rather than stretching it.
+フレームが縦長なので、トリミングには他の規格より肩が多く入ります。元の写真が襟のところで切れている場合、使える画像が足りません。そのときこのツールは引き伸ばすのではなく、そのことを伝えます。
 
-## The requirement most people miss
+## いちばん見落とされる要件
 
-Canada requires two identical photos, and the back of one of them must show the
-photographer's name, the address and the date the photo was taken. A photo you
-made yourself and printed at a counter has none of that written on it. Write it on
-the back yourself before you submit: the requirement is the information, not a
-commercial studio stamp.
+カナダは同一の写真を二枚求め、そのうち一枚の裏面に撮影者の氏名、住所、撮影日を示さなければなりません。自分で作って店頭でプリントした写真には、それが何も書かれていません。提出前に自分で裏に書いてください。この要件が求めているのは情報であって、商業スタジオの印ではありません。
 
-Digital submission is not an option for Canadian passports, so printing is a
-required step rather than a convenience.
+カナダのパスポートではデジタル提出という選択肢がないので、印刷は便利な手段ではなく必須の工程です。
 
-## How this tool works
+## このツールの仕組み
 
-Upload a photo. The tool locates your chin, crown and eye line, then computes the
-crop that places your face at 33.5 mm, the middle of the permitted range, leaving
-the most room for measurement error. The background is replaced with uniform
-white, which removes the shadow problems that cause a large share of rejections.
+写真をアップロードします。ツールはあごと頭頂部と目の位置を特定し、顔を許容範囲の中央である 33.5 ミリに置くトリミングを計算して、計測誤差の余地を最大に残します。背景は均一な白に置き換えられ、不受理の大きな割合を占める影の問題が取り除かれます。
 
-Processing happens entirely inside your browser using WebAssembly. Your photo is
-not uploaded anywhere.
+処理は WebAssembly によってすべてブラウザ内で行われます。あなたの写真はどこにもアップロードされません。
 
-## Printing
+## 印刷
 
-A 50 x 70 mm photo fits four to a 4 x 6 inch print when turned a quarter turn,
-which the tool does automatically. Download the sheet, have it printed on matte or
-semi-matte photo paper, and cut along the guide lines. That gives you two pairs,
-enough for this application and a spare.
+50 x 70 ミリの写真は九十度回すと 4 x 6 インチのプリントにちょうど四枚収まります。この回転はツールが自動で行います。シートをダウンロードし、マットまたはセミマットの印画紙にプリントしてもらい、ガイド線に沿って切ってください。二組取れるので、今回の申請と予備の分に足ります。

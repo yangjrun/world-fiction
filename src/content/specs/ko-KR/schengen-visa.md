@@ -1,10 +1,10 @@
 ---
 country: schengen
-countryName: Schengen Area
+countryName: 솅겐 지역
 document: visa
-documentName: Schengen visa photo
-title: Schengen Visa Photo Size and Requirements (35x45 mm)
-description: Create a compliant 35x45 mm Schengen visa photo in your browser. Correct 70-80% face height, light background and a printable sheet. Your photo never leaves your device.
+documentName: 솅겐 비자 사진
+title: 솅겐 비자 사진 규격과 요구 사항 (35x45mm)
+description: 규정에 맞는 35x45밀리미터 솅겐 비자 사진을 브라우저에서 만드세요. 얼굴이 높이의 70~80%를 차지하도록 맞추고 밝은 배경과 인쇄용 시트도 제공합니다. 사진은 기기를 떠나지 않습니다.
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 32
   maxMm: 36
 background:
-  description: Plain light grey or cream, evenly lit
+  description: 단색 밝은 회색 또는 크림색으로, 고르게 조명된 배경
   colors:
     - '#f0f0f0'
     - '#f5f0e6'
@@ -22,60 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy_en
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face fills less than 70% or more than 80% of the frame height
-  - A pure white background, which several consulates read as overexposed
-  - Head tilted or turned rather than square to the camera
-  - Hair covering the eyes or the outline of the face
-  - Reflections or heavy frames if glasses are worn
-  - Photo older than six months
+  - 얼굴이 화면 높이의 70% 미만이거나 80%를 넘음
+  - 순백색 배경. 여러 영사관이 노출 과다로 판단합니다
+  - 머리가 카메라를 정면으로 향하지 않고 기울거나 돌아가 있음
+  - 머리카락이 눈이나 얼굴 윤곽을 가림
+  - 안경을 썼을 때의 반사나 두꺼운 안경테
+  - 촬영 후 6개월이 지난 사진
 faq:
-  - q: What size is a Schengen visa photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How much of the photo should my face fill?
-    a: Between 70% and 80% of the height, which works out to a head between 32 mm and 36 mm from chin to crown.
-  - q: Should the background be white?
-    a: Prefer plain light grey or cream. The requirement is a light, uniform, contrasting background, and a pure white one can be read as overexposed.
-  - q: Does one photo work for every Schengen country?
-    a: The 35x45 mm format and the 70-80% face rule are common to all of them, but individual consulates add their own notes. Check the consulate you are applying to.
+  - q: 솅겐 비자 사진 규격은 어떻게 되나요?
+    a: 가로 35밀리미터, 세로 45밀리미터입니다. 300 DPI에서는 413 x 531픽셀이 됩니다.
+  - q: 얼굴이 사진의 얼마를 차지해야 하나요?
+    a: 높이의 70%에서 80% 사이이고, 이는 턱에서 정수리까지 32밀리미터에서 36밀리미터인 머리에 해당합니다.
+  - q: 배경은 흰색이어야 하나요?
+    a: 단색 밝은 회색이나 크림색을 권합니다. 요구 사항은 밝고 균일하며 얼굴과 대비되는 배경이고, 순백색은 노출 과다로 읽힐 수 있습니다.
+  - q: 사진 한 장으로 모든 솅겐 국가에 쓸 수 있나요?
+    a: 35x45밀리미터 규격과 70~80% 얼굴 비율은 모든 국가에 공통이지만, 영사관마다 자체 안내가 더해집니다. 신청할 영사관을 확인하세요.
 ---
 
-## The rule that decides it: 70 to 80 percent
+## 결정을 가르는 규칙, 70에서 80퍼센트
 
-Every Schengen consulate works from the same photo format, 35 mm wide by 45 mm
-tall, and the same central requirement: your face must fill 70% to 80% of the
-frame height. In millimetres that is a head between 32 mm and 36 mm measured from
-the bottom of the chin to the top of the head, hair included.
+모든 솅겐 영사관은 같은 사진 규격, 가로 35밀리미터와 세로 45밀리미터로 일하고, 핵심 요구 사항도 같습니다. 얼굴이 화면 높이의 70%에서 80%를 차지해야 합니다. 밀리미터로 말하면 턱 끝에서 머리카락을 포함한 정수리까지 32밀리미터에서 36밀리미터인 머리입니다.
 
-That band is narrower than it sounds. A crop that looks reasonable to the eye
-frequently lands at 60% or 85%, and either one is grounds for rejection. It is
-the most common reason Schengen photo submissions come back.
+이 구간은 들리는 것보다 좁습니다. 눈으로 봐서 그럴듯한 크롭이 자주 60%나 85%에 떨어지고, 둘 다 반려 사유가 됩니다. 솅겐 사진 제출이 되돌아오는 가장 흔한 이유입니다.
 
-## Why not a white background
+## 흰 배경을 쓰지 않는 이유
 
-The published requirement is a light, uniform background that contrasts with the
-face. Plain white technically satisfies "light", but in practice a white
-background photographed with a bright flash loses the outline of light hair and
-shoulders, and several consulates treat that as overexposed. Light grey or cream
-is the safer read of the same rule, so this tool defaults to light grey.
+공표된 요구 사항은 얼굴과 대비되는 밝고 균일한 배경입니다. 순백색은 문자 그대로는 밝음을 충족하지만, 실제로 강한 플래시로 찍은 흰 배경은 밝은 머리카락과 어깨의 윤곽을 잃고, 여러 영사관이 그것을 노출 과다로 취급합니다. 밝은 회색이나 크림색이 같은 규칙을 더 안전하게 읽는 방법이라, 이 도구는 밝은 회색을 기본으로 씁니다.
 
-## How this tool works
+## 이 도구의 작동 방식
 
-Upload any reasonably front-facing photo. The tool locates your chin, crown and
-eye line, then computes the crop that lands your head at 34 mm, the middle of the
-permitted range, giving the widest possible margin for measurement error. The
-background is replaced with an even light grey.
+대체로 정면을 향한 사진이면 어떤 것이든 올리세요. 도구가 턱과 정수리, 눈높이를 찾아 머리를 허용 범위의 가운데인 34밀리미터에 놓는 크롭을 계산해 측정 오차의 여유를 가능한 한 넓게 확보합니다. 배경은 고른 밝은 회색으로 바뀝니다.
 
-If your source photo is cropped too tightly to produce a compliant result, the
-tool tells you which edge is short rather than cropping in further and handing
-you a photo that fails. Retake it standing further from the camera.
+원본 사진이 너무 빽빽하게 잘려 규정에 맞는 결과를 만들 수 없으면, 도구는 더 잘라내 떨어질 사진을 건네는 대신 어느 쪽 변이 부족한지 알려 줍니다. 카메라에서 조금 더 떨어져 다시 찍으세요.
 
-All processing happens in your browser through WebAssembly. Nothing is uploaded.
+모든 처리가 WebAssembly를 통해 브라우저에서 일어납니다. 아무것도 업로드되지 않습니다.
 
-## Printing
+## 인쇄
 
-A 35 x 45 mm photo tiles eight to a 4 x 6 inch print, four across and two down.
-Download the sheet, have it printed as an ordinary photo, and cut along the guide
-lines. Most consulates ask for two identical photos, so one sheet covers four
-applications.
+35 x 45밀리미터 사진은 4 x 6인치 인쇄물에 가로 넷, 세로 둘로 여덟 장이 들어갑니다. 시트를 내려받아 일반 사진으로 인쇄해 달라고 맡기고 안내선을 따라 자르세요. 대부분의 영사관이 동일한 사진 두 장을 요구하므로 한 장의 시트로 네 건의 신청을 처리할 수 있습니다.

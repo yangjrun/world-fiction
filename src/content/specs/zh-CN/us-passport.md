@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: 美国
 document: passport
-documentName: US passport photo
-title: US Passport Photo Size and Requirements (2x2 in)
-description: Make a compliant 2x2 inch US passport photo in your browser. Correct head height, eye line, white background and a printable 4x6 sheet. Nothing is uploaded.
+documentName: 美国护照照片
+title: 美国护照照片尺寸与要求（2x2 英寸）
+description: 在浏览器中制作符合规定的 2x2 英寸美国护照照片。头部高度、眼睛位置和白色背景都正确，并生成可打印的 4x6 拼版。照片不会上传。
 output:
   kind: physical
   widthMm: 50.8
@@ -17,7 +17,7 @@ eyeLine:
   minMmFromBottom: 28.575
   maxMmFromBottom: 34.925
 background:
-  description: Plain white or off-white
+  description: 纯白或接近白色
   colors:
     - '#ffffff'
     - '#fafafa'
@@ -25,60 +25,41 @@ file:
   format: jpeg
 sourceUrl: https://travel.state.gov/content/travel/en/passports/how-apply/photos.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head is too large or too small, the single most common reason for rejection
-  - Shadows on the face or on the background behind the head
-  - Glasses worn in the photo, which have not been accepted since 2016
-  - A background that is patterned, coloured or too dark
-  - Visible smile showing teeth, rather than a neutral expression
-  - A photo older than six months, or one already used on a previous passport
+  - 头部过大或过小，这是照片被退回最常见的单一原因
+  - 面部有阴影，或头部后方的背景上有阴影
+  - 照片中戴了眼镜，自 2016 年起已不再被接受
+  - 背景有花纹、有颜色，或过暗
+  - 露齿微笑，而不是中性表情
+  - 照片拍摄于六个月以前，或已经用在上一本护照上
 faq:
-  - q: What size is a US passport photo?
-    a: Exactly 2 x 2 inches, which is 51 x 51 mm. At 300 DPI that is 600 x 600 pixels.
-  - q: How tall does my head need to be?
-    a: Measured from the bottom of your chin to the top of your head, between 1 inch and 1 3/8 inches (25 mm to 35 mm). Your eyes must sit between 1 1/8 and 1 3/8 inches above the bottom edge.
-  - q: Can I wear glasses?
-    a: No. Glasses have not been permitted in US passport photos since November 2016, except with a signed medical statement.
-  - q: Can I print this at a drugstore?
-    a: Yes. Download the 4x6 inch sheet, which holds six copies, and print it as a standard photo at any counter. Then cut along the guide lines.
+  - q: 美国护照照片是多大尺寸？
+    a: 正好 2 x 2 英寸，也就是 51 x 51 毫米。在 300 DPI 下是 600 x 600 像素。
+  - q: 我的头部需要多高？
+    a: 从下巴底部量到头顶，需要在 1 英寸到 1 3/8 英寸之间（25 毫米到 35 毫米）。眼睛必须位于下缘以上 1 1/8 到 1 3/8 英寸之间。
+  - q: 可以戴眼镜吗？
+    a: 不可以。自 2016 年 11 月起，美国护照照片就不再允许戴眼镜，除非附有签署过的医疗证明。
+  - q: 可以拿到药店冲印吗？
+    a: 可以。下载 4x6 英寸的拼版，上面有六张，在任何冲印柜台按普通照片打印即可，然后沿参考线裁开。
 ---
 
-## What the State Department actually checks
+## 美国国务院真正会检查的东西
 
-A US passport photo is 2 x 2 inches square, and two measurements inside that
-square decide whether it passes. Your head, measured from the bottom of the chin
-to the top of the head including hair, must be between 1 inch and 1 3/8 inches
-tall. Your eyes must fall between 1 1/8 and 1 3/8 inches above the bottom edge.
+美国护照照片是 2 x 2 英寸的正方形，而决定它能否通过的是这个正方形内部的两个尺寸。你的头部，从下巴底部量到头顶（含头发），必须在 1 英寸到 1 3/8 英寸之间。你的眼睛必须落在下缘以上 1 1/8 到 1 3/8 英寸之间。
 
-Those two rules are why so many self-made passport photos come back rejected.
-People crop to a 2 x 2 square, which is easy, and then get the head size wrong,
-which is not. A photo can be perfectly square, perfectly lit and still fail
-because the face fills too much of the frame.
+正是这两条规则，让那么多自己做的护照照片被退回。人们把照片裁成 2 x 2 的正方形——这很容易——然后把头部尺寸弄错了，而这并不容易。一张照片可以方正、光线也好，却仍然因为面部占画面太多而不合格。
 
-## How this tool positions your photo
+## 这个工具如何为你定位
 
-Upload a photo and the tool finds your chin, the top of your head and your eye
-line, then works backwards: it calculates the crop that puts your head at the
-middle of the permitted size range and your eyes in the middle of the permitted
-band. Aiming for the middle rather than the edge of each range leaves room for
-the small errors any automatic measurement makes.
+上传一张照片，工具会找到你的下巴、头顶和眼睛位置，然后反过来推算：算出把你的头部放在允许尺寸区间中段、眼睛放在允许范围中段的那个裁切方案。瞄准每个区间的中段而不是边缘，能为任何自动测量都会有的小误差留出余地。
 
-If your original photo does not have enough space around your head to make a
-compliant crop, the tool says so and tells you which edge is short, instead of
-cropping tighter and quietly handing you something that will be turned down. In
-that case, retake the photo standing further back.
+如果你的原始照片头部周围空间不足、做不出合规的裁切，工具会说明这一点并告诉你哪一边不够，而不是继续往里裁、悄悄把一张会被退回的照片交给你。遇到这种情况，请站远一些重拍。
 
-The background is replaced with plain white. Everything runs inside your browser
-using WebAssembly, so your photo is never uploaded to a server and never leaves
-your device.
+背景会被替换成纯白色。所有处理都通过 WebAssembly 在你的浏览器中完成，所以你的照片绝不会被上传到服务器，也绝不会离开你的设备。
 
-## Printing at home or at a counter
+## 在家或在冲印店打印
 
-The cheapest route is a 4 x 6 inch photo print. A 2 x 2 inch photo tiles exactly
-three across and two down on 4 x 6, so one print gives you six passport photos
-for the price of a single snapshot. Download the sheet, upload it to any photo
-counter or print it borderless at home, then cut along the guide lines.
+最省钱的做法是印一张 4 x 6 英寸的照片。2 x 2 英寸的照片在 4 x 6 上正好横排三张、竖排两张，所以一次冲印就能得到六张护照照片，价钱和一张普通照片一样。下载拼版，拿到任何冲印柜台，或者在家无边距打印，然后沿参考线裁开。
 
-For an online renewal you do not need to print anything. Download the single
-600 x 600 pixel JPEG and upload it directly.
+如果是在线换发，你什么都不用打印。下载那张 600 x 600 像素的 JPEG，直接上传即可。

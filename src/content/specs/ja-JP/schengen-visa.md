@@ -1,10 +1,10 @@
 ---
 country: schengen
-countryName: Schengen Area
+countryName: シェンゲン圏
 document: visa
-documentName: Schengen visa photo
-title: Schengen Visa Photo Size and Requirements (35x45 mm)
-description: Create a compliant 35x45 mm Schengen visa photo in your browser. Correct 70-80% face height, light background and a printable sheet. Your photo never leaves your device.
+documentName: シェンゲンビザ写真
+title: シェンゲンビザ写真のサイズと要件（35x45 mm）
+description: 規格に適合した 35x45 ミリのシェンゲンビザ写真をブラウザで作成。顔が高さの 70〜80% を占め、明るい背景も正しく整え、印刷用シートも出力します。写真は端末から出ません。
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 32
   maxMm: 36
 background:
-  description: Plain light grey or cream, evenly lit
+  description: 無地の薄いグレーまたはクリーム色で、均一に照らされたもの
   colors:
     - '#f0f0f0'
     - '#f5f0e6'
@@ -22,60 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy_en
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face fills less than 70% or more than 80% of the frame height
-  - A pure white background, which several consulates read as overexposed
-  - Head tilted or turned rather than square to the camera
-  - Hair covering the eyes or the outline of the face
-  - Reflections or heavy frames if glasses are worn
-  - Photo older than six months
+  - 顔がフレームの高さの 70% 未満、または 80% を超えている
+  - 純白の背景。複数の領事館が露出過多と受け取ります
+  - 頭がカメラに正対せず、傾いたり横を向いている
+  - 髪が目や顔の輪郭を覆っている
+  - メガネを着用している場合の反射や太いフレーム
+  - 撮影から六か月以上経っている写真
 faq:
-  - q: What size is a Schengen visa photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How much of the photo should my face fill?
-    a: Between 70% and 80% of the height, which works out to a head between 32 mm and 36 mm from chin to crown.
-  - q: Should the background be white?
-    a: Prefer plain light grey or cream. The requirement is a light, uniform, contrasting background, and a pure white one can be read as overexposed.
-  - q: Does one photo work for every Schengen country?
-    a: The 35x45 mm format and the 70-80% face rule are common to all of them, but individual consulates add their own notes. Check the consulate you are applying to.
+  - q: シェンゲンビザ写真のサイズは？
+    a: 幅 35 ミリ、高さ 45 ミリです。300 DPI なら 413 x 531 ピクセルになります。
+  - q: 顔は写真のどれくらいを占めるべきですか？
+    a: 高さの 70% から 80% です。あごから頭頂部までで 32 ミリから 36 ミリの頭に相当します。
+  - q: 背景は白にすべきですか？
+    a: 無地の薄いグレーかクリーム色をおすすめします。要件は明るく均一で顔と対比のある背景であり、純白は露出過多と受け取られることがあります。
+  - q: 一枚の写真でシェンゲン全域に使えますか？
+    a: 35x45 ミリの規格と 70〜80% の顔の比率はすべての国に共通ですが、領事館ごとに独自の注意事項が加わります。申請先の領事館を確認してください。
 ---
 
-## The rule that decides it: 70 to 80 percent
+## 決め手になる規則、70 から 80 パーセント
 
-Every Schengen consulate works from the same photo format, 35 mm wide by 45 mm
-tall, and the same central requirement: your face must fill 70% to 80% of the
-frame height. In millimetres that is a head between 32 mm and 36 mm measured from
-the bottom of the chin to the top of the head, hair included.
+シェンゲンの領事館はどこも同じ写真規格、幅 35 ミリ、高さ 45 ミリで運用し、中心となる要件も同じです。顔がフレームの高さの 70% から 80% を占めなければなりません。ミリで言えば、あごの先から髪を含めた頭頂部までで 32 ミリから 36 ミリの頭です。
 
-That band is narrower than it sounds. A crop that looks reasonable to the eye
-frequently lands at 60% or 85%, and either one is grounds for rejection. It is
-the most common reason Schengen photo submissions come back.
+この帯は聞くより狭いです。目で見て妥当に思えるトリミングは、しばしば 60% や 85% に着地し、どちらも不受理の理由になります。シェンゲンの写真が差し戻される、いちばん多い原因です。
 
-## Why not a white background
+## 白い背景にしない理由
 
-The published requirement is a light, uniform background that contrasts with the
-face. Plain white technically satisfies "light", but in practice a white
-background photographed with a bright flash loses the outline of light hair and
-shoulders, and several consulates treat that as overexposed. Light grey or cream
-is the safer read of the same rule, so this tool defaults to light grey.
+公表されている要件は、顔と対比のある明るく均一な背景です。純白は文字通りには明るいを満たしますが、実際には強いフラッシュで撮った白い背景は明るい髪や肩の輪郭を失わせ、複数の領事館がそれを露出過多と扱います。薄いグレーやクリーム色は同じ規則のより安全な読み方なので、このツールは薄いグレーを既定にしています。
 
-## How this tool works
+## このツールの仕組み
 
-Upload any reasonably front-facing photo. The tool locates your chin, crown and
-eye line, then computes the crop that lands your head at 34 mm, the middle of the
-permitted range, giving the widest possible margin for measurement error. The
-background is replaced with an even light grey.
+おおよそ正面を向いた写真をアップロードしてください。ツールはあごと頭頂部と目の位置を特定し、頭を許容範囲の中央である 34 ミリに着地させるトリミングを計算して、計測誤差に対する余裕を最大限に取ります。背景は均一な薄いグレーに置き換えられます。
 
-If your source photo is cropped too tightly to produce a compliant result, the
-tool tells you which edge is short rather than cropping in further and handing
-you a photo that fails. Retake it standing further from the camera.
+元の写真が詰まりすぎていて適合する結果を作れない場合、ツールはさらに内側へ切り詰めて落ちる写真を渡すのではなく、どの辺が足りないかを伝えます。カメラからもう少し離れて撮り直してください。
 
-All processing happens in your browser through WebAssembly. Nothing is uploaded.
+処理はすべて WebAssembly を通じてブラウザ内で行われます。何もアップロードされません。
 
-## Printing
+## 印刷
 
-A 35 x 45 mm photo tiles eight to a 4 x 6 inch print, four across and two down.
-Download the sheet, have it printed as an ordinary photo, and cut along the guide
-lines. Most consulates ask for two identical photos, so one sheet covers four
-applications.
+35 x 45 ミリの写真は 4 x 6 インチのプリントに横四枚、縦二枚で八枚並びます。シートをダウンロードして普通の写真としてプリントしてもらい、ガイド線に沿って切ってください。ほとんどの領事館は同一の写真二枚を求めるので、一枚のシートで四件の申請に足ります。

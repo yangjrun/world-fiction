@@ -1,10 +1,10 @@
 ---
 country: uk
-countryName: United Kingdom
+countryName: Verenigd Koninkrijk
 document: passport
-documentName: UK passport photo
-title: UK Passport Photo Size and Requirements (35x45 mm)
-description: Make a compliant 35x45 mm UK passport photo in your browser. Correct 29-34 mm head height, plain light background and a printable sheet. Nothing is uploaded anywhere.
+documentName: Britse pasfoto
+title: "Britse pasfoto: formaat en eisen (35x45 mm)"
+description: Maak in je browser een Britse pasfoto van 35x45 mm die aan de eisen voldoet. Juiste hoofdhoogte van 29 tot 34 mm, effen lichte achtergrond en een printbaar vel.
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 29
   maxMm: 34
 background:
-  description: Plain cream or light grey, with no shadows
+  description: Effen crème of lichtgrijs, zonder schaduwen
   colors:
     - '#f5f0e6'
     - '#f0f0f0'
@@ -22,61 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://www.gov.uk/photos-for-passports
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head outside the 29 mm to 34 mm range from chin to crown
-  - Any shadow on the face or behind the head
-  - Head covering worn without a religious or medical reason
-  - Eyes obscured by hair, glasses frames or a glare on the lenses
-  - Anything else visible in the frame, including a second person or a chair back
-  - Photo taken more than one month before applying, if your appearance changed
+  - Hoofd buiten het bereik van 29 mm tot 34 mm van kin tot kruin
+  - Elke schaduw op het gezicht of achter het hoofd
+  - Hoofdbedekking zonder religieuze of medische reden
+  - Ogen bedekt door haar, een brilmontuur of een schittering op de glazen
+  - Iets anders zichtbaar in het kader, waaronder een tweede persoon of een stoelleuning
+  - Foto meer dan een maand voor de aanvraag gemaakt, als je uiterlijk is veranderd
 faq:
-  - q: What size is a UK passport photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How tall should my head be in the photo?
-    a: Between 29 mm and 34 mm from the bottom of your chin to the top of your head, hair included.
-  - q: Can I smile?
-    a: No. HM Passport Office requires a neutral expression with your mouth closed.
-  - q: Can I use this photo for the digital application?
-    a: Yes. The digital route needs at least 600 x 750 pixels, and the file this tool produces exceeds that.
+  - q: Welk formaat heeft een Britse pasfoto?
+    a: 35 mm breed en 45 mm hoog. Bij 300 DPI is dat 413 x 531 pixels.
+  - q: Hoe hoog moet mijn hoofd op de foto zijn?
+    a: Tussen 29 mm en 34 mm van de onderkant van je kin tot de kruin, haar inbegrepen.
+  - q: Mag ik lachen?
+    a: Nee. HM Passport Office verlangt een neutrale uitdrukking met je mond dicht.
+  - q: Kan ik deze foto voor de digitale aanvraag gebruiken?
+    a: Ja. De digitale route vraagt minimaal 600 x 750 pixels, en het bestand van dit hulpmiddel gaat daarboven.
 ---
 
-## What HM Passport Office measures
+## Wat HM Passport Office meet
 
-A UK passport photo is 35 mm wide and 45 mm tall, and the measurement that
-matters inside it is head height: 29 mm to 34 mm from the bottom of your chin to
-the top of your head, including hair. That is a 5 mm window on a 45 mm photo, so
-a crop that is close by eye is often not close enough.
+Een Britse pasfoto is 35 mm breed en 45 mm hoog, en de maat die daarbinnen uitmaakt is de hoofdhoogte: 29 mm tot 34 mm van de onderkant van je kin tot de kruin, haar inbegrepen. Dat is een venster van 5 mm op een foto van 45 mm, dus een uitsnede die op het oog dichtbij zit is vaak niet dichtbij genoeg.
 
-Note that this is a tighter and lower band than the Schengen visa format, even
-though both use the same 35 x 45 mm outer size. A photo made for a Schengen visa
-will usually be rejected for a UK passport, and the reverse is also true. If you
-are applying for both, make two photos.
+Let op dat deze band smaller en lager ligt dan bij het Schengenvisum, ook al gebruiken beide hetzelfde buitenformaat van 35 x 45 mm. Een foto die voor een Schengenvisum is gemaakt wordt voor een Brits paspoort meestal afgekeurd, en omgekeerd geldt hetzelfde. Vraag je beide aan, maak dan twee foto’s.
 
-## Background and lighting
+## Achtergrond en licht
 
-The requirement is a plain cream or light grey background with no shadows.
-Shadows are the second most common failure after head size, and they usually come
-from standing too close to a wall. Stand at least half a metre away from the
-background and face a window rather than a ceiling light.
+De eis is een effen crème of lichtgrijze achtergrond zonder schaduwen. Schaduwen zijn na de grootte van het hoofd de tweede meest voorkomende oorzaak van afkeuring, en ze komen bijna altijd doordat je te dicht bij een muur staat. Ga minstens een halve meter van de achtergrond staan en keer je naar een raam in plaats van naar een plafondlamp.
 
-This tool replaces the background with an even fill, which removes shadow
-problems behind the head. It cannot remove a shadow cast across your face, so
-light yourself from the front when you take the original.
+Dit hulpmiddel vervangt de achtergrond door een gelijkmatige vulling, wat de schaduwproblemen achter het hoofd wegneemt. Een schaduw over je gezicht kan het niet verwijderen, dus licht jezelf van voren uit bij de opname.
 
-## How this tool works
+## Hoe dit hulpmiddel werkt
 
-Upload a photo. The tool finds your chin, crown and eye line, then computes the
-crop that puts your head at 31.5 mm, the centre of the permitted range. If your
-photo lacks the margin to make a compliant crop, it reports which edge falls
-short rather than cropping tighter and producing a photo that fails.
+Upload een foto. Het hulpmiddel vindt je kin, kruin en ooglijn en berekent dan de uitsnede die je hoofd op 31,5 mm zet, het midden van het toegestane bereik. Mist je foto de marge voor een geldige uitsnede, dan meldt het welke rand tekortkomt in plaats van strakker te snijden en een foto op te leveren die wordt afgekeurd.
 
-Every step runs locally in your browser through WebAssembly. Your photo is never
-uploaded.
+Elke stap gebeurt lokaal in je browser via WebAssembly. Je foto wordt nooit geüpload.
 
-## Printing or applying online
+## Afdrukken of online aanvragen
 
-For a paper application, download the 4 x 6 inch sheet, which holds eight copies
-of a 35 x 45 mm photo, and print it at any photo counter. For the online
-application, download the single JPEG and upload it directly; it comfortably
-exceeds the 600 x 750 pixel minimum.
+Voor een papieren aanvraag download je het vel van 4 x 6 inch, waarop acht afdrukken van een foto van 35 x 45 mm passen, en laat je het bij elke fotobalie afdrukken. Voor de online aanvraag download je het losse JPEG en upload je het direct; het gaat ruim over het minimum van 600 x 750 pixels.

@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: Estados Unidos
 document: passport
-documentName: US passport photo
-title: US Passport Photo Size and Requirements (2x2 in)
-description: Make a compliant 2x2 inch US passport photo in your browser. Correct head height, eye line, white background and a printable 4x6 sheet. Nothing is uploaded.
+documentName: fotografia de passaporte dos EUA
+title: "Fotografia de passaporte dos EUA: tamanho e requisitos (2x2 pol.)"
+description: Crie no seu navegador uma fotografia de passaporte dos EUA de 2x2 polegadas conforme os requisitos. Altura da cabeça, linha dos olhos e fundo branco corretos.
 output:
   kind: physical
   widthMm: 50.8
@@ -17,7 +17,7 @@ eyeLine:
   minMmFromBottom: 28.575
   maxMmFromBottom: 34.925
 background:
-  description: Plain white or off-white
+  description: Branco simples ou branco sujo
   colors:
     - '#ffffff'
     - '#fafafa'
@@ -25,60 +25,41 @@ file:
   format: jpeg
 sourceUrl: https://travel.state.gov/content/travel/en/passports/how-apply/photos.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head is too large or too small, the single most common reason for rejection
-  - Shadows on the face or on the background behind the head
-  - Glasses worn in the photo, which have not been accepted since 2016
-  - A background that is patterned, coloured or too dark
-  - Visible smile showing teeth, rather than a neutral expression
-  - A photo older than six months, or one already used on a previous passport
+  - Cabeça demasiado grande ou demasiado pequena, por si só o motivo de rejeição mais frequente
+  - Sombras no rosto ou no fundo atrás da cabeça
+  - Óculos usados na fotografia, o que deixou de ser aceite em 2016
+  - Um fundo com padrão, com cor ou demasiado escuro
+  - Sorriso visível com os dentes, em vez de uma expressão neutra
+  - Uma fotografia com mais de seis meses, ou já usada num passaporte anterior
 faq:
-  - q: What size is a US passport photo?
-    a: Exactly 2 x 2 inches, which is 51 x 51 mm. At 300 DPI that is 600 x 600 pixels.
-  - q: How tall does my head need to be?
-    a: Measured from the bottom of your chin to the top of your head, between 1 inch and 1 3/8 inches (25 mm to 35 mm). Your eyes must sit between 1 1/8 and 1 3/8 inches above the bottom edge.
-  - q: Can I wear glasses?
-    a: No. Glasses have not been permitted in US passport photos since November 2016, except with a signed medical statement.
-  - q: Can I print this at a drugstore?
-    a: Yes. Download the 4x6 inch sheet, which holds six copies, and print it as a standard photo at any counter. Then cut along the guide lines.
+  - q: Que tamanho tem uma fotografia de passaporte dos EUA?
+    a: Exatamente 2 x 2 polegadas, ou seja 51 x 51 mm. A 300 DPI são 600 x 600 píxeis.
+  - q: Que altura deve ter a minha cabeça?
+    a: Medida da base do queixo ao topo da cabeça, entre 1 polegada e 1 3/8 de polegada (25 mm a 35 mm). Os olhos devem ficar entre 1 1/8 e 1 3/8 de polegada acima da margem inferior.
+  - q: Posso usar óculos?
+    a: Não. Os óculos deixaram de ser permitidos nas fotografias de passaporte dos EUA em novembro de 2016, salvo com uma declaração médica assinada.
+  - q: Posso imprimir isto numa loja?
+    a: Sim. Descarregue a folha de 4x6 polegadas, que traz seis cópias, mande imprimi-la como uma fotografia normal em qualquer balcão e corte pelas linhas de corte.
 ---
 
-## What the State Department actually checks
+## O que o Departamento de Estado verifica de facto
 
-A US passport photo is 2 x 2 inches square, and two measurements inside that
-square decide whether it passes. Your head, measured from the bottom of the chin
-to the top of the head including hair, must be between 1 inch and 1 3/8 inches
-tall. Your eyes must fall between 1 1/8 and 1 3/8 inches above the bottom edge.
+Uma fotografia de passaporte dos EUA é um quadrado de 2 x 2 polegadas, e são duas medidas dentro desse quadrado que decidem se passa. A sua cabeça, medida da base do queixo ao topo da cabeça incluindo o cabelo, tem de ficar entre 1 polegada e 1 3/8 de polegada. Os olhos têm de cair entre 1 1/8 e 1 3/8 de polegada acima da margem inferior.
 
-Those two rules are why so many self-made passport photos come back rejected.
-People crop to a 2 x 2 square, which is easy, and then get the head size wrong,
-which is not. A photo can be perfectly square, perfectly lit and still fail
-because the face fills too much of the frame.
+São estas duas regras que explicam por que tantas fotografias de passaporte feitas em casa voltam rejeitadas. As pessoas recortam um quadrado de 2 x 2, o que é fácil, e depois erram no tamanho da cabeça, o que não é. Uma fotografia pode estar perfeitamente quadrada e perfeitamente iluminada e ainda assim chumbar, porque o rosto ocupa demasiado do enquadramento.
 
-## How this tool positions your photo
+## Como esta ferramenta posiciona a sua fotografia
 
-Upload a photo and the tool finds your chin, the top of your head and your eye
-line, then works backwards: it calculates the crop that puts your head at the
-middle of the permitted size range and your eyes in the middle of the permitted
-band. Aiming for the middle rather than the edge of each range leaves room for
-the small errors any automatic measurement makes.
+Carregue uma fotografia e a ferramenta localiza o seu queixo, o topo da cabeça e a linha dos olhos, e depois trabalha ao contrário: calcula o recorte que coloca a cabeça no meio do intervalo de tamanhos permitido e os olhos no meio da faixa permitida. Apontar ao meio em vez da margem deixa espaço para os pequenos erros que qualquer medição automática comete.
 
-If your original photo does not have enough space around your head to make a
-compliant crop, the tool says so and tells you which edge is short, instead of
-cropping tighter and quietly handing you something that will be turned down. In
-that case, retake the photo standing further back.
+Se a sua fotografia original não tiver espaço suficiente em volta da cabeça para existir um recorte conforme, a ferramenta di-lo e indica que margem falta, em vez de recortar mais e entregar-lhe em silêncio algo que será recusado ao balcão. Nesse caso, afaste-se e volte a tirar a fotografia.
 
-The background is replaced with plain white. Everything runs inside your browser
-using WebAssembly, so your photo is never uploaded to a server and never leaves
-your device.
+O fundo é substituído por branco simples. Tudo corre no seu navegador através de WebAssembly, pelo que a sua fotografia nunca é enviada para um servidor nem sai do seu dispositivo.
 
-## Printing at home or at a counter
+## Imprimir em casa ou numa loja
 
-The cheapest route is a 4 x 6 inch photo print. A 2 x 2 inch photo tiles exactly
-three across and two down on 4 x 6, so one print gives you six passport photos
-for the price of a single snapshot. Download the sheet, upload it to any photo
-counter or print it borderless at home, then cut along the guide lines.
+O caminho mais barato é uma impressão fotográfica de 4 x 6 polegadas. Uma fotografia de 2 x 2 polegadas encaixa exatamente três vezes na largura e duas na altura em 4 x 6, pelo que uma única impressão dá seis fotografias de passaporte pelo preço de uma normal. Descarregue a folha, entregue-a num balcão de fotografia ou imprima-a sem margens em casa, e corte pelas linhas.
 
-For an online renewal you do not need to print anything. Download the single
-600 x 600 pixel JPEG and upload it directly.
+Para uma renovação em linha não precisa de imprimir nada. Descarregue o JPEG único de 600 x 600 píxeis e carregue-o diretamente.

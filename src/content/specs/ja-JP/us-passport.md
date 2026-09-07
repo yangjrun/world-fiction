@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: アメリカ
 document: passport
-documentName: US passport photo
-title: US Passport Photo Size and Requirements (2x2 in)
-description: Make a compliant 2x2 inch US passport photo in your browser. Correct head height, eye line, white background and a printable 4x6 sheet. Nothing is uploaded.
+documentName: アメリカのパスポート写真
+title: アメリカのパスポート写真のサイズと要件（2x2 インチ）
+description: 規格に適合した 2x2 インチのアメリカ用パスポート写真をブラウザで作成。頭の高さ、目の位置、白背景を正しく整え、印刷用の 4x6 シートも出力します。アップロードはありません。
 output:
   kind: physical
   widthMm: 50.8
@@ -17,7 +17,7 @@ eyeLine:
   minMmFromBottom: 28.575
   maxMmFromBottom: 34.925
 background:
-  description: Plain white or off-white
+  description: 純白または白に近い色
   colors:
     - '#ffffff'
     - '#fafafa'
@@ -25,60 +25,41 @@ file:
   format: jpeg
 sourceUrl: https://travel.state.gov/content/travel/en/passports/how-apply/photos.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head is too large or too small, the single most common reason for rejection
-  - Shadows on the face or on the background behind the head
-  - Glasses worn in the photo, which have not been accepted since 2016
-  - A background that is patterned, coloured or too dark
-  - Visible smile showing teeth, rather than a neutral expression
-  - A photo older than six months, or one already used on a previous passport
+  - 頭が大きすぎる、または小さすぎる。単独の理由としては最も多い不受理原因です
+  - 顔に影がある、または頭の後ろの背景に影が出ている
+  - 写真でメガネを着用している。2016 年以降は認められていません
+  - 背景に模様や色がある、または暗すぎる
+  - 歯を見せて笑っており、無表情になっていない
+  - 撮影から六か月以上経っている、または前のパスポートで使った写真である
 faq:
-  - q: What size is a US passport photo?
-    a: Exactly 2 x 2 inches, which is 51 x 51 mm. At 300 DPI that is 600 x 600 pixels.
-  - q: How tall does my head need to be?
-    a: Measured from the bottom of your chin to the top of your head, between 1 inch and 1 3/8 inches (25 mm to 35 mm). Your eyes must sit between 1 1/8 and 1 3/8 inches above the bottom edge.
-  - q: Can I wear glasses?
-    a: No. Glasses have not been permitted in US passport photos since November 2016, except with a signed medical statement.
-  - q: Can I print this at a drugstore?
-    a: Yes. Download the 4x6 inch sheet, which holds six copies, and print it as a standard photo at any counter. Then cut along the guide lines.
+  - q: アメリカのパスポート写真のサイズは？
+    a: ちょうど 2 x 2 インチ、つまり 51 x 51 ミリです。300 DPI なら 600 x 600 ピクセルになります。
+  - q: 頭の高さはどれくらい必要ですか？
+    a: あごの先から頭頂部までで 1 インチから 1 3/8 インチ（25 ミリから 35 ミリ）です。目は下端から 1 1/8 インチから 1 3/8 インチの間に来る必要があります。
+  - q: メガネをかけたままでもいいですか？
+    a: いいえ。2016 年 11 月以降、署名入りの医学的証明がある場合を除き、アメリカのパスポート写真でメガネは認められていません。
+  - q: 写真店でプリントできますか？
+    a: できます。六枚が並んだ 4x6 インチのシートをダウンロードし、普通の写真としてどの店のカウンターでもプリントして、ガイド線に沿って切ってください。
 ---
 
-## What the State Department actually checks
+## 米国務省が実際に見ているもの
 
-A US passport photo is 2 x 2 inches square, and two measurements inside that
-square decide whether it passes. Your head, measured from the bottom of the chin
-to the top of the head including hair, must be between 1 inch and 1 3/8 inches
-tall. Your eyes must fall between 1 1/8 and 1 3/8 inches above the bottom edge.
+アメリカのパスポート写真は 2 x 2 インチの正方形で、通るかどうかを決めるのはその正方形の内側にある二つの寸法です。あごの先から髪を含めた頭頂部までで測った頭の高さは、1 インチから 1 3/8 インチでなければなりません。目は下端から 1 1/8 インチから 1 3/8 インチの間に入る必要があります。
 
-Those two rules are why so many self-made passport photos come back rejected.
-People crop to a 2 x 2 square, which is easy, and then get the head size wrong,
-which is not. A photo can be perfectly square, perfectly lit and still fail
-because the face fills too much of the frame.
+自分で作ったパスポート写真がこれほど不受理になるのは、この二つの規則のせいです。人は写真を 2 x 2 の正方形に切ります。これは簡単です。そして頭の大きさを間違えます。こちらは簡単ではありません。完全に正方形で、照明も申し分ない写真が、顔がフレームを占めすぎているという理由だけで落ちることがあります。
 
-## How this tool positions your photo
+## このツールがどう位置を決めるか
 
-Upload a photo and the tool finds your chin, the top of your head and your eye
-line, then works backwards: it calculates the crop that puts your head at the
-middle of the permitted size range and your eyes in the middle of the permitted
-band. Aiming for the middle rather than the edge of each range leaves room for
-the small errors any automatic measurement makes.
+写真をアップロードすると、ツールはあごと頭頂部と目の位置を見つけ、そこから逆算します。頭を許容サイズの範囲の中央に、目を許容帯の中央に置くトリミングを計算するのです。端ではなく中央を狙うことで、どんな自動計測にも生じる小さな誤差の余地が残ります。
 
-If your original photo does not have enough space around your head to make a
-compliant crop, the tool says so and tells you which edge is short, instead of
-cropping tighter and quietly handing you something that will be turned down. In
-that case, retake the photo standing further back.
+元の写真に頭のまわりの余白が足りず、適合するトリミングを作れない場合、ツールはさらに内側へ切り詰めて不受理になる写真をそっと渡すのではなく、そのことを伝えてどの辺が足りないかを示します。その場合は、もう少し後ろに下がって撮り直してください。
 
-The background is replaced with plain white. Everything runs inside your browser
-using WebAssembly, so your photo is never uploaded to a server and never leaves
-your device.
+背景は純白に置き換えられます。すべての処理は WebAssembly によってブラウザ内で完結するので、あなたの写真がサーバーへアップロードされることも、端末を離れることもありません。
 
-## Printing at home or at a counter
+## 自宅または店頭でのプリント
 
-The cheapest route is a 4 x 6 inch photo print. A 2 x 2 inch photo tiles exactly
-three across and two down on 4 x 6, so one print gives you six passport photos
-for the price of a single snapshot. Download the sheet, upload it to any photo
-counter or print it borderless at home, then cut along the guide lines.
+いちばん安く済むのは 4 x 6 インチの写真プリントです。2 x 2 インチの写真は 4 x 6 に横三枚、縦二枚でちょうど並ぶので、一枚のプリント代でパスポート写真が六枚手に入ります。シートをダウンロードして写真店のカウンターに持ち込むか、自宅で縁なし印刷し、ガイド線に沿って切ってください。
 
-For an online renewal you do not need to print anything. Download the single
-600 x 600 pixel JPEG and upload it directly.
+オンラインでの更新なら何も印刷する必要はありません。600 x 600 ピクセルの JPEG を一枚ダウンロードして、そのままアップロードしてください。

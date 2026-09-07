@@ -1,10 +1,10 @@
 ---
 country: ca
-countryName: Canada
+countryName: Kanada
 document: passport
-documentName: Canadian passport photo
-title: Canadian Passport Photo Size and Requirements (50x70 mm)
-description: Create a compliant 50x70 mm Canadian passport photo in your browser. Correct 31-36 mm face height, white background and a printable sheet. Nothing is uploaded.
+documentName: kanadisches Passfoto
+title: "Kanadisches Passfoto: Größe und Vorgaben (50x70 mm)"
+description: Erstellen Sie ein regelkonformes kanadisches Passfoto in 50x70 mm im Browser. Korrekte Gesichtshöhe von 31-36 mm, weißer Hintergrund und ein druckfertiger Bogen.
 output:
   kind: physical
   widthMm: 50
@@ -14,68 +14,50 @@ headHeight:
   minMm: 31
   maxMm: 36
 background:
-  description: Plain white, uniform and shadow-free
+  description: Reinweiß, gleichmäßig und ohne Schatten
   colors:
     - '#ffffff'
 file:
   format: jpeg
 sourceUrl: https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/photos.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face height outside the 31 mm to 36 mm range from chin to crown
-  - Photo not printed on plain photographic paper with a matte or semi-matte finish
-  - Missing the photographer's name, address and date on the back of one copy
-  - A background that is not uniformly white, or shows a shadow behind the head
-  - Reflection or glare on glasses obscuring the eyes
-  - Photo taken more than twelve months before applying
+  - Gesichtshöhe außerhalb des Bereichs von 31 mm bis 36 mm vom Kinn zum Scheitel
+  - Foto nicht auf einfachem Fotopapier mit mattem oder seidenmattem Finish gedruckt
+  - Auf der Rückseite eines Abzugs fehlen Name, Adresse und Datum des Fotografen
+  - Ein Hintergrund, der nicht gleichmäßig weiß ist, oder ein Schatten hinter dem Kopf
+  - Spiegelung oder Blendung auf der Brille, die die Augen verdeckt
+  - Foto mehr als zwölf Monate vor dem Antrag aufgenommen
 faq:
-  - q: What size is a Canadian passport photo?
-    a: 50 mm wide by 70 mm tall, which is unusually tall compared with most countries. At 300 DPI that is 591 x 827 pixels.
-  - q: How tall should my face be?
-    a: Between 31 mm and 36 mm measured from the bottom of the chin to the crown of the head.
-  - q: Do I need two photos?
-    a: Yes. Two identical photos are required, and the back of one must carry the photographer's name, address and the date the photo was taken.
-  - q: Can I submit a digital photo instead?
-    a: No. Canadian passport applications require physical printed photos, so you do need to print the sheet.
+  - q: Welche Größe hat ein kanadisches Passfoto?
+    a: 50 mm breit und 70 mm hoch, ungewöhnlich hoch im Vergleich zu den meisten Ländern. Bei 300 DPI sind das 591 x 827 Pixel.
+  - q: Wie hoch muss mein Gesicht sein?
+    a: Zwischen 31 mm und 36 mm, gemessen von der Kinnunterkante bis zum Scheitel.
+  - q: Brauche ich zwei Fotos?
+    a: Ja. Zwei identische Fotos sind erforderlich, und die Rückseite eines davon muss Name und Adresse des Fotografen sowie das Aufnahmedatum tragen.
+  - q: Kann ich stattdessen ein digitales Foto einreichen?
+    a: Nein. Kanadische Passanträge verlangen gedruckte Fotos, das Drucken des Bogens lässt sich also nicht umgehen.
 ---
 
-## An unusual size, and why it matters
+## Ein ungewöhnliches Format, und warum das zählt
 
-A Canadian passport photo is 50 mm wide by 70 mm tall. That 5:7 shape is
-noticeably taller than the 35 x 45 mm format most of Europe uses and the 2 x 2
-inch square the United States uses, and a photo made for either of those will not
-work here. Inside the frame, your face must measure 31 mm to 36 mm from the
-bottom of the chin to the crown of the head.
+Ein kanadisches Passfoto ist 50 mm breit und 70 mm hoch. Dieses Verhältnis von 5:7 ist deutlich höher als die 35 x 45 mm, die der größte Teil Europas verwendet, und als das Quadrat von 2 x 2 Zoll in den USA; ein für eines dieser Formate gemachtes Foto funktioniert hier nicht. Innerhalb des Rahmens muss Ihr Gesicht von der Kinnunterkante bis zum Scheitel 31 mm bis 36 mm messen.
 
-Because the frame is tall, the crop includes more of your shoulders than other
-formats. If your source photo is cut off at the collar, there will not be enough
-image to work with, and this tool will tell you so rather than stretching it.
+Weil der Rahmen hoch ist, umfasst der Zuschnitt mehr von Ihren Schultern als andere Formate. Ist Ihr Ausgangsfoto am Kragen abgeschnitten, fehlt Bildmaterial, und dieses Werkzeug sagt es Ihnen, anstatt zu verzerren.
 
-## The requirement most people miss
+## Die Vorgabe, die die meisten übersehen
 
-Canada requires two identical photos, and the back of one of them must show the
-photographer's name, the address and the date the photo was taken. A photo you
-made yourself and printed at a counter has none of that written on it. Write it on
-the back yourself before you submit: the requirement is the information, not a
-commercial studio stamp.
+Kanada verlangt zwei identische Fotos, und die Rückseite eines davon muss Name und Adresse des Fotografen sowie das Aufnahmedatum zeigen. Auf einem Foto, das Sie selbst gemacht und am Schalter gedruckt haben, steht davon nichts. Schreiben Sie es vor der Einreichung selbst auf die Rückseite: Verlangt wird die Information, nicht der Stempel eines gewerblichen Studios.
 
-Digital submission is not an option for Canadian passports, so printing is a
-required step rather than a convenience.
+Eine digitale Einreichung ist für kanadische Pässe nicht möglich, Drucken ist hier also ein notwendiger Schritt und keine Bequemlichkeit.
 
-## How this tool works
+## Wie dieses Werkzeug arbeitet
 
-Upload a photo. The tool locates your chin, crown and eye line, then computes the
-crop that places your face at 33.5 mm, the middle of the permitted range, leaving
-the most room for measurement error. The background is replaced with uniform
-white, which removes the shadow problems that cause a large share of rejections.
+Laden Sie ein Foto hoch. Das Werkzeug bestimmt Kinn, Scheitel und Augenlinie und berechnet dann den Zuschnitt, der Ihr Gesicht auf 33,5 mm setzt, die Mitte des erlaubten Bereichs, was den größten Spielraum für Messfehler lässt. Der Hintergrund wird durch gleichmäßiges Weiß ersetzt, was die Schattenprobleme beseitigt, die einen großen Teil der Ablehnungen verursachen.
 
-Processing happens entirely inside your browser using WebAssembly. Your photo is
-not uploaded anywhere.
+Die Verarbeitung findet über WebAssembly vollständig in Ihrem Browser statt. Ihr Foto wird nirgends hochgeladen.
 
-## Printing
+## Drucken
 
-A 50 x 70 mm photo fits four to a 4 x 6 inch print when turned a quarter turn,
-which the tool does automatically. Download the sheet, have it printed on matte or
-semi-matte photo paper, and cut along the guide lines. That gives you two pairs,
-enough for this application and a spare.
+Ein Foto von 50 x 70 mm passt viermal auf einen Abzug von 4 x 6 Zoll, wenn man es um eine Vierteldrehung dreht, was das Werkzeug automatisch tut. Laden Sie den Bogen herunter, lassen Sie ihn auf mattem oder seidenmattem Fotopapier drucken und schneiden Sie an den Hilfslinien. Das ergibt zwei Paare, genug für diesen Antrag und ein Ersatzfoto.

@@ -1,10 +1,10 @@
 ---
 country: uk
-countryName: United Kingdom
+countryName: 영국
 document: passport
-documentName: UK passport photo
-title: UK Passport Photo Size and Requirements (35x45 mm)
-description: Make a compliant 35x45 mm UK passport photo in your browser. Correct 29-34 mm head height, plain light background and a printable sheet. Nothing is uploaded anywhere.
+documentName: 영국 여권 사진
+title: 영국 여권 사진 규격과 요구 사항 (35x45mm)
+description: 규정에 맞는 35x45밀리미터 영국 여권 사진을 브라우저에서 만드세요. 머리 높이 29~34밀리미터와 밝은 단색 배경을 정확히 맞추고 인쇄용 시트도 제공합니다. 어디에도 업로드하지 않습니다.
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 29
   maxMm: 34
 background:
-  description: Plain cream or light grey, with no shadows
+  description: 단색 크림색 또는 밝은 회색으로, 그림자가 없어야 합니다
   colors:
     - '#f5f0e6'
     - '#f0f0f0'
@@ -22,61 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://www.gov.uk/photos-for-passports
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head outside the 29 mm to 34 mm range from chin to crown
-  - Any shadow on the face or behind the head
-  - Head covering worn without a religious or medical reason
-  - Eyes obscured by hair, glasses frames or a glare on the lenses
-  - Anything else visible in the frame, including a second person or a chair back
-  - Photo taken more than one month before applying, if your appearance changed
+  - 턱에서 정수리까지 머리 높이가 29밀리미터에서 34밀리미터 범위를 벗어남
+  - 얼굴이나 머리 뒤에 그림자가 있음
+  - 종교적 또는 의학적 이유 없이 머리를 덮는 것을 착용함
+  - 머리카락이나 안경테, 렌즈의 빛 번짐이 눈을 가림
+  - 화면에 다른 것이 보임. 두 번째 인물이나 의자 등받이도 포함됩니다
+  - 겉모습이 달라졌는데 신청보다 한 달 이상 전에 촬영된 사진
 faq:
-  - q: What size is a UK passport photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How tall should my head be in the photo?
-    a: Between 29 mm and 34 mm from the bottom of your chin to the top of your head, hair included.
-  - q: Can I smile?
-    a: No. HM Passport Office requires a neutral expression with your mouth closed.
-  - q: Can I use this photo for the digital application?
-    a: Yes. The digital route needs at least 600 x 750 pixels, and the file this tool produces exceeds that.
+  - q: 영국 여권 사진 규격은 어떻게 되나요?
+    a: 가로 35밀리미터, 세로 45밀리미터입니다. 300 DPI에서는 413 x 531픽셀이 됩니다.
+  - q: 사진에서 머리 높이는 얼마나 되어야 하나요?
+    a: 턱 끝에서 머리카락을 포함한 정수리까지 29밀리미터에서 34밀리미터 사이입니다.
+  - q: 웃어도 되나요?
+    a: 안 됩니다. 영국 여권청은 입을 다문 무표정을 요구합니다.
+  - q: 이 사진을 온라인 신청에 쓸 수 있나요?
+    a: 쓸 수 있습니다. 온라인 절차는 최소 600 x 750픽셀을 요구하고, 이 도구가 만드는 파일은 그보다 큽니다.
 ---
 
-## What HM Passport Office measures
+## 영국 여권청이 측정하는 것
 
-A UK passport photo is 35 mm wide and 45 mm tall, and the measurement that
-matters inside it is head height: 29 mm to 34 mm from the bottom of your chin to
-the top of your head, including hair. That is a 5 mm window on a 45 mm photo, so
-a crop that is close by eye is often not close enough.
+영국 여권 사진은 가로 35밀리미터, 세로 45밀리미터이고, 그 안에서 문제가 되는 치수는 머리 높이입니다. 턱 끝에서 머리카락을 포함한 정수리까지 29밀리미터에서 34밀리미터. 45밀리미터 사진에서 5밀리미터 창이니, 눈으로 봐서 가까운 크롭으로는 부족한 경우가 많습니다.
 
-Note that this is a tighter and lower band than the Schengen visa format, even
-though both use the same 35 x 45 mm outer size. A photo made for a Schengen visa
-will usually be rejected for a UK passport, and the reverse is also true. If you
-are applying for both, make two photos.
+이 구간은 솅겐 비자 규격보다 좁고 위치도 낮다는 점에 유의하세요. 바깥 크기는 똑같이 35 x 45밀리미터인데도 그렇습니다. 솅겐 비자용으로 만든 사진은 영국 여권에서 보통 반려되고, 그 반대도 마찬가지입니다. 둘 다 신청한다면 사진을 두 종류 만드세요.
 
-## Background and lighting
+## 배경과 조명
 
-The requirement is a plain cream or light grey background with no shadows.
-Shadows are the second most common failure after head size, and they usually come
-from standing too close to a wall. Stand at least half a metre away from the
-background and face a window rather than a ceiling light.
+요구 사항은 그림자가 없는 단색 크림색 또는 밝은 회색 배경입니다. 그림자는 머리 크기에 이어 두 번째로 흔한 실패 원인이고, 보통 벽에 너무 가까이 서는 데서 생깁니다. 배경에서 최소 반 미터 떨어지고, 천장 조명이 아니라 창을 마주 보세요.
 
-This tool replaces the background with an even fill, which removes shadow
-problems behind the head. It cannot remove a shadow cast across your face, so
-light yourself from the front when you take the original.
+이 도구는 배경을 고르게 채운 색으로 바꿔 머리 뒤의 그림자 문제를 없앱니다. 얼굴에 드리운 그림자는 지울 수 없으니, 원본을 찍을 때 앞에서 빛을 받으세요.
 
-## How this tool works
+## 이 도구의 작동 방식
 
-Upload a photo. The tool finds your chin, crown and eye line, then computes the
-crop that puts your head at 31.5 mm, the centre of the permitted range. If your
-photo lacks the margin to make a compliant crop, it reports which edge falls
-short rather than cropping tighter and producing a photo that fails.
+사진을 올립니다. 도구가 턱과 정수리, 눈높이를 찾아 머리를 허용 범위의 중앙인 31.5밀리미터에 놓는 크롭을 계산합니다. 규정에 맞는 크롭을 만들 여백이 사진에 없으면, 더 잘라내 떨어질 사진을 만드는 대신 어느 쪽 변이 부족한지 알려 줍니다.
 
-Every step runs locally in your browser through WebAssembly. Your photo is never
-uploaded.
+모든 단계가 WebAssembly를 통해 브라우저 안에서 로컬로 실행됩니다. 사진은 절대 업로드되지 않습니다.
 
-## Printing or applying online
+## 인쇄하거나 온라인으로 신청하기
 
-For a paper application, download the 4 x 6 inch sheet, which holds eight copies
-of a 35 x 45 mm photo, and print it at any photo counter. For the online
-application, download the single JPEG and upload it directly; it comfortably
-exceeds the 600 x 750 pixel minimum.
+서면 신청이라면 35 x 45밀리미터 사진 여덟 장이 들어가는 4 x 6인치 시트를 내려받아 사진관에서 인쇄하세요. 온라인 신청이라면 JPEG 한 장을 내려받아 그대로 올리면 됩니다. 600 x 750픽셀 최소 기준을 넉넉히 넘습니다.

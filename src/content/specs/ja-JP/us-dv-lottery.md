@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: アメリカ
 document: dv-lottery
-documentName: DV lottery photo
-title: DV Lottery Photo Requirements (600x600 px, under 240KB)
-description: Make a compliant Diversity Visa lottery photo in your browser. Exactly 600x600 pixels, under the 240KB limit, correct head and eye position. Nothing is uploaded.
+documentName: DV 抽選の写真
+title: DV 抽選の写真要件（600x600 ピクセル、240KB 以下）
+description: 規格に適合した多様性移民ビザ抽選用の写真をブラウザで作成。ちょうど 600x600 ピクセル、240KB の上限内、頭と目の位置も正確に整えます。アップロードはありません。
 output:
   kind: digital
   widthPx: 600
@@ -16,7 +16,7 @@ eyeLine:
   minRatio: 0.56
   maxRatio: 0.69
 background:
-  description: Plain white or off-white
+  description: 純白または白に近い色
   colors:
     - '#ffffff'
 file:
@@ -24,63 +24,45 @@ file:
   maxBytes: 245760
 sourceUrl: https://travel.state.gov/content/travel/en/us-visas/immigrate/diversity-visa-program-entry/diversity-visa-submit-entry1/diversity-visa-photograph-requirements.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - File larger than 240KB, which the entry form rejects outright
-  - Image not exactly 600 x 600 pixels square
-  - Head height outside 50% to 69% of the image height
-  - Eyes outside the 56% to 69% band measured from the bottom edge
-  - Reusing the photo from a previous year's entry, which is automatically disqualified
-  - A photo of a photo, or a scan showing paper texture
+  - ファイルが 240KB より大きい。応募フォームがその場で受け付けません
+  - 画像がちょうど 600 x 600 ピクセルの正方形になっていない
+  - 頭の高さが画像の高さの 50% から 69% の範囲外である
+  - 目が下端から測って 56% から 69% の帯の外にある
+  - 前年の応募で使った写真を再利用している。自動的に失格になります
+  - 写真を撮り直した写真、または紙の質感が写ったスキャン画像である
 faq:
-  - q: What size does a DV lottery photo need to be?
-    a: Exactly 600 x 600 pixels, square, and the file must be 240KB or smaller.
-  - q: Why does my photo get rejected for file size?
-    a: The entry form enforces a hard 240KB ceiling. This tool searches for the highest JPEG quality that still fits under it, so the file passes without looking over-compressed.
-  - q: Where do my eyes need to be?
-    a: Between 56% and 69% of the image height above the bottom edge, and your head must be between 50% and 69% of the image height.
-  - q: Can I reuse last year's photo?
-    a: No. A photo submitted in a previous year's entry disqualifies the new entry. You need a photo taken within the last six months.
+  - q: DV 抽選の写真はどのサイズが必要ですか？
+    a: ちょうど 600 x 600 ピクセルの正方形で、ファイルは 240KB 以下でなければなりません。
+  - q: なぜファイルサイズで写真がはじかれるのですか？
+    a: 応募フォームは 240KB という固い上限を機械的に適用します。このツールはその上限内に収まる最高の JPEG 品質を探すので、圧縮しすぎた見た目にならずに通ります。
+  - q: 目はどこに来る必要がありますか？
+    a: 下端から測って画像の高さの 56% から 69% の間です。頭は画像の高さの 50% から 69% でなければなりません。
+  - q: 去年の写真を使い回せますか？
+    a: いいえ。前年の応募で提出した写真は新しい応募を失格にします。直近六か月以内に撮影した写真が必要です。
 ---
 
-## Two hard limits, and one of them is a file size
+## 固い制限が二つ、うち一つはファイルサイズ
 
-The Diversity Visa entry form is stricter than most photo requirements because it
-enforces two things mechanically. The image must be exactly 600 x 600 pixels, and
-the file must be 240KB or smaller. Miss either and the form refuses the upload,
-with no explanation of which rule you broke.
+多様性移民ビザの応募フォームは、二つのことを機械的に強制するため、たいていの写真要件より厳しいです。画像はちょうど 600 x 600 ピクセルでなければならず、ファイルは 240KB 以下でなければなりません。どちらかを外すとフォームはアップロードを拒否し、どの規則を破ったのかは説明されません。
 
-The size ceiling is what trips people up. A clean 600 x 600 photo saved at full
-quality from most editors lands somewhere between 300KB and 600KB, well over the
-limit. Saving it again at a guessed lower quality either overshoots or produces a
-visibly mushy image.
+つまずきの元はこの容量の上限です。きれいな 600 x 600 の写真をたいていの編集ソフトで最高品質で保存すると、300KB から 600KB あたりに着地し、制限を大きく超えます。品質を勘で下げて保存し直すと、超えたままか、見て分かるほどぼやけた画像になります。
 
-This tool searches for the answer instead of guessing. It encodes the photo
-repeatedly, narrowing in on the highest JPEG quality that still fits under 240KB,
-which gives you the best-looking file that the form will accept.
+このツールは勘に頼らず、答えを探します。写真を何度も符号化しながら、240KB を下回る最高の JPEG 品質へ絞り込んでいくので、フォームが受け付けるなかで最も見栄えのよいファイルが得られます。
 
-## The positioning rules
+## 位置の規則
 
-Inside the square, your head must occupy between 50% and 69% of the image height,
-measured from the bottom of your chin to the top of your head. Your eyes must sit
-between 56% and 69% of the image height above the bottom edge. These are the same
-proportions the passport photo requirement uses, expressed as percentages rather
-than inches because a DV photo is digital only.
+正方形の内側で、頭はあごの先から頭頂部までで測って画像の高さの 50% から 69% を占めなければなりません。目は下端から測って画像の高さの 56% から 69% の間に来る必要があります。これはパスポート写真の要件と同じ比率で、DV の写真がデジタル専用なのでインチではなく百分率で表されているだけです。
 
-The tool measures your face, then computes the crop that puts your head and eyes
-at the centre of both permitted bands.
+ツールは顔を計測し、頭と目の両方を許容帯の中央に置くトリミングを計算します。
 
-## The disqualification most people do not know about
+## ほとんど知られていない失格条件
 
-Submitting a photo that was used in a previous year's DV entry disqualifies the
-entry. The photo must have been taken within the last six months, and it must not
-have been submitted before. If you entered last year, take a new photo.
+前年の DV 応募で使った写真を提出すると、その応募は失格になります。写真は直近六か月以内に撮影されたもので、それまでに提出していないものでなければなりません。去年応募したなら、新しく撮ってください。
 
-## Privacy
+## プライバシー
 
-Every step runs inside your browser through WebAssembly: face detection,
-background replacement, cropping and encoding. Your photograph is never uploaded
-to a server, which matters more than usual here, because a DV entry is exactly the
-kind of document that attracts fraudulent copycat sites.
+顔検出、背景の置き換え、トリミング、符号化。すべての工程が WebAssembly を通じてブラウザ内で動きます。あなたの写真がサーバーへアップロードされることはありません。ここではそれが普段以上に重要です。DV の応募は、まさになりすましサイトを引き寄せる種類の手続きだからです。
 
-There is nothing to print. Download the 600 x 600 JPEG and attach it to your entry.
+印刷するものはありません。600 x 600 の JPEG をダウンロードして応募に添付してください。

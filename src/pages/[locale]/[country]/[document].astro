@@ -5,7 +5,7 @@ import SpecTable from '@/components/SpecTable.astro';
 import PhotoEditor from '@/components/editor/PhotoEditor.vue';
 import { getVerifiedSpecPages, type SpecPage } from '@/lib/specs';
 import { locales, type Locale } from '@/i18n/config';
-import { useTranslations } from '@/i18n/ui';
+import { getTranslations, useTranslations } from '@/i18n/ui';
 import { localesWithDocument } from '@/lib/specs-locale';
 
 export async function getStaticPaths() {
@@ -60,6 +60,13 @@ const { Content } = await render(entry);
 const t = useTranslations(locale);
 await t.load();
 
+// Serialize only the editor's copy so SSR and hydration use the same language.
+const editorMessages = Object.fromEntries(
+  Object.entries(await getTranslations(locale)).filter(
+    ([key]) => (key.startsWith('editor.') || key.startsWith('unit.') || key === 'spec.background') && !key.endsWith('__note'),
+  ),
+);
+
 // ISO 8601 and deliberately not localised: this date is the freshness marker on
 // the numbers above it, and 2026-09-03 reads the same everywhere, where
 // 09/03/2026 does not.
@@ -113,7 +120,7 @@ const appSchema = {
   <p class="mt-3 max-w-2xl text-ink-600">{entry.data.description}</p>
 
   <div class="mt-8">
-    <PhotoEditor spec={spec} client:visible />
+    <PhotoEditor spec={spec} locale={locale} messages={editorMessages} client:visible />
   </div>
 
   <section class="mt-12" aria-labelledby="requirements">

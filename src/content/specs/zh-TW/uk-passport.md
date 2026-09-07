@@ -1,10 +1,10 @@
 ---
 country: uk
-countryName: United Kingdom
+countryName: 英國
 document: passport
-documentName: UK passport photo
-title: UK Passport Photo Size and Requirements (35x45 mm)
-description: Make a compliant 35x45 mm UK passport photo in your browser. Correct 29-34 mm head height, plain light background and a printable sheet. Nothing is uploaded anywhere.
+documentName: 英國護照相片
+title: 英國護照相片尺寸與規定（35x45 公釐）
+description: 在瀏覽器中製作符合規定的 35x45 公釐英國護照相片。頭部高度 29–34 公釐、淺色純背景都正確，並產生可列印的拼版。相片不會上傳到任何地方。
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 29
   maxMm: 34
 background:
-  description: Plain cream or light grey, with no shadows
+  description: 米色或淺灰色的純色背景，沒有陰影
   colors:
     - '#f5f0e6'
     - '#f0f0f0'
@@ -22,61 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://www.gov.uk/photos-for-passports
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head outside the 29 mm to 34 mm range from chin to crown
-  - Any shadow on the face or behind the head
-  - Head covering worn without a religious or medical reason
-  - Eyes obscured by hair, glasses frames or a glare on the lenses
-  - Anything else visible in the frame, including a second person or a chair back
-  - Photo taken more than one month before applying, if your appearance changed
+  - 頭部不在下巴到頭頂 29 公釐至 34 公釐的範圍內
+  - 臉部或頭部後方有任何陰影
+  - 沒有宗教或醫療原因卻戴著頭部遮蓋物
+  - 眼睛被頭髮或鏡框遮住，或被鏡片反光擋住
+  - 畫面裡出現其他任何東西，包括第二個人或椅背
+  - 相片拍攝於申請前一個月以上，而你的外貌已經改變
 faq:
-  - q: What size is a UK passport photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How tall should my head be in the photo?
-    a: Between 29 mm and 34 mm from the bottom of your chin to the top of your head, hair included.
-  - q: Can I smile?
-    a: No. HM Passport Office requires a neutral expression with your mouth closed.
-  - q: Can I use this photo for the digital application?
-    a: Yes. The digital route needs at least 600 x 750 pixels, and the file this tool produces exceeds that.
+  - q: 英國護照相片是多大尺寸？
+    a: 寬 35 公釐、高 45 公釐。在 300 DPI 下是 413 x 531 像素。
+  - q: 相片裡我的頭部應該多高？
+    a: 從下巴底部到頭頂（含頭髮）之間，需要在 29 公釐到 34 公釐之間。
+  - q: 可以微笑嗎？
+    a: 不可以。英國護照局要求中性表情，並且嘴巴閉合。
+  - q: 這張相片可以用於線上申請嗎？
+    a: 可以。線上申請要求至少 600 x 750 像素，本工具產出的檔案輕鬆超過這個尺寸。
 ---
 
-## What HM Passport Office measures
+## 英國護照局量的是什麼
 
-A UK passport photo is 35 mm wide and 45 mm tall, and the measurement that
-matters inside it is head height: 29 mm to 34 mm from the bottom of your chin to
-the top of your head, including hair. That is a 5 mm window on a 45 mm photo, so
-a crop that is close by eye is often not close enough.
+英國護照相片寬 35 公釐、高 45 公釐，而畫框內部真正要緊的那個尺寸是頭部高度：從下巴底部到頭頂（含頭髮）為 29 公釐到 34 公釐。這是在一張 45 公釐高的相片上只有 5 公釐的視窗，所以憑肉眼覺得差不多的裁切，往往還不夠準。
 
-Note that this is a tighter and lower band than the Schengen visa format, even
-though both use the same 35 x 45 mm outer size. A photo made for a Schengen visa
-will usually be rejected for a UK passport, and the reverse is also true. If you
-are applying for both, make two photos.
+要注意，這個區間比申根簽證規格更窄、位置也更低，儘管兩者外框都是 35 x 45 公釐。為申根簽證做的相片拿去申請英國護照通常會被退件，反過來也一樣。如果兩樣都要辦，就做兩套相片。
 
-## Background and lighting
+## 背景與光線
 
-The requirement is a plain cream or light grey background with no shadows.
-Shadows are the second most common failure after head size, and they usually come
-from standing too close to a wall. Stand at least half a metre away from the
-background and face a window rather than a ceiling light.
+規定是米色或淺灰色的純色背景，且沒有陰影。陰影是僅次於頭部尺寸的第二大失敗原因，而它通常來自站得離牆太近。請離背景至少半公尺遠，並且面朝窗戶而不是天花板燈。
 
-This tool replaces the background with an even fill, which removes shadow
-problems behind the head. It cannot remove a shadow cast across your face, so
-light yourself from the front when you take the original.
+本工具會把背景替換成均勻的底色，這消除了頭部後方的陰影問題。它無法去掉投在你臉上的陰影，所以拍原始相片時請從正面打光。
 
-## How this tool works
+## 這個工具如何運作
 
-Upload a photo. The tool finds your chin, crown and eye line, then computes the
-crop that puts your head at 31.5 mm, the centre of the permitted range. If your
-photo lacks the margin to make a compliant crop, it reports which edge falls
-short rather than cropping tighter and producing a photo that fails.
+上傳一張相片。工具會找到你的下巴、頭頂和眼睛位置，然後計算出把頭部放在 31.5 公釐（允許範圍正中）的裁切方案。如果你的相片餘量不足、做不出合規的裁切，它會回報哪一邊不夠，而不是裁得更緊、產出一張不合格的相片。
 
-Every step runs locally in your browser through WebAssembly. Your photo is never
-uploaded.
+每一步都透過 WebAssembly 在你的瀏覽器本機執行。你的相片絕不會被上傳。
 
-## Printing or applying online
+## 列印或線上申請
 
-For a paper application, download the 4 x 6 inch sheet, which holds eight copies
-of a 35 x 45 mm photo, and print it at any photo counter. For the online
-application, download the single JPEG and upload it directly; it comfortably
-exceeds the 600 x 750 pixel minimum.
+紙本申請可以下載 4 x 6 吋的拼版，上面能放八張 35 x 45 公釐的相片，在任何沖印櫃台列印即可。線上申請則下載那張單獨的 JPEG 直接上傳；它的尺寸遠超 600 x 750 像素的最低要求。

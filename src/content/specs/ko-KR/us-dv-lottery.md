@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: 미국
 document: dv-lottery
-documentName: DV lottery photo
-title: DV Lottery Photo Requirements (600x600 px, under 240KB)
-description: Make a compliant Diversity Visa lottery photo in your browser. Exactly 600x600 pixels, under the 240KB limit, correct head and eye position. Nothing is uploaded.
+documentName: DV 추첨 사진
+title: DV 추첨 사진 요구 사항 (600x600픽셀, 240KB 이하)
+description: 규정에 맞는 다양성 비자 추첨 사진을 브라우저에서 만드세요. 정확히 600x600픽셀, 240KB 한도 안, 머리와 눈 위치까지 정확합니다. 업로드는 없습니다.
 output:
   kind: digital
   widthPx: 600
@@ -16,7 +16,7 @@ eyeLine:
   minRatio: 0.56
   maxRatio: 0.69
 background:
-  description: Plain white or off-white
+  description: 흰색 또는 흰색에 가까운 단색
   colors:
     - '#ffffff'
 file:
@@ -24,63 +24,45 @@ file:
   maxBytes: 245760
 sourceUrl: https://travel.state.gov/content/travel/en/us-visas/immigrate/diversity-visa-program-entry/diversity-visa-submit-entry1/diversity-visa-photograph-requirements.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - File larger than 240KB, which the entry form rejects outright
-  - Image not exactly 600 x 600 pixels square
-  - Head height outside 50% to 69% of the image height
-  - Eyes outside the 56% to 69% band measured from the bottom edge
-  - Reusing the photo from a previous year's entry, which is automatically disqualified
-  - A photo of a photo, or a scan showing paper texture
+  - 파일이 240KB보다 큼. 신청 양식이 그 자리에서 거부합니다
+  - 이미지가 정확히 600 x 600픽셀 정사각형이 아님
+  - 머리 높이가 이미지 높이의 50%에서 69% 범위를 벗어남
+  - 눈이 아래 변에서 측정한 56%에서 69% 구간을 벗어남
+  - 지난해 신청에 쓴 사진을 재사용함. 자동으로 실격됩니다
+  - 사진을 다시 찍은 사진이거나 종이 질감이 보이는 스캔 이미지
 faq:
-  - q: What size does a DV lottery photo need to be?
-    a: Exactly 600 x 600 pixels, square, and the file must be 240KB or smaller.
-  - q: Why does my photo get rejected for file size?
-    a: The entry form enforces a hard 240KB ceiling. This tool searches for the highest JPEG quality that still fits under it, so the file passes without looking over-compressed.
-  - q: Where do my eyes need to be?
-    a: Between 56% and 69% of the image height above the bottom edge, and your head must be between 50% and 69% of the image height.
-  - q: Can I reuse last year's photo?
-    a: No. A photo submitted in a previous year's entry disqualifies the new entry. You need a photo taken within the last six months.
+  - q: DV 추첨 사진은 어떤 크기여야 하나요?
+    a: 정확히 600 x 600픽셀 정사각형이고, 파일은 240KB 이하여야 합니다.
+  - q: 왜 파일 크기 때문에 사진이 거부되나요?
+    a: 신청 양식은 240KB라는 단단한 상한을 그대로 적용합니다. 이 도구는 그 상한 안에 들어가는 가장 높은 JPEG 품질을 찾으므로, 과하게 압축된 모습 없이 통과합니다.
+  - q: 눈은 어디에 있어야 하나요?
+    a: 아래 변에서 측정해 이미지 높이의 56%에서 69% 사이이고, 머리는 이미지 높이의 50%에서 69%여야 합니다.
+  - q: 작년 사진을 다시 쓸 수 있나요?
+    a: 쓸 수 없습니다. 지난해 신청에 제출한 사진은 새 신청을 실격시킵니다. 최근 6개월 안에 촬영한 사진이 필요합니다.
 ---
 
-## Two hard limits, and one of them is a file size
+## 단단한 제한 두 가지, 그중 하나는 파일 크기
 
-The Diversity Visa entry form is stricter than most photo requirements because it
-enforces two things mechanically. The image must be exactly 600 x 600 pixels, and
-the file must be 240KB or smaller. Miss either and the form refuses the upload,
-with no explanation of which rule you broke.
+다양성 비자 신청 양식은 두 가지를 기계적으로 강제하기 때문에 대부분의 사진 요구 사항보다 엄격합니다. 이미지는 정확히 600 x 600픽셀이어야 하고, 파일은 240KB 이하여야 합니다. 어느 하나라도 어긋나면 양식은 업로드를 거부하며, 어떤 규칙을 어겼는지는 설명하지 않습니다.
 
-The size ceiling is what trips people up. A clean 600 x 600 photo saved at full
-quality from most editors lands somewhere between 300KB and 600KB, well over the
-limit. Saving it again at a guessed lower quality either overshoots or produces a
-visibly mushy image.
+사람들이 걸려 넘어지는 것은 이 용량 상한입니다. 깨끗한 600 x 600 사진을 대부분의 편집기에서 최고 품질로 저장하면 300KB에서 600KB 사이에 떨어져 한도를 크게 넘습니다. 품질을 감으로 낮춰 다시 저장하면 여전히 넘거나 눈에 보이게 뭉개진 이미지가 나옵니다.
 
-This tool searches for the answer instead of guessing. It encodes the photo
-repeatedly, narrowing in on the highest JPEG quality that still fits under 240KB,
-which gives you the best-looking file that the form will accept.
+이 도구는 짐작하지 않고 답을 찾습니다. 사진을 반복해 인코딩하면서 240KB 아래에 들어가는 가장 높은 JPEG 품질로 좁혀 가므로, 양식이 받아들이는 것 중 가장 보기 좋은 파일을 얻습니다.
 
-## The positioning rules
+## 위치 규칙
 
-Inside the square, your head must occupy between 50% and 69% of the image height,
-measured from the bottom of your chin to the top of your head. Your eyes must sit
-between 56% and 69% of the image height above the bottom edge. These are the same
-proportions the passport photo requirement uses, expressed as percentages rather
-than inches because a DV photo is digital only.
+정사각형 안에서 머리는 턱 끝에서 정수리까지 측정해 이미지 높이의 50%에서 69%를 차지해야 합니다. 눈은 아래 변에서 측정해 이미지 높이의 56%에서 69% 사이에 있어야 합니다. 여권 사진 요구 사항과 같은 비율이며, DV 사진이 디지털 전용이라 인치가 아니라 백분율로 표현된 것뿐입니다.
 
-The tool measures your face, then computes the crop that puts your head and eyes
-at the centre of both permitted bands.
+도구가 얼굴을 측정한 뒤 머리와 눈을 두 허용 구간의 가운데에 놓는 크롭을 계산합니다.
 
-## The disqualification most people do not know about
+## 대부분이 모르는 실격 사유
 
-Submitting a photo that was used in a previous year's DV entry disqualifies the
-entry. The photo must have been taken within the last six months, and it must not
-have been submitted before. If you entered last year, take a new photo.
+지난해 DV 신청에 사용한 사진을 제출하면 그 신청은 실격됩니다. 사진은 최근 6개월 안에 촬영한 것이어야 하고, 이전에 제출한 적이 없어야 합니다. 작년에 신청했다면 새로 찍으세요.
 
-## Privacy
+## 개인정보
 
-Every step runs inside your browser through WebAssembly: face detection,
-background replacement, cropping and encoding. Your photograph is never uploaded
-to a server, which matters more than usual here, because a DV entry is exactly the
-kind of document that attracts fraudulent copycat sites.
+얼굴 검출, 배경 교체, 크롭, 인코딩까지 모든 단계가 WebAssembly를 통해 브라우저 안에서 실행됩니다. 사진은 서버로 업로드되지 않으며, 이 점이 여기서는 평소보다 더 중요합니다. DV 신청은 사칭 사이트를 끌어들이기 딱 좋은 종류의 절차이기 때문입니다.
 
-There is nothing to print. Download the 600 x 600 JPEG and attach it to your entry.
+인쇄할 것은 없습니다. 600 x 600 JPEG를 내려받아 신청에 첨부하세요.

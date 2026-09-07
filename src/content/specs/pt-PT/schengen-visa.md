@@ -1,10 +1,10 @@
 ---
 country: schengen
-countryName: Schengen Area
+countryName: Espaço Schengen
 document: visa
-documentName: Schengen visa photo
-title: Schengen Visa Photo Size and Requirements (35x45 mm)
-description: Create a compliant 35x45 mm Schengen visa photo in your browser. Correct 70-80% face height, light background and a printable sheet. Your photo never leaves your device.
+documentName: fotografia de visto Schengen
+title: "Fotografia de visto Schengen: tamanho e requisitos (35x45 mm)"
+description: Crie no seu navegador uma fotografia de visto Schengen de 35x45 mm conforme os requisitos. Rosto a 70-80% da altura, fundo claro e uma folha imprimível.
 output:
   kind: physical
   widthMm: 35
@@ -14,7 +14,7 @@ headHeight:
   minMm: 32
   maxMm: 36
 background:
-  description: Plain light grey or cream, evenly lit
+  description: Cinzento-claro ou creme simples, iluminado de forma uniforme
   colors:
     - '#f0f0f0'
     - '#f5f0e6'
@@ -22,60 +22,43 @@ file:
   format: jpeg
 sourceUrl: https://home-affairs.ec.europa.eu/policies/schengen-borders-and-visa/visa-policy_en
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face fills less than 70% or more than 80% of the frame height
-  - A pure white background, which several consulates read as overexposed
-  - Head tilted or turned rather than square to the camera
-  - Hair covering the eyes or the outline of the face
-  - Reflections or heavy frames if glasses are worn
-  - Photo older than six months
+  - O rosto ocupa menos de 70% ou mais de 80% da altura do enquadramento
+  - Um fundo branco puro, que vários consulados leem como sobre-exposto
+  - Cabeça inclinada ou virada em vez de de frente para a câmara
+  - Cabelo a cobrir os olhos ou o contorno do rosto
+  - Reflexos ou armações grossas se usar óculos
+  - Fotografia com mais de seis meses
 faq:
-  - q: What size is a Schengen visa photo?
-    a: 35 mm wide by 45 mm tall. At 300 DPI that is 413 x 531 pixels.
-  - q: How much of the photo should my face fill?
-    a: Between 70% and 80% of the height, which works out to a head between 32 mm and 36 mm from chin to crown.
-  - q: Should the background be white?
-    a: Prefer plain light grey or cream. The requirement is a light, uniform, contrasting background, and a pure white one can be read as overexposed.
-  - q: Does one photo work for every Schengen country?
-    a: The 35x45 mm format and the 70-80% face rule are common to all of them, but individual consulates add their own notes. Check the consulate you are applying to.
+  - q: Que tamanho tem uma fotografia de visto Schengen?
+    a: 35 mm de largura por 45 mm de altura. A 300 DPI são 413 x 531 píxeis.
+  - q: Quanto da fotografia deve o meu rosto ocupar?
+    a: Entre 70% e 80% da altura, o que corresponde a uma cabeça de 32 mm a 36 mm do queixo ao topo da cabeça.
+  - q: O fundo deve ser branco?
+    a: Prefira cinzento-claro ou creme simples. O requisito é um fundo claro, uniforme e com contraste, e um branco puro pode ser lido como sobre-exposto.
+  - q: Uma fotografia serve para todos os países Schengen?
+    a: O formato 35x45 mm e a regra dos 70-80% são comuns a todos, mas cada consulado acrescenta as suas próprias notas. Verifique o consulado onde vai apresentar o pedido.
 ---
 
-## The rule that decides it: 70 to 80 percent
+## A regra que decide: 70 a 80 por cento
 
-Every Schengen consulate works from the same photo format, 35 mm wide by 45 mm
-tall, and the same central requirement: your face must fill 70% to 80% of the
-frame height. In millimetres that is a head between 32 mm and 36 mm measured from
-the bottom of the chin to the top of the head, hair included.
+Todos os consulados Schengen trabalham com o mesmo formato de fotografia, 35 mm de largura por 45 mm de altura, e com o mesmo requisito central: o seu rosto tem de ocupar 70% a 80% da altura do enquadramento. Em milímetros, isso é uma cabeça entre 32 mm e 36 mm medida da base do queixo ao topo da cabeça, cabelo incluído.
 
-That band is narrower than it sounds. A crop that looks reasonable to the eye
-frequently lands at 60% or 85%, and either one is grounds for rejection. It is
-the most common reason Schengen photo submissions come back.
+Essa faixa é mais estreita do que parece. Um recorte que a olho parece razoável cai frequentemente nos 60% ou nos 85%, e qualquer um deles é motivo de recusa. É a razão mais frequente para as fotografias Schengen voltarem para trás.
 
-## Why not a white background
+## Por que não um fundo branco
 
-The published requirement is a light, uniform background that contrasts with the
-face. Plain white technically satisfies "light", but in practice a white
-background photographed with a bright flash loses the outline of light hair and
-shoulders, and several consulates treat that as overexposed. Light grey or cream
-is the safer read of the same rule, so this tool defaults to light grey.
+O requisito publicado é um fundo claro e uniforme que contraste com o rosto. O branco puro cumpre tecnicamente a palavra claro, mas na prática um fundo branco fotografado com um flash forte perde o contorno do cabelo claro e dos ombros, e vários consulados tratam isso como sobre-exposição. O cinzento-claro ou o creme é a leitura mais segura da mesma regra, pelo que esta ferramenta usa cinzento-claro por predefinição.
 
-## How this tool works
+## Como esta ferramenta funciona
 
-Upload any reasonably front-facing photo. The tool locates your chin, crown and
-eye line, then computes the crop that lands your head at 34 mm, the middle of the
-permitted range, giving the widest possible margin for measurement error. The
-background is replaced with an even light grey.
+Carregue qualquer fotografia razoavelmente de frente. A ferramenta localiza o queixo, o topo da cabeça e a linha dos olhos, e depois calcula o recorte que coloca a cabeça em 34 mm, o meio do intervalo permitido, dando a folga mais ampla possível ao erro de medição. O fundo é substituído por um cinzento-claro uniforme.
 
-If your source photo is cropped too tightly to produce a compliant result, the
-tool tells you which edge is short rather than cropping in further and handing
-you a photo that fails. Retake it standing further from the camera.
+Se a fotografia de origem estiver recortada de forma demasiado apertada para produzir um resultado conforme, a ferramenta diz-lhe que margem está curta em vez de recortar mais e entregar-lhe uma fotografia que vai chumbar. Volte a tirá-la mais longe da câmara.
 
-All processing happens in your browser through WebAssembly. Nothing is uploaded.
+Todo o processamento acontece no seu navegador através de WebAssembly. Nada é carregado.
 
-## Printing
+## Impressão
 
-A 35 x 45 mm photo tiles eight to a 4 x 6 inch print, four across and two down.
-Download the sheet, have it printed as an ordinary photo, and cut along the guide
-lines. Most consulates ask for two identical photos, so one sheet covers four
-applications.
+Uma fotografia de 35 x 45 mm cabe oito vezes numa impressão de 4 x 6 polegadas, quatro na largura e duas na altura. Descarregue a folha, mande imprimi-la como uma fotografia comum e corte pelas linhas. A maioria dos consulados pede duas fotografias idênticas, pelo que uma folha cobre quatro pedidos.

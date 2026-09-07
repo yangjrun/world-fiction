@@ -17,8 +17,9 @@ import { DV_LOTTERY, SCHENGEN_VISA, US_PASSPORT } from '../fixtures.js';
 // prose nobody re-reads.
 //
 // The numbers, because `50.8` reads as fifty thousand eight hundred to a German,
-// Spanish or French reader. That half cannot be fixed by translating, and the
-// locale bundles are still English, so nothing else in the suite would notice it.
+// Spanish or French reader. That half is not something translating can fix: the
+// de-DE assertions below pair German wording with German separators, and it was
+// only the separators that were ever wrong.
 
 async function labelsFor(locale: Locale) {
   const t = useTranslations(locale);
@@ -96,10 +97,14 @@ describe('Spec labels in a comma-decimal locale', () => {
 
   it('carries that separator into every derived number', async () => {
     const labels = await labelsFor('de-DE');
-    // The bundle is still English, so only the numbers move — which is the point:
-    // translating alone would never have fixed them.
-    expect(labels.sizeWithPixels(US_PASSPORT)).toBe('50,8 × 50,8 mm (600 × 600 px at 300 DPI)');
-    expect(labels.headHeight(US_PASSPORT)).toContain('25,4 mm – 34,9 mm');
+    // Both halves move now that de-DE is translated: `bei` comes from the bundle,
+    // the commas do not. Translating alone would never have fixed the numbers.
+    expect(labels.sizeWithPixels(US_PASSPORT)).toBe('50,8 × 50,8 mm (600 × 600 px bei 300 DPI)');
+    // German writes the unit once, `25,4 – 34,9 mm`, which is what de-DE's
+    // spec.band-length pattern does; the assertion is about the separators.
+    expect(labels.headHeight(US_PASSPORT)).toContain('25,4 – 34,9 mm');
+    expect(labels.headHeight(US_PASSPORT)).not.toContain('25.4');
+    expect(labels.headHeight(US_PASSPORT)).not.toContain('34.9');
   });
 
   it('runs on an ICU build that knows these locales', () => {
@@ -170,7 +175,7 @@ describe('Spec label number grouping', () => {
     expect(enUS.sizeWithPixels(HIGH_DPI)).toBe('35 × 45 mm (827 × 1063 px at 600 DPI)');
 
     const deDE = await labelsFor('de-DE');
-    expect(deDE.sizeWithPixels(HIGH_DPI)).toBe('35 × 45 mm (827 × 1063 px at 600 DPI)');
+    expect(deDE.sizeWithPixels(HIGH_DPI)).toBe('35 × 45 mm (827 × 1063 px bei 600 DPI)');
   });
 
   it('keeps grouping on a kilobyte ceiling, which is a quantity', async () => {
@@ -180,7 +185,7 @@ describe('Spec label number grouping', () => {
     expect(enUS.file(LARGE_CEILING)).toBe('JPEG, max 25,600 KB');
 
     const deDE = await labelsFor('de-DE');
-    expect(deDE.file(LARGE_CEILING)).toBe('JPEG, max 25.600 KB');
+    expect(deDE.file(LARGE_CEILING)).toBe('JPEG, max. 25.600 KB');
   });
 });
 

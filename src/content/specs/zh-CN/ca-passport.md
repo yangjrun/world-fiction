@@ -1,10 +1,10 @@
 ---
 country: ca
-countryName: Canada
+countryName: 加拿大
 document: passport
-documentName: Canadian passport photo
-title: Canadian Passport Photo Size and Requirements (50x70 mm)
-description: Create a compliant 50x70 mm Canadian passport photo in your browser. Correct 31-36 mm face height, white background and a printable sheet. Nothing is uploaded.
+documentName: 加拿大护照照片
+title: 加拿大护照照片尺寸与要求（50x70 毫米）
+description: 在浏览器中制作符合规定的 50x70 毫米加拿大护照照片。面部高度 31–36 毫米、纯白背景都正确，并生成可打印的拼版。照片不会上传。
 output:
   kind: physical
   widthMm: 50
@@ -14,68 +14,50 @@ headHeight:
   minMm: 31
   maxMm: 36
 background:
-  description: Plain white, uniform and shadow-free
+  description: 纯白，均匀且没有阴影
   colors:
     - '#ffffff'
 file:
   format: jpeg
 sourceUrl: https://www.canada.ca/en/immigration-refugees-citizenship/services/canadian-passports/photos.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Face height outside the 31 mm to 36 mm range from chin to crown
-  - Photo not printed on plain photographic paper with a matte or semi-matte finish
-  - Missing the photographer's name, address and date on the back of one copy
-  - A background that is not uniformly white, or shows a shadow behind the head
-  - Reflection or glare on glasses obscuring the eyes
-  - Photo taken more than twelve months before applying
+  - 面部高度不在下巴到头顶 31 毫米至 36 毫米的范围内
+  - 照片没有印在哑光或半哑光的普通相纸上
+  - 其中一张的背面缺少摄影者的姓名、地址和拍摄日期
+  - 背景不是均匀的白色，或头部后方有阴影
+  - 眼镜反光或反射遮住了眼睛
+  - 照片拍摄于申请前十二个月以上
 faq:
-  - q: What size is a Canadian passport photo?
-    a: 50 mm wide by 70 mm tall, which is unusually tall compared with most countries. At 300 DPI that is 591 x 827 pixels.
-  - q: How tall should my face be?
-    a: Between 31 mm and 36 mm measured from the bottom of the chin to the crown of the head.
-  - q: Do I need two photos?
-    a: Yes. Two identical photos are required, and the back of one must carry the photographer's name, address and the date the photo was taken.
-  - q: Can I submit a digital photo instead?
-    a: No. Canadian passport applications require physical printed photos, so you do need to print the sheet.
+  - q: 加拿大护照照片是多大尺寸？
+    a: 宽 50 毫米、高 70 毫米，比大多数国家的规格都要明显更高。在 300 DPI 下是 591 x 827 像素。
+  - q: 我的面部应该多高？
+    a: 从下巴底部量到头顶，需要在 31 毫米到 36 毫米之间。
+  - q: 需要两张照片吗？
+    a: 需要。必须提交两张完全相同的照片，其中一张的背面要写上摄影者的姓名、地址，以及照片的拍摄日期。
+  - q: 可以改成提交电子照片吗？
+    a: 不可以。加拿大护照申请要求提交实体冲印的照片，所以打印这一步确实省不掉。
 ---
 
-## An unusual size, and why it matters
+## 一个不常见的尺寸，以及它为什么要紧
 
-A Canadian passport photo is 50 mm wide by 70 mm tall. That 5:7 shape is
-noticeably taller than the 35 x 45 mm format most of Europe uses and the 2 x 2
-inch square the United States uses, and a photo made for either of those will not
-work here. Inside the frame, your face must measure 31 mm to 36 mm from the
-bottom of the chin to the crown of the head.
+加拿大护照照片宽 50 毫米、高 70 毫米。这个 5:7 的比例明显比欧洲多数国家用的 35 x 45 毫米更高，也不同于美国用的 2 x 2 英寸正方形，按那两种规格做出来的照片在这里都不能用。在这个画框内部，你的面部从下巴底部到头顶必须是 31 毫米到 36 毫米。
 
-Because the frame is tall, the crop includes more of your shoulders than other
-formats. If your source photo is cut off at the collar, there will not be enough
-image to work with, and this tool will tell you so rather than stretching it.
+因为画框偏高，裁切时会比其他规格包含更多肩部。如果你的原始照片在衣领处就被截断了，可用的画面就不够，这时工具会告诉你，而不是把画面拉伸。
 
-## The requirement most people miss
+## 大多数人会漏掉的那条要求
 
-Canada requires two identical photos, and the back of one of them must show the
-photographer's name, the address and the date the photo was taken. A photo you
-made yourself and printed at a counter has none of that written on it. Write it on
-the back yourself before you submit: the requirement is the information, not a
-commercial studio stamp.
+加拿大要求两张完全相同的照片，其中一张的背面必须写有摄影者的姓名、地址以及照片的拍摄日期。你自己做、拿去柜台冲印的照片上并没有这些信息。提交之前请自己写在背面：这条要求要的是那些信息，而不是商业影楼的印章。
 
-Digital submission is not an option for Canadian passports, so printing is a
-required step rather than a convenience.
+加拿大护照不接受电子提交，所以打印是必需的一步，而不是图个方便。
 
-## How this tool works
+## 这个工具如何工作
 
-Upload a photo. The tool locates your chin, crown and eye line, then computes the
-crop that places your face at 33.5 mm, the middle of the permitted range, leaving
-the most room for measurement error. The background is replaced with uniform
-white, which removes the shadow problems that cause a large share of rejections.
+上传一张照片。工具会定位你的下巴、头顶和眼睛位置，然后计算出把你的面部放在 33.5 毫米（允许范围的中点）的裁切方案，为测量误差留出最大余地。背景会被替换成均匀的白色，这就消除了导致大量退件的阴影问题。
 
-Processing happens entirely inside your browser using WebAssembly. Your photo is
-not uploaded anywhere.
+所有处理都通过 WebAssembly 完全在你的浏览器中进行。你的照片不会被上传到任何地方。
 
-## Printing
+## 打印
 
-A 50 x 70 mm photo fits four to a 4 x 6 inch print when turned a quarter turn,
-which the tool does automatically. Download the sheet, have it printed on matte or
-semi-matte photo paper, and cut along the guide lines. That gives you two pairs,
-enough for this application and a spare.
+50 x 70 毫米的照片旋转九十度后，正好能在一张 4 x 6 英寸的相纸上排四张，工具会自动完成这个旋转。下载拼版，拿去用哑光或半哑光相纸冲印，然后沿参考线裁开。这样你会得到两对，足够这次申请再加一份备用。

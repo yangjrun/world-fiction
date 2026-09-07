@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: États-Unis
 document: dv-lottery
-documentName: DV lottery photo
-title: DV Lottery Photo Requirements (600x600 px, under 240KB)
-description: Make a compliant Diversity Visa lottery photo in your browser. Exactly 600x600 pixels, under the 240KB limit, correct head and eye position. Nothing is uploaded.
+documentName: photo pour la loterie DV
+title: "Loterie DV : normes photo (600x600 px, moins de 240 Ko)"
+description: Créez une photo conforme pour la loterie des visas de diversité dans votre navigateur. Exactement 600x600 pixels, sous la limite de 240 Ko, tête et yeux bien placés.
 output:
   kind: digital
   widthPx: 600
@@ -16,7 +16,7 @@ eyeLine:
   minRatio: 0.56
   maxRatio: 0.69
 background:
-  description: Plain white or off-white
+  description: Blanc uni ou blanc cassé
   colors:
     - '#ffffff'
 file:
@@ -24,63 +24,45 @@ file:
   maxBytes: 245760
 sourceUrl: https://travel.state.gov/content/travel/en/us-visas/immigrate/diversity-visa-program-entry/diversity-visa-submit-entry1/diversity-visa-photograph-requirements.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - File larger than 240KB, which the entry form rejects outright
-  - Image not exactly 600 x 600 pixels square
-  - Head height outside 50% to 69% of the image height
-  - Eyes outside the 56% to 69% band measured from the bottom edge
-  - Reusing the photo from a previous year's entry, which is automatically disqualified
-  - A photo of a photo, or a scan showing paper texture
+  - Fichier de plus de 240 Ko, que le formulaire d’inscription rejette d’emblée
+  - Image qui ne fait pas exactement 600 x 600 pixels carrés
+  - Hauteur de tête hors de la plage de 50% à 69% de la hauteur de l’image
+  - Yeux hors de la bande de 56% à 69% mesurée depuis le bord inférieur
+  - Réutilisation de la photo d’une inscription d’une année précédente, ce qui disqualifie automatiquement
+  - Une photo d’une photo, ou un scan laissant voir le grain du papier
 faq:
-  - q: What size does a DV lottery photo need to be?
-    a: Exactly 600 x 600 pixels, square, and the file must be 240KB or smaller.
-  - q: Why does my photo get rejected for file size?
-    a: The entry form enforces a hard 240KB ceiling. This tool searches for the highest JPEG quality that still fits under it, so the file passes without looking over-compressed.
-  - q: Where do my eyes need to be?
-    a: Between 56% and 69% of the image height above the bottom edge, and your head must be between 50% and 69% of the image height.
-  - q: Can I reuse last year's photo?
-    a: No. A photo submitted in a previous year's entry disqualifies the new entry. You need a photo taken within the last six months.
+  - q: Quelle taille doit avoir une photo pour la loterie DV ?
+    a: Exactement 600 x 600 pixels, carrée, et le fichier ne doit pas dépasser 240 Ko.
+  - q: Pourquoi ma photo est-elle refusée pour sa taille de fichier ?
+    a: Le formulaire applique un plafond strict de 240 Ko. Cet outil cherche la plus haute qualité JPEG qui reste sous cette limite, pour que le fichier passe sans paraître trop compressé.
+  - q: Où mes yeux doivent-ils se situer ?
+    a: Entre 56% et 69% de la hauteur de l’image au-dessus du bord inférieur, et votre tête doit occuper entre 50% et 69% de la hauteur.
+  - q: Puis-je réutiliser la photo de l’an dernier ?
+    a: Non. Une photo déjà soumise lors d’une inscription précédente disqualifie la nouvelle. Il vous faut une photo prise dans les six derniers mois.
 ---
 
-## Two hard limits, and one of them is a file size
+## Deux limites strictes, dont une taille de fichier
 
-The Diversity Visa entry form is stricter than most photo requirements because it
-enforces two things mechanically. The image must be exactly 600 x 600 pixels, and
-the file must be 240KB or smaller. Miss either and the form refuses the upload,
-with no explanation of which rule you broke.
+Le formulaire d’inscription à la loterie des visas de diversité est plus strict que la plupart des normes photo parce qu’il applique deux choses mécaniquement. L’image doit faire exactement 600 x 600 pixels, et le fichier ne doit pas dépasser 240 Ko. Manquez l’une des deux et le formulaire refuse l’envoi, sans dire quelle règle vous avez enfreinte.
 
-The size ceiling is what trips people up. A clean 600 x 600 photo saved at full
-quality from most editors lands somewhere between 300KB and 600KB, well over the
-limit. Saving it again at a guessed lower quality either overshoots or produces a
-visibly mushy image.
+C’est le plafond de taille qui fait trébucher. Une photo propre de 600 x 600 enregistrée en qualité maximale par la plupart des éditeurs se situe entre 300 Ko et 600 Ko, bien au-delà de la limite. La réenregistrer à une qualité inférieure choisie au hasard fait soit dépasser encore, soit produire une image visiblement pâteuse.
 
-This tool searches for the answer instead of guessing. It encodes the photo
-repeatedly, narrowing in on the highest JPEG quality that still fits under 240KB,
-which gives you the best-looking file that the form will accept.
+Cet outil cherche la réponse au lieu de la deviner. Il encode la photo à répétition en resserrant sur la plus haute qualité JPEG qui reste sous 240 Ko, ce qui vous donne le fichier le plus beau que le formulaire acceptera.
 
-## The positioning rules
+## Les règles de positionnement
 
-Inside the square, your head must occupy between 50% and 69% of the image height,
-measured from the bottom of your chin to the top of your head. Your eyes must sit
-between 56% and 69% of the image height above the bottom edge. These are the same
-proportions the passport photo requirement uses, expressed as percentages rather
-than inches because a DV photo is digital only.
+Dans le carré, votre tête doit occuper entre 50% et 69% de la hauteur de l’image, mesurée du bas du menton au sommet du crâne. Vos yeux doivent se situer entre 56% et 69% de la hauteur au-dessus du bord inférieur. Ce sont les mêmes proportions que la norme des photos de passeport, exprimées en pourcentages plutôt qu’en pouces parce qu’une photo DV est uniquement numérique.
 
-The tool measures your face, then computes the crop that puts your head and eyes
-at the centre of both permitted bands.
+L’outil mesure votre visage, puis calcule le recadrage qui place votre tête et vos yeux au centre des deux bandes autorisées.
 
-## The disqualification most people do not know about
+## Le motif de disqualification que presque personne ne connaît
 
-Submitting a photo that was used in a previous year's DV entry disqualifies the
-entry. The photo must have been taken within the last six months, and it must not
-have been submitted before. If you entered last year, take a new photo.
+Soumettre une photo utilisée lors d’une inscription DV d’une année précédente disqualifie l’inscription. La photo doit avoir été prise dans les six derniers mois et ne pas avoir été soumise auparavant. Si vous avez participé l’an dernier, prenez une nouvelle photo.
 
-## Privacy
+## Confidentialité
 
-Every step runs inside your browser through WebAssembly: face detection,
-background replacement, cropping and encoding. Your photograph is never uploaded
-to a server, which matters more than usual here, because a DV entry is exactly the
-kind of document that attracts fraudulent copycat sites.
+Chaque étape s’exécute dans votre navigateur via WebAssembly : détection du visage, remplacement du fond, recadrage et encodage. Votre photo n’est jamais envoyée à un serveur, ce qui compte ici plus que d’habitude, car une inscription DV est exactement le genre de démarche qui attire les sites frauduleux imitant les sites officiels.
 
-There is nothing to print. Download the 600 x 600 JPEG and attach it to your entry.
+Il n’y a rien à imprimer. Téléchargez le JPEG de 600 x 600 et joignez-le à votre inscription.

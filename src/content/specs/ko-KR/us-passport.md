@@ -1,10 +1,10 @@
 ---
 country: us
-countryName: United States
+countryName: 미국
 document: passport
-documentName: US passport photo
-title: US Passport Photo Size and Requirements (2x2 in)
-description: Make a compliant 2x2 inch US passport photo in your browser. Correct head height, eye line, white background and a printable 4x6 sheet. Nothing is uploaded.
+documentName: 미국 여권 사진
+title: 미국 여권 사진 규격과 요구 사항 (2x2인치)
+description: 규정에 맞는 2x2인치 미국 여권 사진을 브라우저에서 만드세요. 머리 높이, 눈높이, 흰 배경을 정확히 맞추고 인쇄용 4x6 시트까지 제공합니다. 업로드는 없습니다.
 output:
   kind: physical
   widthMm: 50.8
@@ -17,7 +17,7 @@ eyeLine:
   minMmFromBottom: 28.575
   maxMmFromBottom: 34.925
 background:
-  description: Plain white or off-white
+  description: 흰색 또는 흰색에 가까운 단색
   colors:
     - '#ffffff'
     - '#fafafa'
@@ -25,60 +25,41 @@ file:
   format: jpeg
 sourceUrl: https://travel.state.gov/content/travel/en/passports/how-apply/photos.html
 sourceCheckedOn: 2026-09-03
-status: needs-review
+status: verified
 rejectionReasons:
-  - Head is too large or too small, the single most common reason for rejection
-  - Shadows on the face or on the background behind the head
-  - Glasses worn in the photo, which have not been accepted since 2016
-  - A background that is patterned, coloured or too dark
-  - Visible smile showing teeth, rather than a neutral expression
-  - A photo older than six months, or one already used on a previous passport
+  - 머리가 너무 크거나 너무 작음. 단일 사유로는 가장 흔한 반려 원인입니다
+  - 얼굴에 그림자가 지거나 머리 뒤 배경에 그림자가 있음
+  - 사진에서 안경을 착용함. 2016년부터 허용되지 않습니다
+  - 배경에 무늬나 색이 있거나 너무 어두움
+  - 무표정이 아니라 치아가 보이게 웃고 있음
+  - 촬영 후 6개월이 지난 사진이거나 이전 여권에 이미 사용한 사진
 faq:
-  - q: What size is a US passport photo?
-    a: Exactly 2 x 2 inches, which is 51 x 51 mm. At 300 DPI that is 600 x 600 pixels.
-  - q: How tall does my head need to be?
-    a: Measured from the bottom of your chin to the top of your head, between 1 inch and 1 3/8 inches (25 mm to 35 mm). Your eyes must sit between 1 1/8 and 1 3/8 inches above the bottom edge.
-  - q: Can I wear glasses?
-    a: No. Glasses have not been permitted in US passport photos since November 2016, except with a signed medical statement.
-  - q: Can I print this at a drugstore?
-    a: Yes. Download the 4x6 inch sheet, which holds six copies, and print it as a standard photo at any counter. Then cut along the guide lines.
+  - q: 미국 여권 사진 규격은 어떻게 되나요?
+    a: 정확히 2 x 2인치, 즉 51 x 51밀리미터입니다. 300 DPI에서는 600 x 600픽셀이 됩니다.
+  - q: 머리 높이는 얼마나 되어야 하나요?
+    a: 턱 끝에서 정수리까지 1인치에서 1 3/8인치(25밀리미터에서 35밀리미터) 사이입니다. 눈은 아래 변에서 1 1/8인치에서 1 3/8인치 사이에 있어야 합니다.
+  - q: 안경을 쓸 수 있나요?
+    a: 쓸 수 없습니다. 2016년 11월부터 서명이 있는 의학적 소견서가 있는 경우를 제외하고 미국 여권 사진에서 안경은 허용되지 않습니다.
+  - q: 사진관에서 인쇄할 수 있나요?
+    a: 가능합니다. 여섯 장이 들어간 4x6인치 시트를 내려받아 일반 사진처럼 어느 인쇄 창구에서든 출력한 뒤 안내선을 따라 자르세요.
 ---
 
-## What the State Department actually checks
+## 미국 국무부가 실제로 확인하는 것
 
-A US passport photo is 2 x 2 inches square, and two measurements inside that
-square decide whether it passes. Your head, measured from the bottom of the chin
-to the top of the head including hair, must be between 1 inch and 1 3/8 inches
-tall. Your eyes must fall between 1 1/8 and 1 3/8 inches above the bottom edge.
+미국 여권 사진은 2 x 2인치 정사각형이고, 통과 여부를 결정하는 것은 그 정사각형 안의 두 가지 치수입니다. 턱 끝에서 머리카락을 포함한 정수리까지 측정한 머리 높이는 1인치에서 1 3/8인치여야 합니다. 눈은 아래 변에서 1 1/8인치에서 1 3/8인치 사이에 들어와야 합니다.
 
-Those two rules are why so many self-made passport photos come back rejected.
-People crop to a 2 x 2 square, which is easy, and then get the head size wrong,
-which is not. A photo can be perfectly square, perfectly lit and still fail
-because the face fills too much of the frame.
+직접 만든 여권 사진이 그렇게 많이 반려되는 이유가 바로 이 두 규칙입니다. 사람들은 사진을 2 x 2 정사각형으로 자릅니다. 이건 쉽습니다. 그리고 머리 크기를 틀립니다. 이건 쉽지 않습니다. 완벽하게 반듯하고 조명도 좋은 사진이 얼굴이 화면을 너무 많이 차지한다는 이유만으로 떨어질 수 있습니다.
 
-## How this tool positions your photo
+## 이 도구가 위치를 잡는 방식
 
-Upload a photo and the tool finds your chin, the top of your head and your eye
-line, then works backwards: it calculates the crop that puts your head at the
-middle of the permitted size range and your eyes in the middle of the permitted
-band. Aiming for the middle rather than the edge of each range leaves room for
-the small errors any automatic measurement makes.
+사진을 올리면 도구가 턱과 정수리, 눈높이를 찾아 거꾸로 계산합니다. 머리를 허용 크기 범위의 가운데에, 눈을 허용 구간의 가운데에 놓는 크롭을 구하는 것입니다. 각 범위의 가장자리가 아니라 가운데를 노리면 어떤 자동 측정에서도 생기는 작은 오차의 여유가 남습니다.
 
-If your original photo does not have enough space around your head to make a
-compliant crop, the tool says so and tells you which edge is short, instead of
-cropping tighter and quietly handing you something that will be turned down. In
-that case, retake the photo standing further back.
+원본 사진에 머리 주변 여백이 부족해 규정에 맞는 크롭을 만들 수 없으면, 이 도구는 더 잘라내 창구에서 거절당할 사진을 조용히 건네는 대신 그 사실을 알리고 어느 쪽 변이 부족한지 말해 줍니다. 그럴 때는 조금 더 뒤로 물러나 다시 찍으세요.
 
-The background is replaced with plain white. Everything runs inside your browser
-using WebAssembly, so your photo is never uploaded to a server and never leaves
-your device.
+배경은 흰색으로 바뀝니다. 모든 처리가 WebAssembly로 브라우저 안에서 끝나므로 사진이 서버로 업로드되지도, 기기를 떠나지도 않습니다.
 
-## Printing at home or at a counter
+## 집에서 또는 사진관에서 인쇄하기
 
-The cheapest route is a 4 x 6 inch photo print. A 2 x 2 inch photo tiles exactly
-three across and two down on 4 x 6, so one print gives you six passport photos
-for the price of a single snapshot. Download the sheet, upload it to any photo
-counter or print it borderless at home, then cut along the guide lines.
+가장 저렴한 방법은 4 x 6인치 사진 인쇄입니다. 2 x 2인치 사진은 4 x 6에 가로 세 장, 세로 두 장으로 정확히 들어가므로 한 장 값에 여권 사진 여섯 장이 나옵니다. 시트를 내려받아 사진관 창구에 맡기거나 집에서 여백 없이 인쇄한 뒤 안내선을 따라 자르세요.
 
-For an online renewal you do not need to print anything. Download the single
-600 x 600 pixel JPEG and upload it directly.
+온라인 갱신이라면 아무것도 인쇄할 필요가 없습니다. 600 x 600픽셀 JPEG 한 장을 내려받아 그대로 올리면 됩니다.

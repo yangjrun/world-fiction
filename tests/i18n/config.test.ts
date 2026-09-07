@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { languages, locales, defaultLocale, type Locale } from '@/i18n/config';
+import { languages, locales, defaultLocale } from '@/i18n/config';
 
 describe('i18n configuration', () => {
   it('should define all 11 locales', () => {
