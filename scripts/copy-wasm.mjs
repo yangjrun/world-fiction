@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, stat } from 'node:fs/promises';
+import { cp, mkdir, readdir, stat, unlink } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
 
@@ -7,8 +7,8 @@ import { dirname, join, resolve } from 'node:path';
  *
  * A CDN would be less work, but it would also tell a third party that a given
  * visitor is making a passport photo, which contradicts the promise the rest of
- * the pipeline keeps. Runs before every build so a deploy cannot silently ship
- * without them.
+ * the pipeline keeps. Runs before development and production builds so neither
+ * can start without the runtime assets.
  */
 const require = createRequire(import.meta.url);
 const root = resolve(import.meta.dirname, '..');
@@ -57,7 +57,23 @@ async function findDirUp(from, name, maxLevels = 4) {
 
 async function main() {
   const ortDir = dirname(require.resolve('onnxruntime-web'));
-  const ortCopied = await copyMatching(ortDir, join(root, 'public/wasm/ort'), (name) => name.endsWith('.wasm'));
+  // ONNX imports an Emscripten .mjs loader from wasmPaths before loading its
+  // matching .wasm binary. Both files must be served from the same directory.
+  // The application imports onnxruntime-web/wasm, which only needs this pair.
+  // The general-purpose entry loads JSEP instead (over Pages' 25 MiB limit).
+  const ortFiles = ['ort-wasm-simd-threaded.mjs', 'ort-wasm-simd-threaded.wasm'];
+  const ortDestination = join(root, 'public/wasm/ort');
+  await mkdir(ortDestination, { recursive: true });
+  for (const name of ortFiles) await cp(join(ortDir, name), join(ortDestination, name));
+  const ortCopied = ortFiles.length;
+
+  // A previous local build may have copied other backends. Remove only generated
+  // ONNX runtime files, or those stale oversized files would still reach dist/.
+  for (const entry of await readdir(ortDestination, { withFileTypes: true })) {
+    if (entry.isFile() && /^ort-wasm-.*\.(mjs|wasm)$/.test(entry.name) && !ortFiles.includes(entry.name)) {
+      await unlink(join(ortDestination, entry.name));
+    }
+  }
 
   const mediapipeWasm = await findDirUp(dirname(require.resolve('@mediapipe/tasks-vision')), 'wasm');
   const mediapipeCopied = mediapipeWasm

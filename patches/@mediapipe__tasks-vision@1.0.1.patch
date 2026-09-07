@@ -1,0 +1,6 @@
+diff --git a/vision_bundle.mjs b/vision_bundle.mjs
+--- a/vision_bundle.mjs
++++ b/vision_bundle.mjs
+@@ -2 +2 @@
+-//# sourceMappingURL=vision_bundle_mjs.js.map
++//# sourceMappingURL=vision_bundle.mjs.map

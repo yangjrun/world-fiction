@@ -6,3 +6,9 @@
 allowBuilds:
   esbuild: true
   protobufjs: true
+  # Downloads the workerd runtime binary that wrangler shells out to.
+  workerd: true
+
+# MediaPipe 1.0.1 ships vision_bundle.mjs.map but references a different filename.
+patchedDependencies:
+  '@mediapipe/tasks-vision@1.0.1': patches/@mediapipe__tasks-vision@1.0.1.patch

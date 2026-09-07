@@ -1,4 +1,4 @@
-import * as ort from 'onnxruntime-web';
+import * as ort from 'onnxruntime-web/wasm';
 import { assertCommercialUseAllowed, type MattingModelConfig } from './matting-model.js';
 
 export interface SegmentationResult {
@@ -122,7 +122,9 @@ function resampleMask(
 export async function createPersonSegmenter(model: MattingModelConfig): Promise<PersonSegmenter> {
   assertCommercialUseAllowed(model);
 
-  ort.env.wasm.wasmPaths = ORT_WASM_PATH;
+  // Vite adds ?import to root-relative dynamic imports and then rejects files
+  // in public/. An absolute same-origin URL keeps the loader a static request.
+  ort.env.wasm.wasmPaths = new URL(ORT_WASM_PATH, globalThis.location.href).href;
   const session = await ort.InferenceSession.create(model.url, { executionProviders: ['wasm'] });
 
   // Unset means "the fused prediction", which these architectures put first.

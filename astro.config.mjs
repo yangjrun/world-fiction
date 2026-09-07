@@ -7,9 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { DEFAULT_LOCALE, LOCALES } from './astro.locales.mjs';
 import { readTranslatedLocales } from './astro.translations.mjs';
 
-// TODO(deploy): replace with the real apex domain before the first production build.
 // `site` must be correct or sitemap.xml and canonical URLs ship wrong absolute URLs.
-const SITE = process.env.SITE_URL ?? 'https://example.com';
+const SITE = process.env.SITE_URL ?? 'https://foxapi.uk';
 
 // Which locales a translator has actually started on. Read here, once, from the
 // bundles on disk -- see astro.translations.mjs for the rule and for why this list
@@ -67,11 +66,21 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     resolve: {
-      alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        // Force the WASM-only entry that loads our self-hosted binaries.
+        // Vite 8's resolve.conditions doesn't reliably apply the
+        // "onnxruntime-web-use-extern-wasm" export condition, so the bundled
+        // root entry loads and tries to fetch JSEP files that don't exist.
+        // An explicit alias bypasses the conditional-exports resolution.
+        'onnxruntime-web/wasm': fileURLToPath(
+          new URL('./node_modules/onnxruntime-web/dist/ort.wasm.min.mjs', import.meta.url),
+        ),
+      },
     },
     optimizeDeps: {
       // These ship their own WASM and must not be pre-bundled.
-      exclude: ['onnxruntime-web', '@mediapipe/tasks-vision'],
+      exclude: ['onnxruntime-web', 'onnxruntime-web/wasm', '@mediapipe/tasks-vision'],
     },
   },
 });

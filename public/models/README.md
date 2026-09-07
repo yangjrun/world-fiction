@@ -1,10 +1,16 @@
 # On-device model assets
 
-These files are deliberately not committed: they are large binaries, and one of
-them needs a licence decision recorded before it ships. `.gitignore` excludes
-everything in this directory except this file.
+These files are deliberately not committed because they are large binaries.
+`.gitignore` excludes everything in this directory except this file.
 
-Fetch them into `public/models/` and `public/wasm/` before running the app.
+`pnpm build` downloads the two default models when missing and verifies their
+pinned SHA-256 hashes before building. Existing files with unexpected hashes
+fail the build instead of being overwritten. For local development, run:
+
+    pnpm setup:models
+
+The download URLs and hashes are recorded in `scripts/setup-models.mjs`.
+Downloads happen on the build machine; visitors load all assets from this site.
 
 ## `models/face_landmarker.task` (~3 MB)
 
@@ -16,13 +22,19 @@ measurements. Download from Google's model garden:
 ## `models/u2netp.onnx` (~4.7 MB) — the default
 
 U2-Net small variant, Apache-2.0. Produces the person mask used both to replace
-the background and to locate the crown of the head.
+the background and to locate the crown of the head. The pinned ONNX export is
+distributed with rembg:
+
+    https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx
 
 ## `models/birefnet.onnx` (~220 MB) — optional quality upgrade
 
 BiRefNet, MIT. Noticeably better on fine hair than U2-Net, at forty times the
 download. Worth offering as an opt-in for users whose first result has ragged
 hair edges; not worth making the default.
+
+This optional model is not downloaded by the build. It exceeds Cloudflare Pages'
+25 MiB single-file limit and would need separate asset hosting if enabled.
 
 ## Do not use RMBG
 
@@ -36,8 +48,16 @@ commercial licence from BRIA and update the flag, or stay on U2-Net/BiRefNet.
 ## WASM runtimes
 
 Both runtimes are served from this origin rather than a CDN, so that a visitor's
-use of a passport photo tool is not disclosed to a third party. Copy them out of
-`node_modules` as a build step:
+use of a passport photo tool is not disclosed to a third party. `pnpm dev` and
+`pnpm build` copy them from the installed dependencies automatically. To prepare
+them manually after installing dependencies, run:
 
-    cp node_modules/onnxruntime-web/dist/*.wasm public/wasm/ort/
-    cp -r node_modules/@mediapipe/tasks-vision/wasm/* public/wasm/mediapipe/
+    pnpm setup:wasm
+
+The application imports `onnxruntime-web/wasm` and requires the matching
+`ort-wasm-simd-threaded.mjs` and `ort-wasm-simd-threaded.wasm` pair in
+`public/wasm/ort/`. The copy script removes stale generated ONNX backends from
+earlier builds. Do not switch back to the general ONNX entry without revisiting
+this list: it needs JSEP, whose binary exceeds the Pages single-file limit.
+
+See `docs/deploy-cloudflare-pages.md` for deployment settings.

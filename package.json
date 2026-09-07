@@ -5,10 +5,16 @@
   "type": "module",
   "description": "Privacy-first passport & visa photo tool. All image processing happens in the browser.",
   "scripts": {
+    "predev": "node scripts/copy-wasm.mjs",
     "dev": "astro dev",
+    "stop": "astro dev stop",
+    "setup:models": "node scripts/setup-models.mjs",
     "setup:wasm": "node scripts/copy-wasm.mjs",
-    "prebuild": "node scripts/copy-wasm.mjs",
+    "prebuild": "node scripts/setup-models.mjs && node scripts/copy-wasm.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/check-pages.mjs",
+    "build:pages": "node scripts/check-pages.mjs --site && pnpm run build",
+    "check:pages": "node scripts/check-pages.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
@@ -30,7 +36,8 @@
     "@vitest/coverage-v8": "4.1.11",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
-    "vitest": "4.1.11"
+    "vitest": "4.1.11",
+    "wrangler": "^4.129.0"
   },
   "packageManager": "pnpm@11.4.0"
 }
