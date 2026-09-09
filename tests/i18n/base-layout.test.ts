@@ -110,6 +110,68 @@ describe('the document page hands the layout its narrowed list', () => {
   });
 });
 
+/**
+ * The document page builds a BreadcrumbList that mirrors its visible breadcrumb
+ * exactly — two levels, the first linking to the locale home, the last carrying
+ * no `item`. A third level the nav does not show would be schema the markup
+ * cannot justify, and a URL here is a second place a canonical could be
+ * computed; neither regression changes any rendered text, so both are pinned
+ * against the source like the hreflang wiring above.
+ */
+describe('the document page mirrors its breadcrumb in schema', () => {
+  const page = readFileSync(
+    fileURLToPath(
+      new URL('../../src/pages/[locale]/[country]/[document].astro', import.meta.url),
+    ),
+    'utf8',
+  );
+
+  it('builds a two-level BreadcrumbList from the same strings as the nav', () => {
+    expect(page).toContain("'@type': 'BreadcrumbList'");
+    expect(page).toContain('position: 2');
+    // The first item is the link the visible nav renders, in the reader's language.
+    expect(page).toContain("name: t.t('nav.home')");
+    // The last item is the plain text the nav renders as the current level.
+    expect(page).toContain('name: entry.data.countryName');
+  });
+
+  it('passes the block between the app and the FAQ, not instead of either', () => {
+    // The order is the contract: app, breadcrumb, then the conditional FAQ.
+    expect(page).toContain(
+      'structuredData={[appSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}',
+    );
+  });
+});
+
+/**
+ * The related-specs section is wiring more than markup: the graph lives in
+ * `src/lib/related-specs.ts` (unit-tested in tests/related-specs.test.ts), and
+ * what is left to pin is the line that connects it to the page — drop the
+ * prop, or resolve targets against the wrong locale's list, and the section
+ * quietly renders nothing or links a URL the build never wrote.
+ */
+describe('the document page renders its related specs', () => {
+  const page = readFileSync(
+    fileURLToPath(
+      new URL('../../src/pages/[locale]/[country]/[document].astro', import.meta.url),
+    ),
+    'utf8',
+  );
+
+  it('resolves the links from the graph and this locale’s own pages', () => {
+    expect(page).toContain('relatedDocuments(');
+    expect(page).toContain('relatedPages: relatedDocuments(page.entry.data).flatMap(');
+  });
+
+  it('reads the list from the props and renders it under the translated heading', () => {
+    expect(page).toContain(
+      'const { page, locale, availableLocales, relatedPages } = Astro.props;',
+    );
+    expect(page).toContain('{relatedPages.map(({ entry, spec, href }) => (');
+    expect(page).toContain("t.t('related.heading')");
+  });
+});
+
 describe('the language switcher says when it leads somewhere else', () => {
   // On a document page "Deutsch" goes to the German home page, not to the German
   // version of that document, and the word "Deutsch" alone does not say so.

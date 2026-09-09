@@ -488,6 +488,7 @@ describe('Document page translations', () => {
     'requirements.checked',
     'rejections.heading',
     'faq.heading',
+    'related.heading',
     'schema.app-name',
     'spec.size',
     'spec.head-height',

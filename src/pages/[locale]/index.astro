@@ -42,10 +42,10 @@ const howParagraphs = ['home.how-p1', 'home.how-p2', 'home.how-p3'].map((key) =>
   parseEmphasis(t.t(key)),
 );
 
-// Ten of the eleven locales have no verified spec yet, so ten home pages rendered
-// "Choose your document" above nothing at all. The empty state says why and sends
-// the reader somewhere that works, rather than leaving them to conclude the tool
-// is broken.
+// Every locale publishes five verified specs today, so this branch is inert —
+// but it stays, because it is what a future locale with no content renders:
+// the empty state says why and sends the reader somewhere that works, rather
+// than leaving them to conclude the tool is broken.
 //
 // The destination lives in the page, like the privacy page's two: the copy says
 // which words link where, and the page says where that is. See src/i18n/rich-text.ts
