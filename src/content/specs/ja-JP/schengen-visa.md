@@ -3,8 +3,8 @@ country: schengen
 countryName: シェンゲン圏
 document: visa
 documentName: シェンゲンビザ写真
-title: シェンゲンビザ写真のサイズと要件（35x45 mm）
-description: 規格に適合した 35x45 ミリのシェンゲンビザ写真をブラウザで作成。顔が高さの 70〜80% を占め、明るい背景も正しく整え、印刷用シートも出力します。写真は端末から出ません。
+title: シェンゲンビザ写真を無料でオンライン作成｜35x45mmのサイズと要件
+description: 35x45mmのシェンゲンビザ写真をブラウザ上で無料作成。顔が高さの70〜80%を占めるよう自動で整え、明るい背景と印刷用シートも出力します。写真はどこにもアップロードされません。
 output:
   kind: physical
   widthMm: 35

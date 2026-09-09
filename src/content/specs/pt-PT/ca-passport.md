@@ -3,8 +3,8 @@ country: ca
 countryName: Canadá
 document: passport
 documentName: fotografia de passaporte canadiano
-title: "Fotografia de passaporte canadiano: tamanho e requisitos (50x70 mm)"
-description: Crie no seu navegador uma fotografia de passaporte canadiano de 50x70 mm conforme os requisitos. Altura do rosto de 31 a 36 mm, fundo branco e uma folha imprimível.
+title: "Fotografia de passaporte canadiano grátis online: 50x70 mm"
+description: Crie grátis online uma fotografia de passaporte canadiano de 50x70 mm. Altura do rosto 31-36 mm, fundo branco e folha imprimível. Tudo no navegador, nada é enviado.
 output:
   kind: physical
   widthMm: 50

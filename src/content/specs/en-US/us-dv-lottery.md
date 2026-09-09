@@ -3,8 +3,8 @@ country: us
 countryName: United States
 document: dv-lottery
 documentName: DV lottery photo
-title: DV Lottery Photo Requirements (600x600 px, under 240KB)
-description: Make a compliant Diversity Visa lottery photo in your browser. Exactly 600x600 pixels, under the 240KB limit, correct head and eye position. Nothing is uploaded.
+title: Free Online DV Lottery Photo — 600x600 px, Under 240KB
+description: Free 600x600 px DV lottery photo maker. Correct head and eye position, white background, under the 240KB limit. Works in your browser — nothing is uploaded.
 output:
   kind: digital
   widthPx: 600

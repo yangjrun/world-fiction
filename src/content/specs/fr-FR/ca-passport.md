@@ -3,8 +3,8 @@ country: ca
 countryName: Canada
 document: passport
 documentName: photo de passeport canadien
-title: "Photo de passeport canadien : taille et normes (50x70 mm)"
-description: Créez une photo de passeport canadien conforme de 50x70 mm dans votre navigateur. Hauteur de visage correcte de 31 à 36 mm, fond blanc et une planche imprimable.
+title: "Photo passeport canadienne gratuite en ligne : 50x70 mm"
+description: Créez gratuitement une photo passeport canadienne 50x70 mm. Hauteur de visage 31-36 mm, fond blanc et planche imprimable. Tout dans votre navigateur, rien n'est envoyé.
 output:
   kind: physical
   widthMm: 50

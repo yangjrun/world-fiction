@@ -3,8 +3,8 @@ country: uk
 countryName: United Kingdom
 document: passport
 documentName: UK passport photo
-title: UK Passport Photo Size and Requirements (35x45 mm)
-description: Make a compliant 35x45 mm UK passport photo in your browser. Correct 29-34 mm head height, plain light background and a printable sheet. Nothing is uploaded anywhere.
+title: Free Online UK Passport Photo — 35x45 mm Requirements
+description: Free 35x45 mm UK passport photo maker. Correct 29-34 mm head height, plain background and a printable sheet. Works in your browser — nothing is uploaded.
 output:
   kind: physical
   widthMm: 35

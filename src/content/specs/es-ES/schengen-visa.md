@@ -3,8 +3,8 @@ country: schengen
 countryName: Espacio Schengen
 document: visa
 documentName: foto de visado Schengen
-title: "Foto de visado Schengen: tamaño y requisitos (35x45 mm)"
-description: Crea en tu navegador una foto de visado Schengen de 35x45 mm que cumpla los requisitos. Cara al 70-80% de la altura, fondo claro y una hoja imprimible.
+title: "Foto de visado Schengen gratis online: 35x45 mm"
+description: "Crea gratis online una foto de visado Schengen de 35x45 mm. Cara al 70-80% de la altura, fondo claro y hoja imprimible. Todo en tu navegador: no se sube nada."
 output:
   kind: physical
   widthMm: 35

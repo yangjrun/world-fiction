@@ -3,8 +3,8 @@ country: us
 countryName: Estados Unidos
 document: passport
 documentName: foto de pasaporte de EE. UU.
-title: "Foto de pasaporte de EE. UU.: tamaño y requisitos (2x2 in)"
-description: Crea en tu navegador una foto de pasaporte de EE. UU. de 2x2 pulgadas que cumpla los requisitos. Altura de cabeza, línea de los ojos y fondo blanco correctos.
+title: "Foto de pasaporte de EE. UU. gratis online: 2x2 in"
+description: "Crea gratis online una foto de pasaporte de EE. UU. de 2x2 in. Cabeza, ojos y fondo blanco correctos, más una hoja 4x6. Todo en tu navegador: no se sube nada."
 output:
   kind: physical
   widthMm: 50.8

@@ -3,8 +3,8 @@ country: us
 countryName: Estados Unidos
 document: passport
 documentName: fotografia de passaporte dos EUA
-title: "Fotografia de passaporte dos EUA: tamanho e requisitos (2x2 pol.)"
-description: Crie no seu navegador uma fotografia de passaporte dos EUA de 2x2 polegadas conforme os requisitos. Altura da cabeça, linha dos olhos e fundo branco corretos.
+title: "Fotografia de passaporte dos EUA grátis online: 2x2 pol."
+description: Crie grátis online uma fotografia de passaporte dos EUA de 2x2 pol. Cabeça, olhos e fundo branco corretos, mais uma folha 4x6. Tudo no navegador, nada é enviado.
 output:
   kind: physical
   widthMm: 50.8

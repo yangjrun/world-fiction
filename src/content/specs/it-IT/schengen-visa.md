@@ -3,8 +3,8 @@ country: schengen
 countryName: Area Schengen
 document: visa
 documentName: foto per visto Schengen
-title: "Foto per visto Schengen: misure e requisiti (35x45 mm)"
-description: Crea nel browser una foto per visto Schengen di 35x45 mm conforme ai requisiti. Viso al 70-80% dell’altezza, sfondo chiaro e un foglio stampabile.
+title: "Foto per visto Schengen gratis online: 35x45 mm"
+description: Crea gratis online una foto per visto Schengen di 35x45 mm. Viso al 70-80% dell’altezza, sfondo chiaro e foglio stampabile. Tutto nel tuo browser, nessun upload.
 output:
   kind: physical
   widthMm: 35

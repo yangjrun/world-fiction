@@ -3,8 +3,8 @@ country: us
 countryName: Stati Uniti
 document: passport
 documentName: foto per passaporto statunitense
-title: "Foto per passaporto USA: misure e requisiti (2x2 pollici)"
-description: Crea nel browser una foto per passaporto statunitense di 2x2 pollici conforme ai requisiti. Altezza della testa, linea degli occhi e sfondo bianco corretti.
+title: "Foto per passaporto statunitense gratis online: 2x2 in"
+description: Crea gratis online una foto per passaporto statunitense di 2x2 in. Testa, occhi e sfondo bianco corretti, più un foglio 4x6. Tutto nel tuo browser, nessun upload.
 output:
   kind: physical
   widthMm: 50.8

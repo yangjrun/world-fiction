@@ -3,8 +3,8 @@ country: us
 countryName: Verenigde Staten
 document: dv-lottery
 documentName: foto voor de DV-loterij
-title: "DV-loterij: foto-eisen (600x600 px, onder 240 KB)"
-description: Maak in je browser een geldige foto voor de Diversity Visa-loterij. Precies 600x600 pixels, onder de grens van 240 KB, met de juiste stand van hoofd en ogen.
+title: "Gratis foto voor de DV-loterij online: 600x600 px"
+description: Maak gratis online een foto voor de DV-loterij. Precies 600x600 pixels, onder 240 KB, juiste stand van hoofd en ogen. Alles in je browser, niets wordt geüpload.
 output:
   kind: digital
   widthPx: 600

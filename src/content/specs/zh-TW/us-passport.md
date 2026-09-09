@@ -3,8 +3,8 @@ country: us
 countryName: 美國
 document: passport
 documentName: 美國護照相片
-title: 美國護照相片尺寸與規定（2x2 吋）
-description: 在瀏覽器中製作符合規定的 2x2 吋美國護照相片。頭部高度、眼睛位置與白色背景都正確，並產生可列印的 4x6 拼版。相片不會上傳。
+title: 美國護照相片免費線上製作：2x2吋尺寸與規定
+description: 免費線上製作符合規定的2x2吋美國護照相片。自動校正頭部高度、眼睛位置與純白背景，並提供可列印的4x6拼版。相片不會上傳到任何地方。
 output:
   kind: physical
   widthMm: 50.8

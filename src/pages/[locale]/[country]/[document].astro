@@ -7,13 +7,14 @@ import { getVerifiedSpecPages, type SpecPage } from '@/lib/specs';
 import { locales, type Locale } from '@/i18n/config';
 import { getTranslations, useTranslations } from '@/i18n/ui';
 import { localesWithDocument } from '@/lib/specs-locale';
+import { relatedDocuments } from '@/lib/related-specs';
+import { createSpecLabels } from '@/lib/spec-labels';
 
 export async function getStaticPaths() {
   // Each locale is asked for its own verified specs, in parallel. A locale with
   // no content bundle yet contributes no paths rather than borrowing English
   // ones: a page whose `lang` claims de-DE over an English body is worse for a
-  // reader, and for search, than no page at all. Today that means en-US alone —
-  // the other ten start emitting pages as their spec bundles land.
+  // reader, and for search, than no page at all.
   const perLocale = await Promise.all(
     locales.map(async (locale) => ({ locale, pages: await getVerifiedSpecPages(locale) })),
   );
@@ -37,6 +38,14 @@ export async function getStaticPaths() {
         page,
         locale,
         availableLocales: localesWithDocument(published, page.entry.data),
+        // Related targets are resolved against this locale's own published
+        // pages, so a link can never point at a URL the build did not write.
+        relatedPages: relatedDocuments(page.entry.data).flatMap((id) => {
+          const target = pages.find(
+            (p) => p.entry.data.country === id.country && p.entry.data.document === id.document,
+          );
+          return target === undefined ? [] : [target];
+        }),
       },
     })),
   );
@@ -48,17 +57,27 @@ export interface Props {
   locale: Locale;
   /**
    * Locales with a verified spec for this same country and document, which is
-   * the hreflang set the layout may advertise. Today: en-US and nothing else.
+   * the hreflang set the layout may advertise.
    */
   availableLocales: readonly Locale[];
+  /**
+   * Other spec pages this page links to, resolved against this locale's own
+   * publications: a target this locale does not publish is simply not listed.
+   */
+  relatedPages: readonly SpecPage[];
 }
 
-const { page, locale, availableLocales } = Astro.props;
+const { page, locale, availableLocales, relatedPages } = Astro.props;
 const { entry, spec } = page;
 const { Content } = await render(entry);
 
 const t = useTranslations(locale);
 await t.load();
+
+// The size on a related card and the size row of the spec table are the same
+// measurement written twice, so both are derived from this one locale-aware
+// formatter. See src/lib/spec-labels.ts.
+const labels = createSpecLabels(locale, t.t);
 
 // Serialize only the editor's copy so SSR and hydration use the same language.
 const editorMessages = Object.fromEntries(
@@ -101,6 +120,25 @@ const appSchema = {
   operatingSystem: 'Any',
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 };
+
+// Mirrors the visible breadcrumb — {nav.home} linking to /{locale}, then the
+// country name as plain text — so a crawler can correlate schema and markup.
+// The last item is the current page and carries no `item`, which also means
+// this block can never disagree with the canonical URL buildAlternates computes.
+const origin = Astro.site ?? Astro.url.origin;
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: t.t('nav.home'),
+      item: new URL(`/${locale}`, origin).href,
+    },
+    { '@type': 'ListItem', position: 2, name: entry.data.countryName },
+  ],
+};
 ---
 
 <BaseLayout
@@ -108,7 +146,7 @@ const appSchema = {
   availableLocales={availableLocales}
   title={entry.data.title}
   description={entry.data.description}
-  structuredData={[appSchema, ...(faqSchema ? [faqSchema] : [])]}
+  structuredData={[appSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}
 >
   <nav aria-label={t.t('aria.breadcrumb')} class="mb-4 text-sm text-ink-400">
     <a class="hover:text-brand-700" href={`/${locale}`}>{t.t('nav.home')}</a>
@@ -175,6 +213,30 @@ const appSchema = {
             </div>
           ))}
         </dl>
+      </section>
+    )
+  }
+
+  {
+    relatedPages.length > 0 && (
+      <section class="mt-12" aria-labelledby="related">
+        <h2 id="related" class="text-xl font-semibold text-ink-900">
+          {t.t('related.heading')}
+        </h2>
+        <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+          {relatedPages.map(({ entry, spec, href }) => (
+            <li>
+              <a
+                href={href}
+                class="block h-full rounded-xl border border-ink-200 p-5 transition-colors hover:border-brand-500 hover:bg-brand-50"
+              >
+                <span class="block font-medium text-ink-900">{entry.data.documentName}</span>
+                <span class="mt-1 block text-sm text-ink-600">{entry.data.countryName}</span>
+                <span class="mt-3 block text-sm text-ink-400">{labels.size(spec)}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
     )
   }

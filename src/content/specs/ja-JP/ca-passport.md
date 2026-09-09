@@ -3,8 +3,8 @@ country: ca
 countryName: カナダ
 document: passport
 documentName: カナダのパスポート写真
-title: カナダのパスポート写真のサイズと要件（50x70 mm）
-description: 規格に適合した 50x70 ミリのカナダ用パスポート写真をブラウザで作成。顔の高さ 31〜36 ミリ、白背景を正しく整え、印刷用シートも出力します。アップロードはありません。
+title: カナダのパスポート写真を無料でオンライン作成｜50x70mmのサイズと要件
+description: 50x70mmのカナダ用パスポート写真をブラウザ上で無料作成。顔の高さ31〜36mm、白背景を自動で整え、印刷用シートも出力します。写真はどこにもアップロードされません。
 output:
   kind: physical
   widthMm: 50

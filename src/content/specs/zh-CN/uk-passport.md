@@ -3,8 +3,8 @@ country: uk
 countryName: 英国
 document: passport
 documentName: 英国护照照片
-title: 英国护照照片尺寸与要求（35x45 毫米）
-description: 在浏览器中制作符合规定的 35x45 毫米英国护照照片。头部高度 29–34 毫米、浅色纯背景都正确，并生成可打印的拼版。照片不会上传到任何地方。
+title: 英国护照照片免费在线制作：35x45毫米尺寸与要求
+description: 免费在线制作符合要求的35x45毫米英国护照照片。自动校正29–34毫米头部高度和浅色纯色背景，并提供可打印拼版。照片不会上传到任何地方。
 output:
   kind: physical
   widthMm: 35

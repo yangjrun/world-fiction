@@ -3,8 +3,8 @@ country: uk
 countryName: Reino Unido
 document: passport
 documentName: fotografia de passaporte britânico
-title: "Fotografia de passaporte britânico: tamanho e requisitos (35x45 mm)"
-description: Crie no seu navegador uma fotografia de passaporte britânico de 35x45 mm conforme os requisitos. Altura da cabeça de 29 a 34 mm, fundo claro e uma folha imprimível.
+title: "Fotografia de passaporte britânico grátis online: 35x45 mm"
+description: Crie grátis online uma fotografia de passaporte britânico de 35x45 mm. Altura da cabeça 29-34 mm, fundo claro e folha imprimível. Tudo no navegador, nada é enviado.
 output:
   kind: physical
   widthMm: 35

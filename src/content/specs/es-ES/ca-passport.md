@@ -3,8 +3,8 @@ country: ca
 countryName: Canadá
 document: passport
 documentName: foto de pasaporte canadiense
-title: "Foto de pasaporte canadiense: tamaño y requisitos (50x70 mm)"
-description: Crea en tu navegador una foto de pasaporte canadiense de 50x70 mm que cumpla los requisitos. Altura de cara de 31 a 36 mm, fondo blanco y una hoja imprimible.
+title: "Foto de pasaporte canadiense gratis online: 50x70 mm"
+description: "Crea gratis online una foto de pasaporte canadiense de 50x70 mm. Altura de cara de 31 a 36 mm, fondo blanco y hoja imprimible. Todo en tu navegador: no se sube nada."
 output:
   kind: physical
   widthMm: 50

@@ -3,8 +3,8 @@ country: us
 countryName: Vereinigte Staaten
 document: dv-lottery
 documentName: Foto für die DV-Lotterie
-title: "DV-Lotterie: Fotovorgaben (600x600 px, unter 240 KB)"
-description: Erstellen Sie ein regelkonformes Foto für die Diversity-Visa-Lotterie im Browser. Genau 600x600 Pixel, unter der Grenze von 240 KB, mit korrekter Kopf- und Augenposition.
+title: "DV-Lotteriefoto gratis online: 600x600 px, unter 240 KB"
+description: "Gratis DV-Lotteriefoto online: genau 600x600 px, unter 240 KB, weißer Hintergrund, Kopf- und Augenposition korrekt. Läuft komplett im Browser – nichts wird hochgeladen."
 output:
   kind: digital
   widthPx: 600

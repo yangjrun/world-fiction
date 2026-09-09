@@ -3,8 +3,8 @@ country: uk
 countryName: Reino Unido
 document: passport
 documentName: foto de pasaporte británico
-title: "Foto de pasaporte británico: tamaño y requisitos (35x45 mm)"
-description: Crea en tu navegador una foto de pasaporte británico de 35x45 mm que cumpla los requisitos. Altura de cabeza de 29 a 34 mm, fondo claro liso y una hoja imprimible.
+title: "Foto de pasaporte UK gratis online: 35x45 mm y requisitos"
+description: "Crea gratis online una foto de pasaporte UK de 35x45 mm. Altura de cabeza de 29 a 34 mm, fondo claro y hoja imprimible. Todo en tu navegador: no se sube nada."
 output:
   kind: physical
   widthMm: 35

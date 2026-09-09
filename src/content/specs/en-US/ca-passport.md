@@ -3,8 +3,8 @@ country: ca
 countryName: Canada
 document: passport
 documentName: Canadian passport photo
-title: Canadian Passport Photo Size and Requirements (50x70 mm)
-description: Create a compliant 50x70 mm Canadian passport photo in your browser. Correct 31-36 mm face height, white background and a printable sheet. Nothing is uploaded.
+title: Free Online Canadian Passport Photo — 50x70 mm Requirements
+description: Free 50x70 mm Canadian passport photo maker. Correct 31-36 mm face height, white background and a printable sheet. Works in your browser — nothing is uploaded.
 output:
   kind: physical
   widthMm: 50
