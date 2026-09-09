@@ -3,8 +3,8 @@ country: schengen
 countryName: Espace Schengen
 document: visa
 documentName: photo de visa Schengen
-title: "Photo de visa Schengen : taille et normes (35x45 mm)"
-description: Créez une photo de visa Schengen conforme de 35x45 mm dans votre navigateur. Visage occupant 70 à 80% de la hauteur, fond clair et une planche imprimable.
+title: "Photo de visa Schengen gratuite en ligne : 35x45 mm"
+description: Créez gratuitement une photo de visa Schengen de 35x45 mm. Visage à 70-80% de la hauteur, fond clair et planche imprimable. Tout dans votre navigateur, rien n'est envoyé.
 output:
   kind: physical
   widthMm: 35

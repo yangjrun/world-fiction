@@ -3,8 +3,8 @@ country: us
 countryName: 美國
 document: dv-lottery
 documentName: DV 抽籤相片
-title: DV 抽籤相片規定（600x600 像素，240KB 以內）
-description: 在瀏覽器中製作符合規定的多元化簽證抽籤相片。正好 600x600 像素、壓在 240KB 限制以內，頭部與眼睛位置都正確。相片不會上傳。
+title: DV抽籤相片免費線上製作：600x600像素，240KB以內
+description: 免費線上製作符合規定的DV抽籤相片。精確輸出600x600像素、控制在240KB以內，頭部與眼睛位置自動校正。相片不會上傳到任何地方。
 output:
   kind: digital
   widthPx: 600

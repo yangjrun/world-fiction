@@ -3,8 +3,8 @@ country: ca
 countryName: Canada
 document: passport
 documentName: Canadese pasfoto
-title: "Canadese pasfoto: formaat en eisen (50x70 mm)"
-description: Maak in je browser een Canadese pasfoto van 50x70 mm die aan de eisen voldoet. Juiste gezichtshoogte van 31 tot 36 mm, witte achtergrond en een printbaar vel.
+title: "Gratis Canadese pasfoto online: 50x70 mm en eisen"
+description: Maak gratis online een Canadese pasfoto van 50x70 mm. Juiste gezichtshoogte 31-36 mm, witte achtergrond en printbaar vel. Alles in je browser, niets wordt geüpload.
 output:
   kind: physical
   widthMm: 50

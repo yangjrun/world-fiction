@@ -3,8 +3,8 @@ country: ca
 countryName: 加拿大
 document: passport
 documentName: 加拿大護照相片
-title: 加拿大護照相片尺寸與規定（50x70 公釐）
-description: 在瀏覽器中製作符合規定的 50x70 公釐加拿大護照相片。臉部高度 31–36 公釐、純白背景都正確，並產生可列印的拼版。相片不會上傳。
+title: 加拿大護照相片免費線上製作：50x70公釐尺寸與規定
+description: 免費線上製作符合規定的50x70公釐加拿大護照相片。自動校正31–36公釐臉部高度與純白背景，並提供可列印拼版。相片不會上傳到任何地方。
 output:
   kind: physical
   widthMm: 50

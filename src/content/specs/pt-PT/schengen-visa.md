@@ -3,8 +3,8 @@ country: schengen
 countryName: Espaço Schengen
 document: visa
 documentName: fotografia de visto Schengen
-title: "Fotografia de visto Schengen: tamanho e requisitos (35x45 mm)"
-description: Crie no seu navegador uma fotografia de visto Schengen de 35x45 mm conforme os requisitos. Rosto a 70-80% da altura, fundo claro e uma folha imprimível.
+title: "Fotografia de visto Schengen grátis online: 35x45 mm"
+description: Crie grátis online uma fotografia de visto Schengen de 35x45 mm. Rosto a 70-80% da altura, fundo claro e folha imprimível. Tudo no navegador, nada é enviado.
 output:
   kind: physical
   widthMm: 35

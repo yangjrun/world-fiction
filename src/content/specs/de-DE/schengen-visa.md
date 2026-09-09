@@ -3,8 +3,8 @@ country: schengen
 countryName: Schengen-Raum
 document: visa
 documentName: Schengen-Visumfoto
-title: "Schengen-Visumfoto: Größe und Vorgaben (35x45 mm)"
-description: Erstellen Sie ein regelkonformes Schengen-Visumfoto in 35x45 mm im Browser. Korrekte Gesichtshöhe von 70-80%, heller Hintergrund und ein druckfertiger Bogen.
+title: "Schengen-Visumfoto online gratis: 35x45 mm und Vorgaben"
+description: "Gratis Schengen-Visumfoto online: 35x45 mm, Gesichtshöhe von 70-80%, heller Hintergrund und ein Druckbogen. Läuft komplett im Browser – nichts wird hochgeladen."
 output:
   kind: physical
   widthMm: 35

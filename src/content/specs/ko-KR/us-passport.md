@@ -3,8 +3,8 @@ country: us
 countryName: 미국
 document: passport
 documentName: 미국 여권 사진
-title: 미국 여권 사진 규격과 요구 사항 (2x2인치)
-description: 규정에 맞는 2x2인치 미국 여권 사진을 브라우저에서 만드세요. 머리 높이, 눈높이, 흰 배경을 정확히 맞추고 인쇄용 4x6 시트까지 제공합니다. 업로드는 없습니다.
+title: "미국 여권 사진 무료 온라인 제작: 2x2인치 규격 및 요건"
+description: 브라우저에서 무료로 2x2인치 미국 여권 사진을 만드세요. 머리 높이, 눈높이, 흰 배경을 자동으로 맞추고 인쇄용 4x6 시트도 제공합니다. 사진은 어디에도 업로드되지 않습니다.
 output:
   kind: physical
   widthMm: 50.8

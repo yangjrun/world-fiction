@@ -3,8 +3,8 @@ country: us
 countryName: 美国
 document: passport
 documentName: 美国护照照片
-title: 美国护照照片尺寸与要求（2x2 英寸）
-description: 在浏览器中制作符合规定的 2x2 英寸美国护照照片。头部高度、眼睛位置和白色背景都正确，并生成可打印的 4x6 拼版。照片不会上传。
+title: 美国护照照片免费在线制作：2x2英寸尺寸与要求
+description: 免费在线制作符合要求的2x2英寸美国护照照片。自动校正头部高度、眼睛位置和纯白背景，并提供可打印的4x6拼版。照片不会上传到任何地方。
 output:
   kind: physical
   widthMm: 50.8

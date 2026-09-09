@@ -3,8 +3,8 @@ country: us
 countryName: 미국
 document: dv-lottery
 documentName: DV 추첨 사진
-title: DV 추첨 사진 요구 사항 (600x600픽셀, 240KB 이하)
-description: 규정에 맞는 다양성 비자 추첨 사진을 브라우저에서 만드세요. 정확히 600x600픽셀, 240KB 한도 안, 머리와 눈 위치까지 정확합니다. 업로드는 없습니다.
+title: "DV 추첨 사진 무료 온라인 제작: 600x600픽셀, 240KB 이하"
+description: 브라우저에서 무료로 DV 추첨 사진을 만드세요. 정확히 600x600픽셀, 240KB 한도 안, 머리와 눈 위치까지 자동으로 맞춥니다. 사진은 어디에도 업로드되지 않습니다.
 output:
   kind: digital
   widthPx: 600

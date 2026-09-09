@@ -3,8 +3,8 @@ country: uk
 countryName: Regno Unito
 document: passport
 documentName: foto per passaporto britannico
-title: "Foto per passaporto britannico: misure e requisiti (35x45 mm)"
-description: Crea nel browser una foto per passaporto britannico di 35x45 mm conforme ai requisiti. Altezza della testa da 29 a 34 mm, sfondo chiaro e un foglio stampabile.
+title: "Foto per passaporto UK gratis online: 35x45 mm e requisiti"
+description: Crea gratis online una foto per passaporto UK di 35x45 mm. Altezza della testa da 29 a 34 mm, sfondo chiaro e foglio stampabile. Tutto nel tuo browser, nessun upload.
 output:
   kind: physical
   widthMm: 35

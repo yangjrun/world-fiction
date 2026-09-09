@@ -3,8 +3,8 @@ country: ca
 countryName: Kanada
 document: passport
 documentName: kanadisches Passfoto
-title: "Kanadisches Passfoto: Größe und Vorgaben (50x70 mm)"
-description: Erstellen Sie ein regelkonformes kanadisches Passfoto in 50x70 mm im Browser. Korrekte Gesichtshöhe von 31-36 mm, weißer Hintergrund und ein druckfertiger Bogen.
+title: "Kanadisches Passfoto online gratis: 50x70 mm und Vorgaben"
+description: "Gratis kanadisches Passfoto online: 50x70 mm, Gesichtshöhe von 31-36 mm, weißer Hintergrund und ein Druckbogen. Läuft komplett im Browser – nichts wird hochgeladen."
 output:
   kind: physical
   widthMm: 50

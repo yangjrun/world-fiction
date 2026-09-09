@@ -3,8 +3,8 @@ country: us
 countryName: アメリカ
 document: dv-lottery
 documentName: DV 抽選の写真
-title: DV 抽選の写真要件（600x600 ピクセル、240KB 以下）
-description: 規格に適合した多様性移民ビザ抽選用の写真をブラウザで作成。ちょうど 600x600 ピクセル、240KB の上限内、頭と目の位置も正確に整えます。アップロードはありません。
+title: DV抽選写真を無料でオンライン作成｜600x600ピクセル・240KB以下
+description: DV抽選用の写真をブラウザ上で無料作成。ちょうど600x600ピクセル、240KB以下、頭と目の位置も自動で整えます。写真はどこにもアップロードされません。
 output:
   kind: digital
   widthPx: 600

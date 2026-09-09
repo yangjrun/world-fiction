@@ -3,8 +3,8 @@ country: uk
 countryName: Vereinigtes Königreich
 document: passport
 documentName: britisches Passfoto
-title: "Britisches Passfoto: Größe und Vorgaben (35x45 mm)"
-description: Erstellen Sie ein regelkonformes britisches Passfoto in 35x45 mm im Browser. Korrekte Kopfhöhe von 29-34 mm, heller Hintergrund und ein druckfertiger Bogen.
+title: "Britisches Passfoto online gratis: 35x45 mm und Vorgaben"
+description: "Gratis britisches Passfoto online: 35x45 mm, Kopfhöhe von 29-34 mm, heller Hintergrund und ein Druckbogen. Läuft komplett im Browser – nichts wird hochgeladen."
 output:
   kind: physical
   widthMm: 35

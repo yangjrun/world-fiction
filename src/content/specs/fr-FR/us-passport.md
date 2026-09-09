@@ -3,8 +3,8 @@ country: us
 countryName: États-Unis
 document: passport
 documentName: photo de passeport américain
-title: "Photo de passeport américain : taille et normes (2x2 pouces)"
-description: Créez une photo de passeport américain conforme de 2x2 pouces dans votre navigateur. Hauteur de tête, ligne des yeux et fond blanc corrects, plus une planche 4x6.
+title: "Photo de passeport américain gratuite en ligne : 2x2 in"
+description: Créez gratuitement une photo de passeport américain de 2x2 in. Tête, yeux et fond blanc corrects, plus une planche 4x6. Tout dans votre navigateur, rien n'est envoyé.
 output:
   kind: physical
   widthMm: 50.8

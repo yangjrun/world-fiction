@@ -3,8 +3,8 @@ country: uk
 countryName: 英國
 document: passport
 documentName: 英國護照相片
-title: 英國護照相片尺寸與規定（35x45 公釐）
-description: 在瀏覽器中製作符合規定的 35x45 公釐英國護照相片。頭部高度 29–34 公釐、淺色純背景都正確，並產生可列印的拼版。相片不會上傳到任何地方。
+title: 英國護照相片免費線上製作：35x45公釐尺寸與規定
+description: 免費線上製作符合規定的35x45公釐英國護照相片。自動校正29–34公釐頭部高度與淺色純色背景，並提供可列印拼版。相片不會上傳到任何地方。
 output:
   kind: physical
   widthMm: 35

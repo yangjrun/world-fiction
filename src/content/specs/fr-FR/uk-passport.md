@@ -3,8 +3,8 @@ country: uk
 countryName: Royaume-Uni
 document: passport
 documentName: photo de passeport britannique
-title: "Photo de passeport britannique : taille et normes (35x45 mm)"
-description: Créez une photo de passeport britannique conforme de 35x45 mm dans votre navigateur. Hauteur de tête correcte de 29 à 34 mm, fond clair uni et une planche imprimable.
+title: "Photo passeport UK gratuite en ligne : 35x45 mm, exigences"
+description: Créez gratuitement une photo passeport UK 35x45 mm. Hauteur de tête de 29 à 34 mm, fond clair et planche imprimable. Tout dans votre navigateur, rien n'est envoyé.
 output:
   kind: physical
   widthMm: 35

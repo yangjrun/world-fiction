@@ -3,8 +3,8 @@ country: us
 countryName: United States
 document: passport
 documentName: US passport photo
-title: US Passport Photo Size and Requirements (2x2 in)
-description: Make a compliant 2x2 inch US passport photo in your browser. Correct head height, eye line, white background and a printable 4x6 sheet. Nothing is uploaded.
+title: Free Online US Passport Photo — 2x2 in Requirements
+description: Free 2x2 in US passport photo maker. Correct head height, eye line, white background and a printable 4x6 sheet. Works in your browser — nothing is uploaded.
 output:
   kind: physical
   widthMm: 50.8

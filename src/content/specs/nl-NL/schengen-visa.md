@@ -3,8 +3,8 @@ country: schengen
 countryName: Schengengebied
 document: visa
 documentName: Schengenvisumfoto
-title: "Schengenvisumfoto: formaat en eisen (35x45 mm)"
-description: Maak in je browser een Schengenvisumfoto van 35x45 mm die aan de eisen voldoet. Gezicht op 70-80% van de hoogte, lichte achtergrond en een printbaar vel.
+title: "Gratis Schengenvisumfoto online: 35x45 mm en eisen"
+description: Maak gratis online een Schengenvisumfoto van 35x45 mm. Gezicht op 70-80% van de hoogte, lichte achtergrond en printbaar vel. Alles in je browser, niets wordt geüpload.
 output:
   kind: physical
   widthMm: 35

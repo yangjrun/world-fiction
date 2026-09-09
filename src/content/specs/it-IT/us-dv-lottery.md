@@ -3,8 +3,8 @@ country: us
 countryName: Stati Uniti
 document: dv-lottery
 documentName: foto per la lotteria DV
-title: "Lotteria DV: requisiti della foto (600x600 px, sotto 240 KB)"
-description: Crea nel browser una foto conforme per la lotteria dei visti per la diversità. Esattamente 600x600 pixel, sotto il limite di 240 KB, con testa e occhi in posizione.
+title: "Foto per la lotteria DV gratis online: 600x600 px"
+description: Crea gratis online una foto conforme per la lotteria DV. Esattamente 600x600 pixel, sotto 240 KB, con testa e occhi in posizione. Tutto nel tuo browser, nessun upload.
 output:
   kind: digital
   widthPx: 600

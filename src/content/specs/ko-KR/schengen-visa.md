@@ -3,8 +3,8 @@ country: schengen
 countryName: 솅겐 지역
 document: visa
 documentName: 솅겐 비자 사진
-title: 솅겐 비자 사진 규격과 요구 사항 (35x45mm)
-description: 규정에 맞는 35x45밀리미터 솅겐 비자 사진을 브라우저에서 만드세요. 얼굴이 높이의 70~80%를 차지하도록 맞추고 밝은 배경과 인쇄용 시트도 제공합니다. 사진은 기기를 떠나지 않습니다.
+title: "솅겐 비자 사진 무료 온라인 제작: 35x45mm 규격 및 요건"
+description: 브라우저에서 무료로 35x45mm 솅겐 비자 사진을 만드세요. 얼굴이 높이의 70~80%를 차지하도록 자동으로 맞추고 밝은 배경과 인쇄용 시트도 제공합니다. 사진은 어디에도 업로드되지 않습니다.
 output:
   kind: physical
   widthMm: 35

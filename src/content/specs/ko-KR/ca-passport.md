@@ -3,8 +3,8 @@ country: ca
 countryName: 캐나다
 document: passport
 documentName: 캐나다 여권 사진
-title: 캐나다 여권 사진 규격과 요구 사항 (50x70mm)
-description: 규정에 맞는 50x70밀리미터 캐나다 여권 사진을 브라우저에서 만드세요. 얼굴 높이 31~36밀리미터와 흰 배경을 정확히 맞추고 인쇄용 시트도 제공합니다. 업로드는 없습니다.
+title: "캐나다 여권 사진 무료 온라인 제작: 50x70mm 규격 및 요건"
+description: 브라우저에서 무료로 50x70mm 캐나다 여권 사진을 만드세요. 얼굴 높이 31~36mm와 흰 배경을 자동으로 맞추고 인쇄용 시트도 제공합니다. 사진은 어디에도 업로드되지 않습니다.
 output:
   kind: physical
   widthMm: 50

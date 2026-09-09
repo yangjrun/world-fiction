@@ -3,8 +3,8 @@ country: us
 countryName: 美国
 document: dv-lottery
 documentName: DV 抽签照片
-title: DV 抽签照片要求（600x600 像素，240KB 以内）
-description: 在浏览器中制作符合规定的多元化签证抽签照片。正好 600x600 像素、压在 240KB 限制以内，头部与眼睛位置都正确。照片不会上传。
+title: DV抽签照片免费在线制作：600x600像素，240KB以内
+description: 免费在线制作符合要求的DV抽签照片。精确输出600x600像素、控制在240KB以内，头部与眼睛位置自动校正。照片不会上传到任何地方。
 output:
   kind: digital
   widthPx: 600

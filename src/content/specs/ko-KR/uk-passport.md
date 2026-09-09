@@ -3,8 +3,8 @@ country: uk
 countryName: 영국
 document: passport
 documentName: 영국 여권 사진
-title: 영국 여권 사진 규격과 요구 사항 (35x45mm)
-description: 규정에 맞는 35x45밀리미터 영국 여권 사진을 브라우저에서 만드세요. 머리 높이 29~34밀리미터와 밝은 단색 배경을 정확히 맞추고 인쇄용 시트도 제공합니다. 어디에도 업로드하지 않습니다.
+title: "영국 여권 사진 무료 온라인 제작: 35x45mm 규격 및 요건"
+description: 브라우저에서 무료로 35x45mm 영국 여권 사진을 만드세요. 머리 높이 29~34mm와 밝은 무지 배경을 자동으로 맞추고 인쇄용 시트도 제공합니다. 사진은 어디에도 업로드되지 않습니다.
 output:
   kind: physical
   widthMm: 35

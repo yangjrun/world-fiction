@@ -3,8 +3,8 @@ country: us
 countryName: Vereinigte Staaten
 document: passport
 documentName: US-Passfoto
-title: "US-Passfoto: Größe und Vorgaben (2x2 Zoll)"
-description: Erstellen Sie ein regelkonformes 2x2-Zoll-Passfoto für die USA im Browser. Korrekte Kopfhöhe, Augenlinie und weißer Hintergrund, plus druckfertiger 4x6-Bogen.
+title: "US-Passfoto online gratis: 2x2 Zoll und Vorgaben"
+description: "Gratis US-Passfoto online: 2x2 Zoll, Kopfhöhe und Augenlinie korrekt, weißer Hintergrund, plus 4x6-Bogen. Läuft komplett im Browser – nichts wird hochgeladen."
 output:
   kind: physical
   widthMm: 50.8

@@ -3,8 +3,8 @@ country: schengen
 countryName: 申根區
 document: visa
 documentName: 申根簽證相片
-title: 申根簽證相片尺寸與規定（35x45 公釐）
-description: 在瀏覽器中製作符合規定的 35x45 公釐申根簽證相片。臉部占高度 70–80%、淺色背景都正確，並產生可列印的拼版。相片絕不會離開你的裝置。
+title: 申根簽證相片免費線上製作：35x45公釐尺寸與規定
+description: 免費線上製作符合規定的35x45公釐申根簽證相片。自動校正70–80%臉部占比與淺色純色背景，並提供可列印拼版。相片不會上傳到任何地方。
 output:
   kind: physical
   widthMm: 35

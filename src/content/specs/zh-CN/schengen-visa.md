@@ -3,8 +3,8 @@ country: schengen
 countryName: 申根区
 document: visa
 documentName: 申根签证照片
-title: 申根签证照片尺寸与要求（35x45 毫米）
-description: 在浏览器中制作符合规定的 35x45 毫米申根签证照片。面部占高度 70–80%、浅色背景都正确，并生成可打印的拼版。照片绝不会离开你的设备。
+title: 申根签证照片免费在线制作：35x45毫米尺寸与要求
+description: 免费在线制作符合要求的35x45毫米申根签证照片。自动校正70–80%面部占比和浅色纯色背景，并提供可打印拼版。照片不会上传到任何地方。
 output:
   kind: physical
   widthMm: 35

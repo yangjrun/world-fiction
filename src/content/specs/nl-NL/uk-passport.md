@@ -3,8 +3,8 @@ country: uk
 countryName: Verenigd Koninkrijk
 document: passport
 documentName: Britse pasfoto
-title: "Britse pasfoto: formaat en eisen (35x45 mm)"
-description: Maak in je browser een Britse pasfoto van 35x45 mm die aan de eisen voldoet. Juiste hoofdhoogte van 29 tot 34 mm, effen lichte achtergrond en een printbaar vel.
+title: "Gratis Britse pasfoto online: 35x45 mm en eisen"
+description: Maak gratis online een Britse pasfoto van 35x45 mm. Juiste hoofdhoogte 29-34 mm, effen achtergrond en printbaar vel. Alles in je browser, niets wordt geüpload.
 output:
   kind: physical
   widthMm: 35

@@ -3,8 +3,8 @@ country: schengen
 countryName: Schengen Area
 document: visa
 documentName: Schengen visa photo
-title: Schengen Visa Photo Size and Requirements (35x45 mm)
-description: Create a compliant 35x45 mm Schengen visa photo in your browser. Correct 70-80% face height, light background and a printable sheet. Your photo never leaves your device.
+title: Free Online Schengen Visa Photo — 35x45 mm Requirements
+description: Free 35x45 mm Schengen visa photo maker. Correct 70-80% face height, light background and a printable sheet. Works in your browser — nothing is uploaded.
 output:
   kind: physical
   widthMm: 35

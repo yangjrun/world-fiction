@@ -3,8 +3,8 @@ country: us
 countryName: Verenigde Staten
 document: passport
 documentName: Amerikaanse pasfoto
-title: "Amerikaanse pasfoto: formaat en eisen (2x2 inch)"
-description: Maak in je browser een Amerikaanse pasfoto van 2x2 inch die aan de eisen voldoet. Juiste hoofdhoogte, ooglijn en witte achtergrond, plus een printbaar 4x6-vel.
+title: "Gratis Amerikaanse pasfoto online: 2x2 inch en eisen"
+description: Maak gratis online een Amerikaanse pasfoto van 2x2 inch. Hoofdhoogte, ooglijn en witte achtergrond, plus printbaar 4x6-vel. Alles in je browser, niets wordt geüpload.
 output:
   kind: physical
   widthMm: 50.8
