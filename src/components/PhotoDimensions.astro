@@ -1,0 +1,119 @@
+---
+import type { Locale } from '@/i18n/config';
+import type { PhotoSpec } from '@/lib/photo/types';
+import { createSpecLabels } from '@/lib/spec-labels';
+import { useTranslations } from '@/i18n/ui';
+import { photoGuide } from '@/i18n/photo-guide';
+
+interface Props { spec: PhotoSpec; locale: Locale }
+const { spec, locale } = Astro.props;
+const t = useTranslations(locale);
+await t.load();
+const labels = createSpecLabels(locale, t.t);
+const text = await photoGuide(locale);
+const size = spec.output;
+const ratio = size.kind === 'physical' ? size.widthMm / size.heightMm : size.widthPx / size.heightPx;
+const height = 272;
+const width = height * ratio;
+const headHeight = height * (spec.headHeight.minRatio + spec.headHeight.maxRatio) / 2;
+const eye = spec.eyeLine ? height * (1 - (spec.eyeLine.minRatio + spec.eyeLine.maxRatio) / 2) : 0;
+// This schematic illustrates proportions, not measured landmarks on a real photo.
+const crown = spec.eyeLine ? eye - headHeight * 0.43 : (height - headHeight) * 0.26;
+const chin = crown + headHeight;
+const canvasWidth = Math.max(360, width + 104);
+const photoX = (canvasWidth - width) / 2;
+const photoY = 30;
+const center = photoX + width / 2;
+const radius = headHeight * 0.32;
+const eyeY = spec.eyeLine ? eye : crown + headHeight * 0.43;
+const eyeLabel = labels.eyeLine(spec);
+const dimensionItems = [
+  { number: '1', label: t.t('spec.size'), value: labels.sizeWithPixels(spec), tone: 'neutral' },
+  { number: '2', label: t.t('spec.head-height'), value: labels.headHeight(spec), tone: 'brand' },
+  ...(eyeLabel
+    ? [{ number: '3', label: t.t('spec.eye-height'), value: eyeLabel, tone: 'ok' }]
+    : []),
+];
+---
+
+<section class="mt-10" aria-labelledby="photo-dimensions">
+  <h2 id="photo-dimensions" class="text-xl font-semibold text-ink-900">{text.dimensions}</h2>
+  <p class="mt-3 max-w-2xl text-ink-600">{text.dimensionIntro}</p>
+
+  <figure class="mt-6 overflow-hidden rounded-xl border border-ink-200 bg-ink-50">
+    <div class="grid items-center gap-8 p-5 sm:p-7 md:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.1fr)] md:p-8">
+      <div class="flex min-h-88 items-center justify-center rounded-lg border border-ink-200 bg-white p-3 sm:p-5">
+        <svg viewBox={`0 0 ${canvasWidth} 350`} role="img" aria-labelledby="dimension-title dimension-description" class="block w-full max-w-96">
+          <title id="dimension-title">{text.dimensions}: {spec.documentName}</title>
+          <desc id="dimension-description">{labels.sizeWithPixels(spec)}; {t.t('spec.head-height')}: {labels.headHeight(spec)}{eyeLabel ? `; ${t.t('spec.eye-height')}: ${eyeLabel}` : ''}</desc>
+
+          <rect x={photoX} y={photoY} width={width} height={height} rx="2" fill={spec.background.colors[0]} stroke="var(--color-ink-400)" stroke-width="1.5" />
+
+          {spec.eyeLine && (
+            <rect
+              x={photoX + 1}
+              y={photoY + height * (1 - spec.eyeLine.maxRatio)}
+              width={width - 2}
+              height={height * (spec.eyeLine.maxRatio - spec.eyeLine.minRatio)}
+              fill="var(--color-ok-500)"
+              opacity="0.14"
+            />
+          )}
+
+          <svg x={photoX} y={photoY} width={width} height={height} viewBox={`0 0 ${width} ${height}`} overflow="hidden" aria-hidden="true">
+            <path d={`M ${width / 2 - radius * 1.95} ${height} Q ${width / 2 - radius * 1.78} ${chin + 17} ${width / 2} ${chin + 17} Q ${width / 2 + radius * 1.78} ${chin + 17} ${width / 2 + radius * 1.95} ${height}`} fill="var(--color-ink-200)" />
+            <ellipse cx={width / 2} cy={crown + headHeight / 2} rx={radius} ry={headHeight / 2} fill="var(--color-ink-100)" stroke="var(--color-ink-400)" stroke-width="1.25" />
+            <path d={`M ${width / 2 - radius * 0.5} ${eyeY} h 10 M ${width / 2 + radius * 0.5 - 10} ${eyeY} h 10`} stroke="var(--color-ink-600)" stroke-linecap="round" stroke-width="2" />
+          </svg>
+
+          <path d={`M ${photoX} ${photoY + crown} H ${photoX + width} M ${photoX} ${photoY + chin} H ${photoX + width}`} stroke="var(--color-brand-500)" stroke-dasharray="4 4" />
+
+          <path
+            d={`M ${center + radius + 15} ${photoY + crown + 7} V ${photoY + chin - 7} M ${center + radius + 11} ${photoY + crown + 7} l 4 -7 4 7 M ${center + radius + 11} ${photoY + chin - 7} l 4 7 4 -7`}
+            fill="none"
+            stroke="var(--color-brand-600)"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          />
+
+          <path d={`M ${photoX} ${photoY + height + 11} V ${photoY + height + 19} M ${photoX + width} ${photoY + height + 11} V ${photoY + height + 19} M ${photoX + 7} ${photoY + height + 15} H ${photoX + width - 7} M ${photoX + 7} ${photoY + height + 11} l -7 4 7 4 M ${photoX + width - 7} ${photoY + height + 11} l 7 4 -7 4`} fill="none" stroke="var(--color-ink-600)" stroke-linecap="round" stroke-linejoin="round" />
+          <path d={`M ${photoX - 11} ${photoY} H ${photoX - 19} M ${photoX - 11} ${photoY + height} H ${photoX - 19} M ${photoX - 15} ${photoY + 7} V ${photoY + height - 7} M ${photoX - 19} ${photoY + 7} l 4 -7 4 7 M ${photoX - 19} ${photoY + height - 7} l 4 7 4 -7`} fill="none" stroke="var(--color-ink-600)" stroke-linecap="round" stroke-linejoin="round" />
+
+          <g aria-hidden="true">
+            <circle cx={photoX + width - 16} cy={photoY + height - 16} r="11" fill="var(--color-ink-800)" />
+            <text x={photoX + width - 16} y={photoY + height - 12} fill="white" font-size="12" font-weight="700" text-anchor="middle">1</text>
+            <circle cx={center + radius + 15} cy={photoY + crown + headHeight / 2} r="11" fill="var(--color-brand-600)" />
+            <text x={center + radius + 15} y={photoY + crown + headHeight / 2 + 4} fill="white" font-size="12" font-weight="700" text-anchor="middle">2</text>
+            {spec.eyeLine && (
+              <>
+                <circle cx={photoX + 17} cy={photoY + eye} r="11" fill="var(--color-ok-500)" />
+                <text x={photoX + 17} y={photoY + eye + 4} fill="white" font-size="12" font-weight="700" text-anchor="middle">3</text>
+              </>
+            )}
+          </g>
+        </svg>
+      </div>
+
+      <figcaption>
+        <dl class="divide-y divide-ink-200">
+          {dimensionItems.map((item) => (
+            <div class="grid grid-cols-[2rem_1fr] gap-3 py-4 first:pt-0 last:pb-0">
+              <dt class:list={[
+                'flex size-7 items-center justify-center rounded-full text-xs font-bold text-white',
+                item.tone === 'brand' && 'bg-brand-600',
+                item.tone === 'ok' && 'bg-ok-500',
+                item.tone === 'neutral' && 'bg-ink-800',
+              ]}>{item.number}</dt>
+              <dd>
+                <span class="block text-sm font-medium text-ink-600">{item.label}</span>
+                <span class="mt-1 block font-semibold leading-snug text-ink-900">{item.value}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p class="mt-6 border-t border-ink-200 pt-5 text-xs leading-relaxed text-ink-400">{text.limitation}</p>
+      </figcaption>
+    </div>
+  </figure>
+</section>

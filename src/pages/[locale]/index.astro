@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import PhotoExamples from '@/components/PhotoExamples.astro';
 import { getVerifiedSpecPages } from '@/lib/specs';
 import { defaultLocale, isLocale, locales } from '@/i18n/config';
 import { parseEmphasis, parseLinks, type RichTextLink } from '@/i18n/rich-text';
@@ -99,7 +100,9 @@ const emptyState = pages.length === 0 ? parseLinks(t.t('home.empty'), emptyLinks
     )
   }
 
-  <section class="mt-16 max-w-2xl" aria-labelledby="how">
+  <PhotoExamples locale={locale} />
+
+  <section class="mt-12 max-w-2xl" aria-labelledby="how">
     <h2 id="how" class="text-xl font-semibold text-ink-900">{t.t('home.how-heading')}</h2>
     {
       howParagraphs.map((chunks) => (

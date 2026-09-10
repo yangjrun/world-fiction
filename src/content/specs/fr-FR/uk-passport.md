@@ -3,8 +3,9 @@ country: uk
 countryName: Royaume-Uni
 document: passport
 documentName: photo de passeport britannique
-title: "Photo passeport UK gratuite en ligne : 35x45 mm, exigences"
-description: Créez gratuitement une photo passeport UK 35x45 mm. Hauteur de tête de 29 à 34 mm, fond clair et planche imprimable. Tout dans votre navigateur, rien n'est envoyé.
+title: "Photo de passeport UK : règles papier et numériques"
+description: "Règles photo de passeport UK : 35x45 mm sur papier, taille numérique, fond, lunettes et vêtements. Selon les indications du HM Passport Office."
+editorNotice: "Aperçu uniquement : cet outil produit 413 x 531 pixels avec un fond remplacé. GOV.UK exige des photos non modifiées ; ne déposez pas cette image pour un passeport britannique."
 output:
   kind: physical
   widthMm: 35
@@ -20,8 +21,8 @@ background:
     - '#f0f0f0'
 file:
   format: jpeg
-sourceUrl: https://www.gov.uk/photos-for-passports
-sourceCheckedOn: 2026-09-03
+sourceUrl: https://www.gov.uk/photos-for-passports/photo-requirements
+sourceCheckedOn: 2026-09-09
 status: verified
 rejectionReasons:
   - Tête hors de la plage de 29 mm à 34 mm du menton au sommet du crâne
@@ -29,36 +30,47 @@ rejectionReasons:
   - Couvre-chef porté sans motif religieux ou médical
   - Yeux masqués par les cheveux, la monture des lunettes ou un reflet sur les verres
   - Tout autre élément visible dans le cadre, y compris une deuxième personne ou un dossier de chaise
-  - Photo prise plus d’un mois avant la demande, si votre apparence a changé
+  - Photo prise plus d’un mois avant la demande, même si votre apparence n’a pas changé
+  - Photo modifiée par logiciel, y compris par remplacement du fond
 faq:
   - q: Quelle est la taille d’une photo de passeport britannique ?
-    a: 35 mm de large sur 45 mm de haut. À 300 DPI cela fait 413 x 531 pixels.
+    a: Les photos imprimées mesurent 35 mm de large sur 45 mm de haut. À 300 DPI, cela correspond à 413 x 531 pixels. Les photos numériques ont leurs propres règles et exigent au moins 600 x 750 pixels.
   - q: Quelle hauteur ma tête doit-elle avoir sur la photo ?
     a: Entre 29 mm et 34 mm du bas du menton au sommet du crâne, cheveux compris.
   - q: Puis-je sourire ?
-    a: Non. Le HM Passport Office exige une expression neutre, bouche fermée.
+    a: Les adultes et les enfants à partir de 6 ans doivent avoir une expression neutre, bouche fermée. Les moins de 6 ans ne sont pas obligés de garder une expression neutre ni de regarder l’objectif.
   - q: Puis-je utiliser cette photo pour la demande en ligne ?
-    a: Oui. La voie numérique demande au moins 600 x 750 pixels, et le fichier produit par cet outil dépasse ce minimum.
+    a: Non. La sortie fait 413 x 531 pixels, sous le minimum de 600 x 750, et son fond est remplacé. GOV.UK exige des photos non modifiées et demande de ne pas recadrer soi-même les photos prises avec son appareil pour la demande en ligne.
+  - q: Quels vêtements puis-je porter ?
+    a: Le visage et les yeux doivent rester visibles. Un couvre-chef est permis uniquement pour un motif religieux ou médical. Aucune couleur de chemise n’est imposée ; le contraste avec le fond est un conseil pratique, pas une règle officielle.
+  - q: Puis-je porter des lunettes ?
+    a: Évitez-les sauf si elles sont nécessaires. Pas de lunettes de soleil ni de verres teintés ; monture, reflets et ombres ne doivent pas masquer les yeux.
+  - q: De quand doit dater la photo ?
+    a: Elle doit avoir été prise au cours du dernier mois. Un nouveau passeport nécessite une nouvelle photo même si votre apparence n’a pas changé.
 ---
 
-## Ce que mesure le HM Passport Office
+## Règles pour les photos imprimées
 
-Une photo de passeport britannique mesure 35 mm de large et 45 mm de haut, et la mesure qui compte à l’intérieur est la hauteur de tête : de 29 mm à 34 mm du bas du menton au sommet du crâne, cheveux compris. C’est une fenêtre de 5 mm sur une photo de 45 mm, donc un recadrage qui paraît juste à l’œil ne l’est souvent pas assez.
+Une demande papier exige 2 photos identiques de 35 x 45 mm. La hauteur du menton au sommet du crâne doit être de 29 à 34 mm. Le tableau ci-dessus concerne ce format imprimé.
 
-Notez que cette bande est plus étroite et plus basse que pour le visa Schengen, même si les deux utilisent le même format extérieur de 35 x 45 mm. Une photo faite pour un visa Schengen sera généralement refusée pour un passeport britannique, et l’inverse est vrai aussi. Si vous demandez les deux, faites deux photos.
+Les photos doivent être nettes, en couleur, non modifiées par logiciel et imprimées à un niveau professionnel sur papier photographique blanc sans bordure. Elles doivent dater du dernier mois, même si votre apparence reste la même. Consultez les [règles officielles pour les photos imprimées](https://www.gov.uk/photos-for-passports/photo-requirements).
 
-## Fond et éclairage
+## Photos numériques pour la demande en ligne
 
-L’exigence est un fond uni crème ou gris clair sans ombre. Les ombres sont la deuxième cause d’échec après la taille de la tête, et elles viennent presque toujours d’une position trop proche du mur. Tenez-vous à au moins un demi-mètre du fond et tournez-vous vers une fenêtre plutôt que vers un plafonnier.
+Les [règles officielles pour les photos numériques](https://www.gov.uk/photos-for-passports/rules-for-digital-photos) demandent au moins 600 pixels de large et 750 de haut, pour un fichier de 50 KB à 10 MB. La photo doit être nette, en couleur, non modifiée et prise sur fond uni clair sans ombre.
 
-Cet outil remplace le fond par un remplissage uniforme, ce qui supprime les problèmes d’ombre derrière la tête. Il ne peut pas retirer une ombre projetée sur votre visage : éclairez-vous de face au moment de la prise de vue.
+Avec votre propre appareil, incluez la tête, les épaules et le haut du corps. Ne recadrez pas vous-même : le service de demande s’en charge. Vous pouvez aussi obtenir un code de photo numérique auprès d’un photographe ou d’une cabine.
 
-## Comment cet outil fonctionne
+## Fond, vêtements et lunettes
 
-Chargez une photo. L’outil trouve votre menton, le sommet de votre crâne et votre ligne des yeux, puis calcule le recadrage qui place votre tête à 31,5 mm, le centre de la plage autorisée. Si votre photo manque de marge pour un recadrage conforme, il signale le bord trop court plutôt que de recadrer plus serré et de produire une photo qui échoue.
+Le fond doit être uni crème ou gris clair pour le papier, uni clair pour le numérique. Aucune ombre sur le visage ni derrière vous. Préparez le fond à la prise de vue ; le remplacer par logiciel ne respecte pas la règle de non-modification.
 
-Chaque étape s’exécute localement dans votre navigateur via WebAssembly. Votre photo n’est jamais envoyée.
+Regardez de face, yeux visibles et bouche fermée. Cheveux et vêtements ne doivent pas cacher le visage. Un couvre-chef n’est permis que pour un motif religieux ou médical. Aucune couleur de chemise n’est imposée. Ne portez des lunettes que si nécessaire, sans verres teintés ni obstruction des yeux.
 
-## Imprimer ou faire la demande en ligne
+Les moins de 6 ans n’ont pas besoin d’une expression neutre ni de regarder l’objectif ; les moins de 1 an n’ont pas besoin d’ouvrir les yeux. Les autres règles pour enfants figurent dans la notice officielle.
 
-Pour une demande papier, téléchargez la planche de 4 x 6 pouces, qui contient huit exemplaires d’une photo de 35 x 45 mm, et faites-la imprimer à n’importe quel comptoir photo. Pour la demande en ligne, téléchargez le JPEG unique et envoyez-le directement : il dépasse largement le minimum de 600 x 750 pixels.
+## Aperçu et photo à déposer
+
+L’outil produit 413 x 531 pixels, soit 35 x 45 mm à 300 DPI, et une planche de 4 x 6 pouces. Ces sorties servent à prévisualiser le cadrage et la disposition, pas à déposer une demande de passeport britannique.
+
+Le fond est remplacé, alors que les photos papier et numériques doivent rester non modifiées. L’image individuelle est aussi sous le minimum numérique. Augmenter les DPI ou agrandir l’image ne résout pas la modification. Utilisez un original non modifié conforme à GOV.UK ou passez par un photographe ou une cabine. Les photos ouvertes ici restent sur votre appareil.

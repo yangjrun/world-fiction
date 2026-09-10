@@ -130,11 +130,11 @@ const footerLinks = [
     </a>
 
     <header class="border-b border-ink-200">
-      <div class="mx-auto flex max-w-5xl items-center justify-between gap-6 px-4 py-4">
+      <div class="mx-auto flex max-w-5xl flex-col items-start justify-between gap-3 px-4 py-4 sm:flex-row sm:items-center sm:gap-6">
         <a href={`/${locale}`} class="text-lg font-semibold tracking-tight text-ink-900">
           Passport Photo Maker
         </a>
-        <nav aria-label={t.t('aria.main-nav')} class="flex items-center gap-5">
+        <nav aria-label={t.t('aria.main-nav')} class="flex w-full items-center justify-between gap-5 sm:w-auto">
           <ul class="flex items-center gap-5 text-sm">
             {
               navLinks.map((link) => (

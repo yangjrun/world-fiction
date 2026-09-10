@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "护照与签证照片制作 —— 免费、私密、在浏览器内完成",
-  "home.meta-description": "免费制作符合规定的护照或签证照片。按各国要求校准头部高度、眼睛位置和背景，并生成可打印的 4x6 英寸拼版。照片不会上传。",
-  "home.title": "真正符合要求的护照与签证照片",
-  "home.subtitle": "被退回的照片大多不是裁切出了问题，而是头部尺寸不对。在下面选择一种证件，本工具会测量你的面部、把它放进允许的范围内、替换背景，并生成可打印的拼版。",
+  "home.meta-description": "查看护照与签证照片尺寸、构图及官方要求，在浏览器中预览照片。照片仅在本地处理，不上传服务器。",
+  "home.title": "护照与签证照片要求",
+  "home.subtitle": "比较照片尺寸、头部位置与背景要求。选择证件，查看官方规定，并在自己的设备上预览照片。",
   "home.privacy": "每一步都在你的浏览器内完成。你的照片绝不会被上传、绝不会被存储，除你之外没有任何人看得到。",
   "home.choose": "选择你的证件",
   "home.empty": "目前还没有照片规格被翻译成这种语言。无论用哪种语言阅读，各项尺寸都是一样的，所以{a1}英文版列表{/a1}已经包含了本页将来会有的全部内容。",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName}制作工具",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "照片示例",
+  "examples.forward": "正视镜头",
+  "examples.turned": "视线偏离镜头",
+  "examples.visible": "面部清晰可见",
+  "examples.covered": "面部被遮挡",
+  "examples.intro": "头部端正、双眼可见、光线均匀，是拍摄清晰照片的基础。申请前请核对对应证件的具体规定。",
+  "examples.attribution": "图片仅说明姿态与构图，不可用于提交，也不代表保证通过。示例改编自 GOV.UK。",
+  "examples.dimensions": "尺寸与构图",
+  "examples.dimension-intro": "下图的外框、头部高度范围和眼睛位置依据本证件规格。仅在规定了眼睛高度范围时显示眼位参考线。",
+  "examples.limitation": "自动检查仅覆盖列出的测量项目。表情、光照、拍摄时间及是否允许修图，仍需自行核对。"
 }

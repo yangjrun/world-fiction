@@ -3,8 +3,9 @@ country: uk
 countryName: Regno Unito
 document: passport
 documentName: foto per passaporto britannico
-title: "Foto per passaporto UK gratis online: 35x45 mm e requisiti"
-description: Crea gratis online una foto per passaporto UK di 35x45 mm. Altezza della testa da 29 a 34 mm, sfondo chiaro e foglio stampabile. Tutto nel tuo browser, nessun upload.
+title: "Foto passaporto UK: requisiti cartacei e digitali"
+description: "Requisiti foto passaporto UK: 35x45 mm su carta, dimensioni digitali, sfondo, occhiali e abiti. Secondo le indicazioni dell'HM Passport Office."
+editorNotice: "Solo anteprima: questo strumento produce 413 x 531 pixel con lo sfondo sostituito. GOV.UK richiede foto non modificate; non presentare questa immagine per un passaporto britannico."
 output:
   kind: physical
   widthMm: 35
@@ -20,8 +21,8 @@ background:
     - '#f0f0f0'
 file:
   format: jpeg
-sourceUrl: https://www.gov.uk/photos-for-passports
-sourceCheckedOn: 2026-09-03
+sourceUrl: https://www.gov.uk/photos-for-passports/photo-requirements
+sourceCheckedOn: 2026-09-09
 status: verified
 rejectionReasons:
   - Testa fuori dall’intervallo da 29 mm a 34 mm dal mento alla sommità del capo
@@ -29,36 +30,47 @@ rejectionReasons:
   - Copricapo indossato senza motivo religioso o medico
   - Occhi coperti dai capelli, dalla montatura degli occhiali o da un riflesso sulle lenti
   - Qualunque altra cosa visibile nell’inquadratura, compresa una seconda persona o lo schienale di una sedia
-  - Foto scattata più di un mese prima della domanda, se il tuo aspetto è cambiato
+  - Foto scattata più di un mese prima della domanda, anche se il tuo aspetto non è cambiato
+  - Foto modificata tramite software, inclusa la sostituzione dello sfondo
 faq:
   - q: Che misure ha una foto per passaporto britannico?
-    a: 35 mm di larghezza per 45 mm di altezza. A 300 DPI sono 413 x 531 pixel.
+    a: Le foto stampate misurano 35 mm di larghezza e 45 mm di altezza. A 300 DPI equivalgono a 413 x 531 pixel. Le foto digitali hanno regole proprie e richiedono almeno 600 x 750 pixel.
   - q: Quanto deve essere alta la testa nella foto?
     a: Tra 29 mm e 34 mm dalla base del mento alla sommità del capo, capelli compresi.
   - q: Posso sorridere?
-    a: No. L’HM Passport Office richiede un’espressione neutra con la bocca chiusa.
+    a: Adulti e bambini dai 6 anni devono avere un’espressione neutra con la bocca chiusa. I minori di 6 anni non devono necessariamente avere un’espressione neutra o guardare l’obiettivo.
   - q: Posso usare questa foto per la domanda online?
-    a: Sì. La via digitale richiede almeno 600 x 750 pixel, e il file prodotto da questo strumento supera quel minimo.
+    a: No. L’output è di 413 x 531 pixel, inferiore al minimo di 600 x 750, e sostituisce lo sfondo. GOV.UK richiede foto non modificate e indica di non ritagliare da soli quelle scattate con il proprio dispositivo per la domanda online.
+  - q: Quali vestiti posso indossare?
+    a: Viso e occhi devono restare visibili. I copricapi sono ammessi solo per motivi religiosi o medici. Non è prescritto un colore della camicia; il contrasto con lo sfondo è un consiglio pratico, non una regola ufficiale.
+  - q: Posso portare gli occhiali?
+    a: Evitali salvo necessità. Niente occhiali da sole o lenti colorate; montatura, riflessi e ombre non devono nascondere gli occhi.
+  - q: Quanto deve essere recente la foto?
+    a: Deve essere stata scattata nell’ultimo mese. Un nuovo passaporto richiede una nuova foto anche se il tuo aspetto non è cambiato.
 ---
 
-## Cosa misura l’HM Passport Office
+## Requisiti per le foto stampate
 
-Una foto per passaporto britannico è larga 35 mm e alta 45 mm, e la misura che conta al suo interno è l’altezza della testa: da 29 mm a 34 mm dalla base del mento alla sommità del capo, capelli compresi. È una finestra di 5 mm su una foto di 45 mm, quindi un ritaglio che a occhio sembra vicino spesso non lo è abbastanza.
+La domanda cartacea richiede 2 foto identiche di 35 x 45 mm. L’altezza dal mento alla sommità del capo deve essere da 29 a 34 mm. La tabella sopra riguarda questo formato stampato.
 
-Nota che questa fascia è più stretta e più bassa di quella del visto Schengen, anche se entrambi usano lo stesso formato esterno di 35 x 45 mm. Una foto fatta per un visto Schengen viene di solito respinta per un passaporto britannico, e vale anche il contrario. Se richiedi entrambi, fai due foto.
+Le foto devono essere nitide, a colori, non modificate tramite software e stampate con qualità professionale su carta fotografica bianca senza bordi. Devono risalire all’ultimo mese anche se il tuo aspetto è uguale. Consulta le [regole ufficiali per le foto stampate](https://www.gov.uk/photos-for-passports/photo-requirements).
 
-## Sfondo e illuminazione
+## Foto digitali per la domanda online
 
-Il requisito è uno sfondo uniforme crema o grigio chiaro senza ombre. Le ombre sono la seconda causa di bocciatura dopo la dimensione della testa, e nascono quasi sempre dallo stare troppo vicini a una parete. Mettiti almeno a mezzo metro dallo sfondo e rivolgiti verso una finestra invece che verso una luce a soffitto.
+Le [regole ufficiali per le foto digitali](https://www.gov.uk/photos-for-passports/rules-for-digital-photos) richiedono almeno 600 pixel di larghezza, 750 di altezza e un file tra 50 KB e 10 MB. La foto deve essere nitida, a colori, non modificata e su sfondo uniforme chiaro senza ombre.
 
-Questo strumento sostituisce lo sfondo con un riempimento uniforme, il che elimina i problemi di ombra dietro la testa. Non può rimuovere un’ombra proiettata sul viso, quindi al momento dello scatto illuminati di fronte.
+Con il tuo dispositivo, includi testa, spalle e parte superiore del corpo. Non ritagliare la foto: lo farà il servizio di domanda. Puoi anche ottenere un codice per la foto digitale presso un fotografo o una cabina.
 
-## Come funziona questo strumento
+## Sfondo, abiti e occhiali
 
-Carica una foto. Lo strumento trova mento, sommità del capo e linea degli occhi, poi calcola il ritaglio che porta la testa a 31,5 mm, il centro dell’intervallo consentito. Se alla foto manca il margine per un ritaglio conforme, segnala quale bordo è troppo corto invece di ritagliare più stretto e produrre una foto che non passa.
+Lo sfondo deve essere uniforme crema o grigio chiaro per le stampe, uniforme chiaro per il digitale. Non devono esserci ombre sul viso o dietro di te. Prepara lo sfondo allo scatto; sostituirlo tramite software non rispetta il requisito della foto non modificata.
 
-Ogni passaggio avviene localmente nel tuo browser tramite WebAssembly. La tua foto non viene mai caricata.
+Guarda frontalmente, con occhi visibili e bocca chiusa. Capelli e vestiti non devono coprire il viso. I copricapi sono ammessi solo per motivi religiosi o medici. Non è prescritto un colore della camicia. Porta gli occhiali solo se necessari, senza lenti colorate o ostacoli davanti agli occhi.
 
-## Stampare o fare domanda online
+I minori di 6 anni non devono avere un’espressione neutra o guardare l’obiettivo; i minori di 1 anno non devono tenere gli occhi aperti. Le altre regole per bambini sono nella guida ufficiale.
 
-Per una domanda su carta, scarica il foglio da 4 x 6 pollici, che contiene otto copie di una foto da 35 x 45 mm, e fallo stampare a qualunque banco fotografico. Per la domanda online, scarica il singolo JPEG e caricalo direttamente: supera con ampio margine il minimo di 600 x 750 pixel.
+## Anteprima e foto da presentare
+
+Lo strumento produce 413 x 531 pixel, equivalenti a 35 x 45 mm a 300 DPI, e un foglio di 4 x 6 pollici. Sono anteprime di inquadratura e disposizione, non foto da presentare per un passaporto britannico.
+
+Lo sfondo viene sostituito, mentre le foto cartacee e digitali devono restare non modificate. L’immagine singola è anche inferiore al minimo digitale. Aumentare i DPI o ingrandirla non risolve la modifica. Usa un originale non modificato secondo GOV.UK o rivolgiti a un fotografo o una cabina. Le foto aperte qui rimangono sul tuo dispositivo.

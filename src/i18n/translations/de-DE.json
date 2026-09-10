@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "Pass- und Visumfoto-Generator — kostenlos, privat, im Browser",
-  "home.meta-description": "Kostenlos ein regelkonformes Pass- oder Visumfoto erstellen. Korrekte Kopfhöhe, Augenlinie und Hintergrund je Land, plus druckfertiger 4x6-Bogen. Nichts wird hochgeladen.",
-  "home.title": "Pass- und Visumfotos, die die Vorgaben wirklich erfüllen",
-  "home.subtitle": "Die meisten abgelehnten Fotos scheitern an der Kopfgröße, nicht am Zuschnitt. Wählen Sie unten ein Dokument: Dieses Werkzeug vermisst Ihr Gesicht, setzt es in den erlaubten Bereich, ersetzt den Hintergrund und liefert Ihnen einen druckfertigen Bogen.",
+  "home.meta-description": "Fotoformate und Bildausschnitte für Pass und Visum vergleichen. Offizielle Vorgaben und lokale Vorschau: Ihre Fotos bleiben im Browser.",
+  "home.title": "Pass- und Visafoto: Anforderungen",
+  "home.subtitle": "Vergleichen Sie Fotoformate, Kopfposition und Hintergrund. Wählen Sie Ihr Dokument für die offiziellen Vorgaben und eine lokale Fotovorschau.",
   "home.privacy": "Jeder Schritt läuft in Ihrem Browser. Ihr Foto wird nie hochgeladen, nie gespeichert und von niemandem außer Ihnen gesehen.",
   "home.choose": "Wählen Sie Ihr Dokument",
   "home.empty": "In diese Sprache wurden noch keine Fotovorgaben übersetzt. Die Maße sind in jeder Sprache dieselben, deshalb enthält {a1}die englische Liste{/a1} schon alles, was diese Seite einmal haben wird.",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName}-Generator",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "Fotobeispiele",
+  "examples.forward": "In die Kamera blicken",
+  "examples.turned": "Blick zur Seite",
+  "examples.visible": "Gesicht frei sichtbar",
+  "examples.covered": "Gesicht teilweise verdeckt",
+  "examples.intro": "Ein gerader Kopf, sichtbare Augen und gleichmäßiges Licht sind eine gute Grundlage. Prüfen Sie vor dem Antrag die Vorgaben für Ihr Dokument.",
+  "examples.attribution": "Beispiele für Haltung und Bildausschnitt, nicht zur Einreichung oder als Annahmegarantie. Nach GOV.UK bearbeitet.",
+  "examples.dimensions": "Format und Bildausschnitt",
+  "examples.dimension-intro": "Rahmen, Kopfgröße und Augenposition entsprechen dieser Spezifikation. Augenlinien erscheinen nur bei einem vorgegebenen Bereich.",
+  "examples.limitation": "Automatisch geprüft werden nur die aufgeführten Maße. Ausdruck, Licht, Aufnahmealter und Bearbeitungsregeln müssen Sie selbst prüfen."
 }

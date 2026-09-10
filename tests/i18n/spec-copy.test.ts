@@ -14,13 +14,10 @@ import { isPublished } from '@/lib/specs-locale';
  * Three things are pinned here. Lengths, because a title over ~60 characters
  * truncates in results and a description outside 50-170 is either cut off or
  * spammy — `src/content.config.ts` enforces the hard zod bounds, but the usable
- * range inside them is policy, and policy drifts. The English gold strings,
- * because the click-through pattern they carry — "Free Online" up front, the
- * size a searcher typed, "Requirements" for the money query, and the
- * free / in-your-browser / nothing-uploaded triple in the description — is the
- * one lever this site has against gov.uk results at page-one-bottom, and a
- * reworded title can lose it one edit at a time without any test noticing.
- * The pattern check, because gold strings only pin the five files they name.
+ * range inside them is policy, and policy drifts. The English gold strings
+ * preserve the reviewed copy. The UK page leads with requirements to match its
+ * observed search queries; the other tool pages keep their existing wording.
+ * These checks do not establish which wording gets a higher click-through rate.
  *
  * Unpublished specs are skipped: their copy is not what search can show, and a
  * draft's half-finished title is the author's business, not a release gate.
@@ -40,9 +37,9 @@ const GOLD: Record<string, { title: string; description: string }> = {
       'Free 35x45 mm Schengen visa photo maker. Correct 70-80% face height, light background and a printable sheet. Works in your browser — nothing is uploaded.',
   },
   'uk-passport.md': {
-    title: 'Free Online UK Passport Photo — 35x45 mm Requirements',
+    title: 'UK Passport Photo Requirements: Size & Digital Photo Rules',
     description:
-      'Free 35x45 mm UK passport photo maker. Correct 29-34 mm head height, plain background and a printable sheet. Works in your browser — nothing is uploaded.',
+      'UK passport photo requirements: 35x45 mm prints, digital photo size, background, glasses and clothing rules. Based on HM Passport Office guidance.',
   },
   'us-dv-lottery.md': {
     title: 'Free Online DV Lottery Photo — 600x600 px, Under 240KB',
@@ -113,7 +110,7 @@ describe('a published spec page survives the results page', () => {
       expect(
         title?.length ?? Infinity,
         `${locale}/${name}: title is ${title?.length} characters, over the 60-character ` +
-          `snippet limit — shorten it while keeping the size and the free-online hook.`,
+          `editorial limit — shorten it while keeping the subject clear.`,
       ).toBeLessThanOrEqual(60);
     }
   });
@@ -147,10 +144,9 @@ describe('a published spec page survives the results page', () => {
     }
   });
 
-  it('leads every English title and description with the click-through hook', () => {
-    // The pattern, not the strings: a future spec added to en-US must start from
-    // the same value proposition, not from the pre-fix "Size and Requirements".
+  it('keeps the existing free-tool wording outside the UK requirements page', () => {
     for (const { name } of publishedSpecs().filter(({ locale }) => locale === 'en-US')) {
+      if (name === 'uk-passport.md') continue;
       const frontmatter = frontmatterOf(readFileSync(specPath('en-US', name), 'utf8'));
       expect(
         fieldOf(frontmatter ?? '', 'title')?.startsWith('Free Online ') ?? false,

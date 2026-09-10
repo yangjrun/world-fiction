@@ -3,8 +3,9 @@ country: uk
 countryName: Vereinigtes Königreich
 document: passport
 documentName: britisches Passfoto
-title: "Britisches Passfoto online gratis: 35x45 mm und Vorgaben"
-description: "Gratis britisches Passfoto online: 35x45 mm, Kopfhöhe von 29-34 mm, heller Hintergrund und ein Druckbogen. Läuft komplett im Browser – nichts wird hochgeladen."
+title: "Britisches Passfoto: Vorgaben für Druck und digitale Fotos"
+description: "Britische Passfoto-Vorgaben: 35x45 mm im Druck, digitale Mindestgröße, Hintergrund, Brille und Kleidung. Nach den Hinweisen des HM Passport Office."
+editorNotice: "Nur Vorschau: Dieses Werkzeug liefert 413 x 531 Pixel mit ersetztem Hintergrund. GOV.UK verlangt unveränderte Fotos. Reichen Sie diese Ausgabe nicht für einen britischen Pass ein."
 output:
   kind: physical
   widthMm: 35
@@ -20,8 +21,8 @@ background:
     - '#f0f0f0'
 file:
   format: jpeg
-sourceUrl: https://www.gov.uk/photos-for-passports
-sourceCheckedOn: 2026-09-03
+sourceUrl: https://www.gov.uk/photos-for-passports/photo-requirements
+sourceCheckedOn: 2026-09-09
 status: verified
 rejectionReasons:
   - Kopf außerhalb des Bereichs von 29 mm bis 34 mm vom Kinn zum Scheitel
@@ -29,36 +30,47 @@ rejectionReasons:
   - Kopfbedeckung ohne religiösen oder medizinischen Grund
   - Augen verdeckt von Haaren, Brillenrändern oder einer Blendung auf den Gläsern
   - Alles andere im Bild, auch eine zweite Person oder eine Stuhllehne
-  - Foto mehr als einen Monat vor dem Antrag aufgenommen, wenn sich Ihr Aussehen geändert hat
+  - Foto mehr als einen Monat vor dem Antrag aufgenommen, auch bei unverändertem Aussehen
+  - Foto durch Software verändert, auch durch Ersetzen des Hintergrunds
 faq:
   - q: Welche Größe hat ein britisches Passfoto?
-    a: 35 mm breit und 45 mm hoch. Bei 300 DPI sind das 413 x 531 Pixel.
+    a: Gedruckte Fotos sind 35 mm breit und 45 mm hoch. Bei 300 DPI entspricht das 413 x 531 Pixeln. Digitale Fotos haben eigene Vorgaben und benötigen mindestens 600 x 750 Pixel.
   - q: Wie hoch muss mein Kopf auf dem Foto sein?
     a: Zwischen 29 mm und 34 mm von der Kinnunterkante bis zum Scheitel, Haare eingeschlossen.
   - q: Darf ich lächeln?
-    a: Nein. Das HM Passport Office verlangt einen neutralen Ausdruck mit geschlossenem Mund.
+    a: Erwachsene und Kinder ab 6 Jahren brauchen einen neutralen Ausdruck mit geschlossenem Mund. Kinder unter 6 müssen weder neutral schauen noch direkt in die Kamera blicken.
   - q: Kann ich dieses Foto für den Online-Antrag nutzen?
-    a: Ja. Der digitale Weg braucht mindestens 600 x 750 Pixel, und die Datei aus diesem Werkzeug liegt darüber.
+    a: Nein. Die Ausgabe hat 413 x 531 Pixel, weniger als die geforderten 600 x 750 Pixel, und einen ersetzten Hintergrund. GOV.UK verlangt unveränderte Fotos und weist an, selbst aufgenommene Fotos für den Online-Antrag nicht selbst zuzuschneiden.
+  - q: Welche Kleidung ist erlaubt?
+    a: Gesicht und Augen müssen sichtbar bleiben. Kopfbedeckungen sind nur aus religiösen oder medizinischen Gründen erlaubt. Eine Hemdfarbe ist nicht vorgeschrieben; Kontrast zum Hintergrund ist eine praktische Empfehlung, keine amtliche Vorgabe.
+  - q: Darf ich eine Brille tragen?
+    a: Nur wenn nötig. Keine Sonnenbrille oder getönten Gläser; Rahmen, Reflexionen und Schatten dürfen die Augen nicht verdecken.
+  - q: Wie aktuell muss das Foto sein?
+    a: Es muss im letzten Monat aufgenommen worden sein. Für einen neuen Pass brauchen Sie auch bei unverändertem Aussehen ein neues Foto.
 ---
 
-## Was das HM Passport Office misst
+## Vorgaben für gedruckte Passfotos
 
-Ein britisches Passfoto ist 35 mm breit und 45 mm hoch, und das Maß, auf das es darin ankommt, ist die Kopfhöhe: 29 mm bis 34 mm von der Kinnunterkante bis zum Scheitel, Haare eingeschlossen. Das ist ein Fenster von 5 mm auf einem 45 mm hohen Foto, ein nach Augenmaß knapp passender Zuschnitt ist also oft nicht knapp genug.
+Ein Papierantrag benötigt 2 identische Fotos von 35 x 45 mm. Die Kopfhöhe vom Kinn zum Scheitel beträgt 29 bis 34 mm. Die Tabelle oben beschreibt dieses Druckformat.
 
-Beachten Sie, dass dieses Band enger und tiefer liegt als beim Schengen-Visum, obwohl beide dasselbe Außenformat von 35 x 45 mm nutzen. Ein für ein Schengen-Visum gemachtes Foto wird für einen britischen Pass meist abgelehnt, und umgekehrt gilt dasselbe. Wenn Sie beides beantragen, machen Sie zwei Fotos.
+Die Fotos müssen scharf, farbig, unverändert durch Software und professionell auf weißem Fotopapier ohne Rand gedruckt sein. Sie müssen aus dem letzten Monat stammen, auch bei gleichem Aussehen. Siehe die [amtlichen Druckvorgaben](https://www.gov.uk/photos-for-passports/photo-requirements).
 
-## Hintergrund und Beleuchtung
+## Digitale Fotos für den Online-Antrag
 
-Vorgeschrieben ist ein einfarbiger cremefarbener oder hellgrauer Hintergrund ohne Schatten. Schatten sind nach der Kopfgröße der zweithäufigste Fehler, und sie entstehen meist daraus, zu dicht an einer Wand zu stehen. Halten Sie mindestens einen halben Meter Abstand zum Hintergrund und wenden Sie sich einem Fenster zu, nicht einer Deckenlampe.
+Die [amtlichen Digitalvorgaben](https://www.gov.uk/photos-for-passports/rules-for-digital-photos) verlangen mindestens 600 Pixel Breite, 750 Pixel Höhe und 50 KB bis 10 MB Dateigröße. Das Foto muss scharf, farbig und unverändert sein, mit einem einfarbigen hellen Hintergrund ohne Schatten.
 
-Dieses Werkzeug ersetzt den Hintergrund durch eine gleichmäßige Fläche, was Schattenprobleme hinter dem Kopf beseitigt. Einen Schatten, der über Ihr Gesicht fällt, kann es nicht entfernen; leuchten Sie sich bei der Aufnahme also von vorn aus.
+Bei Aufnahmen mit dem eigenen Gerät müssen Kopf, Schultern und Oberkörper sichtbar sein. Schneiden Sie das Foto nicht selbst zu; das übernimmt der Antragsdienst. Ein Fotogeschäft oder Automat kann auch einen digitalen Fotocode ausstellen.
 
-## Wie dieses Werkzeug arbeitet
+## Hintergrund, Kleidung und Brille
 
-Laden Sie ein Foto hoch. Das Werkzeug findet Kinn, Scheitel und Augenlinie und berechnet dann den Zuschnitt, der Ihren Kopf auf 31,5 mm setzt, die Mitte des erlaubten Bereichs. Fehlt Ihrem Foto der Rand für einen regelkonformen Zuschnitt, meldet es die zu kurze Kante, statt enger zu schneiden und ein Foto zu erzeugen, das durchfällt.
+Gedruckte Fotos brauchen einen einfarbigen cremefarbenen oder hellgrauen Hintergrund, digitale einen einfarbigen hellen. Gesicht und Hintergrund müssen schattenfrei sein. Richten Sie den Hintergrund bei der Aufnahme ein; ein Austausch per Software erfüllt die Vorgabe eines unveränderten Fotos nicht.
 
-Jeder Schritt läuft lokal in Ihrem Browser über WebAssembly. Ihr Foto wird nie hochgeladen.
+Schauen Sie geradeaus, halten Sie den Mund geschlossen und die Augen sichtbar. Haare und Kleidung dürfen das Gesicht nicht verdecken. Kopfbedeckungen sind nur aus religiösen oder medizinischen Gründen erlaubt. Eine Hemdfarbe ist nicht vorgeschrieben. Tragen Sie eine Brille nur wenn nötig, ohne getönte Gläser oder verdeckte Augen.
 
-## Drucken oder online beantragen
+Kinder unter 6 brauchen keinen neutralen Ausdruck und müssen nicht direkt in die Kamera schauen; Kinder unter 1 müssen die Augen nicht geöffnet haben. Weitere Kinderregeln stehen in der amtlichen Anleitung.
 
-Für einen Papierantrag laden Sie den Bogen im Format 4 x 6 Zoll herunter, auf dem acht Abzüge eines 35 x 45 mm großen Fotos Platz haben, und lassen ihn an jedem Fotoschalter drucken. Für den Online-Antrag laden Sie das einzelne JPEG herunter und laden es direkt hoch; es übertrifft die Mindestgröße von 600 x 750 Pixeln deutlich.
+## Vorschau statt Antragsfoto
+
+Die Ausgabe umfasst 413 x 531 Pixel, entsprechend 35 x 45 mm bei 300 DPI, sowie einen Bogen von 4 x 6 Zoll. Sie dient nur zur Vorschau von Ausschnitt und Anordnung, nicht zur Einreichung für einen britischen Pass.
+
+Das Werkzeug ersetzt den Hintergrund, während gedruckte und digitale Passfotos unverändert sein müssen. Die Einzeldatei unterschreitet außerdem die digitale Mindestgröße. Eine höhere DPI-Angabe oder Vergrößerung behebt die Veränderung nicht. Nutzen Sie ein unverändertes Original gemäß GOV.UK oder Fotos aus einem Geschäft oder Automaten. Hier geöffnete Fotos bleiben auf Ihrem Gerät.

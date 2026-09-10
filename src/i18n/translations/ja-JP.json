@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "パスポート・ビザ写真メーカー — 無料、非公開、ブラウザ内で完結",
-  "home.meta-description": "規格に適合したパスポート写真・ビザ写真を無料で作成。国ごとの頭の高さ、目の位置、背景を正しく整え、印刷用の 4x6 インチシートも出力します。アップロードは一切ありません。",
-  "home.title": "本当に要件を満たすパスポート・ビザ写真",
-  "home.subtitle": "不受理になる写真の多くは、トリミングではなく頭の大きさで落ちています。下から書類を選ぶと、このツールが顔を計測し、許容範囲に収まる位置へ配置し、背景を置き換えて、印刷用シートまで作成します。",
+  "home.meta-description": "パスポート・ビザ写真のサイズと構図、公式の要件を確認できます。写真はブラウザー内で処理され、サーバーにアップロードされません。",
+  "home.title": "パスポート・ビザ写真の要件",
+  "home.subtitle": "写真サイズ、頭の位置、背景の要件を比較できます。書類を選んで公式の規定を確認し、自分の端末で写真をプレビューしましょう。",
   "home.privacy": "すべての処理はブラウザ内で実行されます。あなたの写真がアップロードされることも、保存されることも、あなた以外の誰かに見られることもありません。",
   "home.choose": "書類を選んでください",
   "home.empty": "この言語に翻訳された写真仕様はまだありません。寸法はどの言語で読んでも同じなので、{a1}英語版の一覧{/a1}にこのページが将来持つ内容がすべて揃っています。",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName}メーカー",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "写真の例",
+  "examples.forward": "カメラを正面から見る",
+  "examples.turned": "視線がそれている",
+  "examples.visible": "顔がはっきり見える",
+  "examples.covered": "顔の一部が隠れている",
+  "examples.intro": "頭をまっすぐにし、目を見せ、均一な光で撮影します。申請前に、対象書類の規定を確認してください。",
+  "examples.attribution": "姿勢と構図を説明する例です。提出用ではなく、受理を保証するものでもありません。GOV.UKの例を加工しています。",
+  "examples.dimensions": "サイズと構図",
+  "examples.dimension-intro": "外枠、頭の高さの範囲、目の位置はこの書類の仕様に基づきます。目の高さが規定されている場合のみ目のガイドを表示します。",
+  "examples.limitation": "自動確認の対象は記載された測定項目のみです。表情、照明、撮影時期、画像加工の規定は別途確認してください。"
 }

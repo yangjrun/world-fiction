@@ -3,8 +3,9 @@ country: uk
 countryName: Reino Unido
 document: passport
 documentName: foto de pasaporte británico
-title: "Foto de pasaporte UK gratis online: 35x45 mm y requisitos"
-description: "Crea gratis online una foto de pasaporte UK de 35x45 mm. Altura de cabeza de 29 a 34 mm, fondo claro y hoja imprimible. Todo en tu navegador: no se sube nada."
+title: "Foto de pasaporte UK: requisitos en papel y digitales"
+description: "Requisitos de foto de pasaporte UK: 35x45 mm en papel, tamaño digital, fondo, gafas y ropa. Basados en las indicaciones de HM Passport Office."
+editorNotice: "Solo vista previa: esta herramienta genera 413 x 531 píxeles con el fondo sustituido. GOV.UK exige fotos sin modificar; no presentes esta imagen para un pasaporte británico."
 output:
   kind: physical
   widthMm: 35
@@ -20,8 +21,8 @@ background:
     - '#f0f0f0'
 file:
   format: jpeg
-sourceUrl: https://www.gov.uk/photos-for-passports
-sourceCheckedOn: 2026-09-03
+sourceUrl: https://www.gov.uk/photos-for-passports/photo-requirements
+sourceCheckedOn: 2026-09-09
 status: verified
 rejectionReasons:
   - Cabeza fuera del rango de 29 mm a 34 mm del mentón a la coronilla
@@ -29,36 +30,47 @@ rejectionReasons:
   - Prenda que cubra la cabeza sin motivo religioso o médico
   - Ojos tapados por el pelo, la montura de las gafas o un brillo en los cristales
   - Cualquier otra cosa visible en el encuadre, incluida una segunda persona o el respaldo de una silla
-  - Foto tomada más de un mes antes de la solicitud, si tu aspecto ha cambiado
+  - Foto tomada más de un mes antes de la solicitud, aunque tu aspecto no haya cambiado
+  - Foto modificada con software, incluida la sustitución del fondo
 faq:
   - q: ¿Qué tamaño tiene una foto de pasaporte británico?
-    a: 35 mm de ancho por 45 mm de alto. A 300 DPI son 413 x 531 píxeles.
+    a: Las fotos impresas miden 35 mm de ancho por 45 mm de alto. A 300 DPI equivalen a 413 x 531 píxeles. Las digitales tienen otras reglas y necesitan al menos 600 x 750 píxeles.
   - q: ¿Cuánto debe medir mi cabeza en la foto?
     a: Entre 29 mm y 34 mm desde la base del mentón hasta la coronilla, pelo incluido.
   - q: ¿Puedo sonreír?
-    a: No. La HM Passport Office exige una expresión neutra con la boca cerrada.
+    a: Los adultos y los niños de 6 años o más necesitan una expresión neutra con la boca cerrada. Los menores de 6 no necesitan una expresión neutra ni mirar directamente a la cámara.
   - q: ¿Puedo usar esta foto para la solicitud digital?
-    a: Sí. La vía digital necesita al menos 600 x 750 píxeles, y el archivo que produce esta herramienta supera ese mínimo.
+    a: No. La salida es de 413 x 531 píxeles, inferior al mínimo de 600 x 750, y sustituye el fondo. GOV.UK exige fotos sin modificar e indica que no recortes las fotos tomadas con tu dispositivo para la solicitud online.
+  - q: ¿Qué ropa puedo llevar?
+    a: La cara y los ojos deben quedar visibles. Solo se permite cubrir la cabeza por motivos religiosos o médicos. No hay un color de camisa obligatorio; contrastar con el fondo es un consejo práctico, no una regla oficial.
+  - q: ¿Puedo llevar gafas?
+    a: Evítalas salvo que sean necesarias. No uses gafas de sol ni cristales tintados, y evita que la montura, los reflejos o las sombras tapen los ojos.
+  - q: ¿Cómo de reciente debe ser la foto?
+    a: Debe haberse tomado en el último mes. Para un pasaporte nuevo necesitas una foto nueva aunque tu aspecto no haya cambiado.
 ---
 
-## Qué mide la HM Passport Office
+## Requisitos para fotos impresas
 
-Una foto de pasaporte británico mide 35 mm de ancho y 45 mm de alto, y la medida que importa dentro de ella es la altura de la cabeza: de 29 mm a 34 mm desde la base del mentón hasta la coronilla, pelo incluido. Es una ventana de 5 mm en una foto de 45 mm, así que un recorte que a ojo parece ajustado a menudo no lo está bastante.
+La solicitud en papel necesita 2 fotos idénticas de 35 x 45 mm. La cabeza debe medir de 29 a 34 mm del mentón a la coronilla. La tabla anterior corresponde a este formato impreso.
 
-Ten en cuenta que esta banda es más estrecha y más baja que la del visado Schengen, aunque ambos usen el mismo tamaño exterior de 35 x 45 mm. Una foto hecha para un visado Schengen suele rechazarse para un pasaporte británico, y al contrario también. Si vas a solicitar los dos, hazte dos fotos.
+Las fotos deben ser nítidas, en color, sin modificaciones de software e impresas con calidad profesional sobre papel fotográfico blanco sin bordes. Deben ser del último mes aunque tu aspecto sea el mismo. Consulta las [reglas oficiales para fotos impresas](https://www.gov.uk/photos-for-passports/photo-requirements).
 
-## Fondo e iluminación
+## Fotos digitales para la solicitud online
 
-El requisito es un fondo liso crema o gris claro sin sombras. Las sombras son el segundo fallo más común después del tamaño de la cabeza, y casi siempre vienen de colocarse demasiado cerca de la pared. Sitúate al menos a medio metro del fondo y mira hacia una ventana en lugar de hacia una luz de techo.
+Las [reglas oficiales para fotos digitales](https://www.gov.uk/photos-for-passports/rules-for-digital-photos) exigen al menos 600 píxeles de ancho y 750 de alto, con un archivo de 50 KB a 10 MB. La foto debe ser nítida, en color, sin modificar y con un fondo liso claro sin sombras.
 
-Esta herramienta sustituye el fondo por un relleno uniforme, lo que elimina los problemas de sombra detrás de la cabeza. No puede quitar una sombra proyectada sobre tu cara, así que ilumínate de frente al hacer la foto original.
+Si usas tu dispositivo, incluye cabeza, hombros y parte superior del cuerpo. No recortes la foto; el servicio de solicitud lo hace por ti. También puedes obtener un código de foto digital en una tienda o fotomatón.
 
-## Cómo funciona esta herramienta
+## Fondo, ropa y gafas
 
-Sube una foto. La herramienta encuentra tu mentón, tu coronilla y tu línea de los ojos, y luego calcula el recorte que sitúa tu cabeza en 31,5 mm, el centro del rango permitido. Si a tu foto le falta margen para un recorte válido, informa de qué borde se queda corto en lugar de recortar más y producir una foto que va a fallar.
+Las fotos impresas necesitan fondo liso crema o gris claro; las digitales, fondo liso claro. No debe haber sombras en la cara ni detrás. Prepara el fondo al fotografiar; cambiarlo con software incumple la regla de no modificar la imagen.
 
-Cada paso se ejecuta localmente en tu navegador mediante WebAssembly. Tu foto nunca se sube.
+Mira al frente, con ojos visibles y boca cerrada. Ni el pelo ni la ropa deben tapar la cara. Solo puedes cubrir la cabeza por motivos religiosos o médicos. No hay un color de camisa obligatorio. Usa gafas solo si es necesario, sin tintado ni obstáculos sobre los ojos.
 
-## Imprimir o solicitar en línea
+Los menores de 6 años no necesitan expresión neutra ni mirar a la cámara; los menores de 1 no necesitan abrir los ojos. Consulta las otras reglas infantiles en la guía oficial.
 
-Para una solicitud en papel, descarga la hoja de 4 x 6 pulgadas, que contiene ocho copias de una foto de 35 x 45 mm, e imprímela en cualquier mostrador de fotografía. Para la solicitud en línea, descarga el JPEG único y súbelo directamente; supera con holgura el mínimo de 600 x 750 píxeles.
+## Vista previa y foto para presentar
+
+Esta herramienta genera 413 x 531 píxeles, equivalentes a 35 x 45 mm a 300 DPI, y una hoja de 4 x 6 pulgadas. Son vistas previas de encuadre y distribución, no fotos para presentar en una solicitud de pasaporte británico.
+
+La herramienta sustituye el fondo, pero tanto las fotos impresas como las digitales deben estar sin modificar. La imagen individual tampoco alcanza el mínimo digital. Aumentar los DPI o ampliar la imagen no resuelve la modificación. Utiliza un original sin alterar conforme a GOV.UK o acude a una tienda o fotomatón. Las fotos abiertas aquí permanecen en tu dispositivo.

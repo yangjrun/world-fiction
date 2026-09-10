@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "여권·비자 사진 제작 — 무료, 비공개, 브라우저에서 바로",
-  "home.meta-description": "규정에 맞는 여권 사진과 비자 사진을 무료로 만드세요. 국가별 머리 높이, 눈높이, 배경을 정확히 맞추고 인쇄용 4x6 인치 시트까지 제공합니다. 업로드는 없습니다.",
-  "home.title": "요구 사항을 실제로 충족하는 여권·비자 사진",
-  "home.subtitle": "반려되는 사진은 대부분 크롭이 아니라 머리 크기 때문에 떨어집니다. 아래에서 서류를 고르면 이 도구가 얼굴을 측정해 허용 범위 안에 배치하고, 배경을 바꾸고, 인쇄용 시트까지 만들어 줍니다.",
+  "home.meta-description": "여권 및 비자 사진 크기와 구도를 비교하고 공식 규정을 확인하세요. 사진은 브라우저에서만 처리되며 서버에 업로드되지 않습니다.",
+  "home.title": "여권 및 비자 사진 규정",
+  "home.subtitle": "사진 크기, 머리 위치와 배경 규정을 비교하세요. 서류를 선택해 공식 규정을 확인하고 내 기기에서 사진을 미리 볼 수 있습니다.",
   "home.privacy": "모든 단계가 브라우저 안에서 실행됩니다. 사진은 업로드되지도, 저장되지도 않으며 본인 외에 누구도 볼 수 없습니다.",
   "home.choose": "서류를 선택하세요",
   "home.empty": "아직 이 언어로 번역된 사진 규격이 없습니다. 치수는 어떤 언어로 읽어도 같으므로, {a1}영어 목록{/a1}에 이 페이지가 앞으로 담을 내용이 모두 들어 있습니다.",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName} 제작 도구",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "사진 예시",
+  "examples.forward": "카메라 정면 보기",
+  "examples.turned": "시선이 다른 곳을 향함",
+  "examples.visible": "얼굴이 잘 보임",
+  "examples.covered": "얼굴 일부가 가려짐",
+  "examples.intro": "머리를 곧게 하고 눈이 보이도록 균일한 조명에서 촬영하세요. 신청 전에 해당 서류의 규정을 확인하세요.",
+  "examples.attribution": "자세와 구도를 설명하는 예시이며 제출용이 아니고 승인을 보장하지 않습니다. GOV.UK 예시를 편집했습니다.",
+  "examples.dimensions": "크기와 구도",
+  "examples.dimension-intro": "프레임, 머리 높이 범위와 눈 위치는 해당 서류 규격을 따릅니다. 눈 높이 범위가 규정된 경우에만 안내선을 표시합니다.",
+  "examples.limitation": "자동 검사는 명시된 측정 항목만 확인합니다. 표정, 조명, 촬영 시기와 보정 규정은 별도로 확인해야 합니다."
 }

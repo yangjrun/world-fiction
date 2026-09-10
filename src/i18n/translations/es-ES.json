@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "Generador de fotos de pasaporte y visado — gratis y privado",
-  "home.meta-description": "Crea gratis una foto de pasaporte o visado que cumpla los requisitos. Altura de cabeza, línea de los ojos y fondo correctos según el país, más una hoja 4x6 imprimible.",
-  "home.title": "Fotos de pasaporte y visado que de verdad cumplen los requisitos",
-  "home.subtitle": "La mayoría de las fotos rechazadas fallan por el tamaño de la cabeza, no por el recorte. Elige un documento abajo y esta herramienta medirá tu cara, la situará dentro del rango permitido, sustituirá el fondo y te dará una hoja lista para imprimir.",
+  "home.meta-description": "Compara tamaños y encuadres de fotos de pasaporte y visado. Consulta las normas oficiales y previsualiza tus fotos localmente en el navegador.",
+  "home.title": "Requisitos de fotos de pasaporte y visado",
+  "home.subtitle": "Compara tamaños, posición de la cabeza y fondos. Elige tu documento para consultar las normas oficiales y previsualizar tu foto de forma privada.",
   "home.privacy": "Cada paso se ejecuta dentro de tu navegador. Tu foto nunca se sube, nunca se almacena y nadie más que tú la ve.",
   "home.choose": "Elige tu documento",
   "home.empty": "Todavía no se ha traducido ninguna especificación de foto a este idioma. Las medidas son las mismas en cualquier idioma, así que {a1}la lista en inglés{/a1} ya contiene todo lo que tendrá esta página.",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "Generador de {documentName}",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "Fotos de ejemplo",
+  "examples.forward": "Mirada a la cámara",
+  "examples.turned": "Mirada desviada",
+  "examples.visible": "Rostro visible",
+  "examples.covered": "Rostro parcialmente cubierto",
+  "examples.intro": "La cabeza recta, los ojos visibles y una luz uniforme son una buena base. Consulta las normas de tu documento antes de solicitarlo.",
+  "examples.attribution": "Ejemplos de postura y encuadre; no sirven para presentar ni garantizan la aceptación. Adaptados de GOV.UK.",
+  "examples.dimensions": "Tamaño y encuadre",
+  "examples.dimension-intro": "El marco, la altura de la cabeza y la posición de los ojos siguen esta especificación. Las guías de ojos solo aparecen si existe un intervalo definido.",
+  "examples.limitation": "Solo se comprueban automáticamente las medidas indicadas. Revisa la expresión, la luz, la antigüedad y las normas de edición."
 }

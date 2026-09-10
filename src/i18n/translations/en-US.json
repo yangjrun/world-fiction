@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "Passport and Visa Photo Maker — Free, Private, In Your Browser",
-  "home.meta-description": "Make a compliant passport or visa photo for free. Correct head height, eye line and background for each country, plus a printable 4x6 sheet. Nothing is uploaded.",
-  "home.title": "Passport and visa photos that actually meet the requirements",
-  "home.subtitle": "Most rejected photos fail on head size, not on the crop. Pick a document below and this tool measures your face, positions it inside the permitted range, replaces the background and gives you a printable sheet.",
+  "home.meta-description": "Photo requirements and framing previews. Compare document sizes and official guidance; your photos are processed locally in your browser.",
+  "home.title": "Passport and visa photo requirements",
+  "home.subtitle": "Compare photo sizes, head position and background requirements. Choose your document to review the official guidance and preview your photo privately.",
   "home.privacy": "Every step runs inside your browser. Your photo is never uploaded, never stored and never seen by anyone but you.",
   "home.choose": "Choose your document",
   "home.empty": "No photo specifications have been translated into this language yet. The measurements are the same whichever language you read them in, so {a1}the English list{/a1} already has everything this page will have.",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName} maker",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "Photo examples",
+  "examples.forward": "Face the camera",
+  "examples.turned": "Looking away",
+  "examples.visible": "Keep your face visible",
+  "examples.covered": "Face partly covered",
+  "examples.intro": "A straight head, visible eyes and even lighting make a clear starting photo. Check the rules for your document before applying.",
+  "examples.attribution": "Illustrations of pose and framing, not photos to submit or a guarantee of acceptance. Examples adapted from GOV.UK.",
+  "examples.dimensions": "Size and framing",
+  "examples.dimension-intro": "The frame, head-height range and eye position below follow this document’s specification. Eye guides appear only where a range is specified.",
+  "examples.limitation": "Only the listed measurements are checked automatically. Expression, lighting, photo age and rules on editing still need your attention."
 }

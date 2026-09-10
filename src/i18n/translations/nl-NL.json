@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "Pasfoto- en visumfotomaker — gratis, privé, in je browser",
-  "home.meta-description": "Maak gratis een pasfoto of visumfoto die aan de eisen voldoet. Juiste hoofdhoogte, ooglijn en achtergrond per land, plus een printbaar vel van 4x6 inch.",
-  "home.title": "Pasfoto’s en visumfoto’s die echt aan de eisen voldoen",
-  "home.subtitle": "De meeste afgekeurde foto’s struikelen over de grootte van het hoofd, niet over de uitsnede. Kies hieronder een document: dit hulpmiddel meet je gezicht, plaatst het binnen het toegestane bereik, vervangt de achtergrond en geeft je een printbaar vel.",
+  "home.meta-description": "Vergelijk paspoort- en visumfotoformaten en officiële regels. Bekijk je foto lokaal in de browser zonder deze naar een server te uploaden.",
+  "home.title": "Eisen voor paspoort- en visumfoto’s",
+  "home.subtitle": "Vergelijk formaten, hoofdpositie en achtergronden. Kies je document voor de officiële regels en een privévoorbeeld van je foto.",
   "home.privacy": "Elke stap gebeurt in je browser. Je foto wordt nooit geüpload, nooit opgeslagen en door niemand anders dan jou gezien.",
   "home.choose": "Kies je document",
   "home.empty": "Er zijn nog geen fotospecificaties naar deze taal vertaald. De maten zijn in elke taal dezelfde, dus {a1}de Engelse lijst{/a1} bevat al alles wat deze pagina zal bevatten.",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName}-maker",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "Fotovoorbeelden",
+  "examples.forward": "Kijk in de camera",
+  "examples.turned": "Kijkt weg",
+  "examples.visible": "Gezicht goed zichtbaar",
+  "examples.covered": "Gezicht deels bedekt",
+  "examples.intro": "Een recht hoofd, zichtbare ogen en gelijkmatig licht vormen een goede basis. Controleer voor je aanvraag de regels voor je document.",
+  "examples.attribution": "Voorbeelden van houding en uitsnede, niet voor indiening of als garantie op acceptatie. Bewerkt naar GOV.UK.",
+  "examples.dimensions": "Formaat en uitsnede",
+  "examples.dimension-intro": "Kader, hoofdhoogte en oogpositie volgen deze specificatie. Ooglijnen verschijnen alleen als een bereik is voorgeschreven.",
+  "examples.limitation": "Alleen de vermelde maten worden automatisch gecontroleerd. Controleer zelf uitdrukking, licht, ouderdom en bewerkingsregels."
 }

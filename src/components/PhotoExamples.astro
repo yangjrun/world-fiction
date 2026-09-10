@@ -1,0 +1,35 @@
+---
+import type { Locale } from '@/i18n/config';
+import { photoGuide } from '@/i18n/photo-guide';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const text = await photoGuide(locale);
+const examples = [
+  { image: 'forward', caption: text.forward, positive: true },
+  { image: 'turned', caption: text.turned, positive: false },
+  { image: 'face-visible', caption: text.visible, positive: true },
+  { image: 'face-covered', caption: text.covered, positive: false },
+];
+---
+
+<section class="mt-12 border-t border-ink-200 pt-8" aria-labelledby="photo-examples">
+  <h2 id="photo-examples" class="text-xl font-semibold text-ink-900">{text.heading}</h2>
+  <p class="mt-3 max-w-2xl text-ink-600">{text.intro}</p>
+  <div class="mt-6 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4 sm:gap-6">
+    {examples.map(({ image, caption, positive }) => (
+      <figure class="min-w-0">
+        <img src={`/examples/${image}-original.jpg`} alt={caption} width="211" height="270" loading="lazy" decoding="async" class="block aspect-[211/270] w-full max-w-[132px] rounded-md bg-ink-50 object-contain" />
+        <figcaption class="mt-3 flex items-start gap-2 text-sm font-medium text-ink-800">
+          <span aria-hidden="true" class:list={['mt-1.5 size-2 shrink-0 rounded-full', positive ? 'bg-ok-500' : 'bg-bad-500']} />
+          {caption}
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+  <p class="mt-5 max-w-3xl text-xs leading-relaxed text-ink-600">{text.attribution}</p>
+  <p class="mt-1 text-xs text-ink-600">
+    <a href="https://www.gov.uk/photos-for-passports/photo-requirements" class="underline hover:text-brand-700">GOV.UK</a>
+    · © Crown copyright · <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license" class="underline hover:text-brand-700">Open Government Licence v3.0</a>
+  </p>
+</section>

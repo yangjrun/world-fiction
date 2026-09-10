@@ -19,9 +19,9 @@
   "switcher.home-fallback__note": "Added to a language in the switcher when this page does not exist in that language, where choosing it opens that language's home page instead. It is shown as a tooltip and read out after the language name, so it continues the phrase \"Deutsch …\".",
 
   "home.meta-title": "護照與簽證相片製作 —— 免費、私密、在瀏覽器內完成",
-  "home.meta-description": "免費製作符合規定的護照或簽證相片。依各國要求校準頭部高度、眼睛位置與背景，並產生可列印的 4x6 吋拼版。相片不會上傳。",
-  "home.title": "真正符合規定的護照與簽證相片",
-  "home.subtitle": "被退件的相片多半不是裁切出了問題，而是頭部尺寸不對。在下面選擇一種證件，本工具會量測你的臉部、把它放進允許的範圍內、替換背景，並產生可列印的拼版。",
+  "home.meta-description": "查看護照與簽證照片尺寸、構圖及官方要求，在瀏覽器中預覽照片。照片僅在本機處理，不上傳伺服器。",
+  "home.title": "護照與簽證照片要求",
+  "home.subtitle": "比較照片尺寸、頭部位置與背景要求。選擇證件，查看官方規定，並在自己的裝置上預覽照片。",
   "home.privacy": "每一個步驟都在你的瀏覽器內完成。你的相片絕不會被上傳、絕不會被儲存，除你以外沒有任何人看得到。",
   "home.choose": "選擇你的證件",
   "home.empty": "目前還沒有相片規格被翻譯成這個語言。無論用哪種語言閱讀，各項尺寸都是一樣的，所以{a1}英文版清單{/a1}已經包含本頁將來會有的全部內容。",
@@ -171,5 +171,16 @@
   "unit.kb": "KB",
 
   "schema.app-name": "{documentName}製作工具",
-  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name."
+  "schema.app-name__note": "The application name in the page's structured data, read by search engines rather than shown on the page. {documentName} is the spec's own document name.",
+
+  "examples.heading": "照片範例",
+  "examples.forward": "正視鏡頭",
+  "examples.turned": "視線偏離鏡頭",
+  "examples.visible": "臉部清晰可見",
+  "examples.covered": "臉部被遮擋",
+  "examples.intro": "頭部端正、雙眼可見、光線均勻，是拍攝清晰照片的基礎。申請前請核對對應證件的具體規定。",
+  "examples.attribution": "圖片僅說明姿態與構圖，不可用於提交，也不代表保證通過。範例改編自 GOV.UK。",
+  "examples.dimensions": "尺寸與構圖",
+  "examples.dimension-intro": "下圖的外框、頭部高度範圍和眼睛位置依據本證件規格。僅在規定了眼睛高度範圍時顯示眼位參考線。",
+  "examples.limitation": "自動檢查僅涵蓋列出的測量項目。表情、光照、拍攝時間及是否允許修圖，仍需自行核對。"
 }

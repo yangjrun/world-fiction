@@ -45,6 +45,8 @@ const specs = defineCollection({
     title: z.string().min(1).max(70),
     /** Meta description. 140-160 characters is the usable range. */
     description: z.string().min(50).max(170),
+    /** Application-specific limitations shown before the photo editor. */
+    editorNotice: z.string().min(1).optional(),
 
     output,
     headHeight,

@@ -43,6 +43,7 @@ const TRANSLATABLE = [
   'documentName',
   'title',
   'description',
+  'editorNotice',
   'rejectionReasons',
   'faq',
   // Not prose, but legitimately per-locale: the publication gate and the date a
@@ -122,7 +123,7 @@ describe('the frontmatter reader this file depends on', () => {
   // empty. Both would pass in silence.
   it('finds the blocks it excludes and the facts it keeps', () => {
     const frontmatter = frontmatterOf(
-      readFileSync(specPath(defaultLocale, 'schengen-visa.md'), 'utf8'),
+      readFileSync(specPath(defaultLocale, 'uk-passport.md'), 'utf8'),
     );
     expect(frontmatter, 'the reference spec has no frontmatter').not.toBeNull();
 
@@ -141,7 +142,7 @@ describe('the frontmatter reader this file depends on', () => {
 
     // The colours stay, the sentence describing them goes.
     expect(facts.get('background')).toContain('#f0f0f0');
-    expect(facts.get('background')).not.toContain('Plain light grey');
+    expect(facts.get('background')).not.toContain('Plain cream or light grey');
   });
 
   it('has translations to compare at all', () => {
